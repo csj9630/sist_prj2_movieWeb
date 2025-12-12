@@ -43,9 +43,10 @@ request.setCharacterEncoding("UTF-8");
 
 $(document).ready(function () {
 	introDivider();
+	initImageModal();
 });//document.ready
 
-$(function introDivider() {
+function introDivider() {
 	 let text = $("#movie_intro").html().trim();
 
 	    // 1) HTML 태그 제거 (<br>, <p> 등)
@@ -70,7 +71,57 @@ $(function introDivider() {
 	    }
 
 	    $("#movie_intro").html(result);
-})//introDivider
+}//introDivider
+
+//이미지 모달 초기화
+function initImageModal() {
+	// 모달 HTML 동적 추가
+	if ($('#imageModal').length === 0) {
+		$('body').append(`
+			<div class="image-modal" id="imageModal">
+				<button class="modal-close" id="closeModal">&times;</button>
+				<div class="modal-content">
+					<img id="modalImage" src="" alt="">
+				</div>
+			</div>
+		`);
+	}
+
+	// 이미지 클릭 이벤트
+	$('.image-grid .image-item img').click(function() {
+		const imgSrc = $(this).attr('src');
+		console.log(imgSrc);
+		const imgAlt = $(this).attr('alt');
+		
+		$('#modalImage').attr('src', imgSrc).attr('alt', imgAlt);
+		$('#imageModal').addClass('active');
+		$('body').css('overflow', 'hidden');
+	});
+
+	// 모달 닫기
+	$('#closeModal, #imageModal').click(function(e) {
+		if (e.target === this) {
+			closeImageModal();
+		}
+	});
+
+	// ESC 키로 모달 닫기
+	$(document).keydown(function(e) {
+		if ($('#imageModal').hasClass('active') && e.key === 'Escape') {
+			closeImageModal();
+		}
+	});
+
+	// 모달 내부 클릭 시 전파 중지
+	$('.modal-content').click(function(e) {
+		e.stopPropagation();
+	});
+}
+
+function closeImageModal() {
+	$('#imageModal').removeClass('active');
+	$('body').css('overflow', 'auto');
+}
 
 </script>
 </head>
