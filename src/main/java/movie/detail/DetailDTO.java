@@ -1,6 +1,5 @@
 package movie.detail;
 
-import java.sql.Date;
 
 public class DetailDTO {
 	// movie_code, movie_name, movie_genre, running_time, movie_grade, release_date,
@@ -10,7 +9,7 @@ public class DetailDTO {
 	//movie_code,movie_name,movie_genre,running_time,movie_grade,release_date,intro,main_image,bg_image,daily_audience,total_audience,movie_delete,showing
 	private String code, name, genre, grade, intro, mainImg, bgImg, deleteFlag, showingFlag;
 	private int runningTime, dailyAudience, totalAudience;
-	private Date releaseDate;
+	private String releaseDate;
 	public String getCode() {
 		return code;
 	}
@@ -83,10 +82,10 @@ public class DetailDTO {
 	public void setTotalAudience(int totalAudience) {
 		this.totalAudience = totalAudience;
 	}
-	public Date getReleaseDate() {
+	public String getReleaseDate() {
 		return releaseDate;
 	}
-	public void setReleaseDate(Date releaseDate) {
+	public void setReleaseDate(String releaseDate) {
 		this.releaseDate = releaseDate;
 	}
 	@Override
