@@ -54,7 +54,7 @@
 			<div class="row featurette">
 				<div class="col-md-7" style="text-align: center;">
 					<!-- 여기서부터 작성 시작-->
-					<h1>클릭하면 영화 상세 페이지로 이동합니다.</h1>
+					<h1>클릭하면 영화 상세 페이지로 이동합니다..</h1>
 					<h2>
 						<a
 							href="${commonURL}/user/movie/detail_process_test.jsp">DB 테스트용</a>
