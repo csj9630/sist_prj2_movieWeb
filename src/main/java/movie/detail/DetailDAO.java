@@ -69,7 +69,8 @@ public class DetailDAO {
 				dtDTO.setGenre(rs.getString("movie_genre"));
 				dtDTO.setRunningTime(rs.getInt("running_time"));
 				dtDTO.setGrade(rs.getString("movie_grade"));
-				dtDTO.setReleaseDate(rs.getDate("release_date"));
+//				dtDTO.setReleaseDate(rs.getDate("release_date"));
+				dtDTO.setReleaseDate(rs.getString("release_date"));
 				dtDTO.setIntro(rs.getString("intro"));
 				dtDTO.setMainImg(rs.getString("main_image"));
 				dtDTO.setBgImg(rs.getString("bg_image"));

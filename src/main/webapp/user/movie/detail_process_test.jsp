@@ -35,9 +35,25 @@ pageContext.setAttribute("trailerList",trailerList);
 %>
 
 <h5>영화 상세</h5>
-${result.code}
-${result.name}
 ${result}
+
+<%
+String code= "mc";
+for(int i = 0; i<50; i++){
+	code = "mc";
+	code += String.format("%3s", i + 1).replace(" ", "0");
+
+	dtDTO = dtDAO.selectDetail(code);
+	out.print(dtDTO.toString());
+	%>
+	<hr><hr><hr>
+	<%
+}
+
+%>
+
+
+
 <hr><hr><hr>
 <h5>이미지</h5>
 ${img}

@@ -91,10 +91,10 @@ public class DetailDTO {
 	}
 	@Override
 	public String toString() {
-		return "DetailDTO [code=" + code + ", name=" + name + ", genre=" + genre + ", grade=" + grade + ", intro="
-				+ intro + ", mainImg=" + mainImg + ", bgImg=" + bgImg + ", deleteFlag=" + deleteFlag + ", showingFlag="
-				+ showingFlag + ", runningTime=" + runningTime + ", dailyAudience=" + dailyAudience + ", totalAudience="
-				+ totalAudience + ", releaseDate=" + releaseDate + "]";
+		return "DetailDTO [code=" + code + ",\n name=" + name + ",\n genre=" + genre + ",\n grade=" + grade + ",\n intro="
+				+ intro + ",\n mainImg=" + mainImg + ",\n bgImg=" + bgImg + ",\n deleteFlag=" + deleteFlag + ",\n showingFlag="
+				+ showingFlag + ",\n runningTime=" + runningTime + ",\n dailyAudience=" + dailyAudience + ",\n totalAudience="
+				+ totalAudience + ",\n releaseDate=" + releaseDate + "]";
 	}
 
 	

@@ -64,7 +64,7 @@
 					 --%>
 					<%
 					String code = null;
-					int limit = 4; //현 시점 영화 4개까지 준비됨
+					int limit = 50; //현 시점 영화 4개까지 준비됨
 
 					for (int i = 0; i < limit; i++) {
 						code = "mc";

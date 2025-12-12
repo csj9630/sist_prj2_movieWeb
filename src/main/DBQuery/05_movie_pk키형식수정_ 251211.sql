@@ -1,5 +1,6 @@
 /*==============업데이트 내용============================*/
 /*
+2025-12-12 : 이미지 파일명을 mc001_still_001.jpg로 변경
 2025-12-11 : movie, trailer, MOVIE_IMAGE 가데이터를 insert all로 수정 및 데이터  추가
 
 2025-12-11 : PK키 포맷 변경 완료 (1자리 -> 3자리 패딩)
@@ -272,27 +273,62 @@ INSERT INTO CINEMA_INFO(CINEMA_NUM, CINEMA_NAME, CINEMA_LOCATION) VALUES ('cn001
 INSERT INTO MOVIE(MOVIE_CODE, MOVIE_NAME, MOVIE_GENRE, RUNNING_TIME, MOVIE_GRADE, RELEASE_DATE, INTRO, MAIN_IMAGE, BG_IMAGE, DAILY_AUDIENCE, TOTAL_AUDIENCE, MOVIE_DELETE, SHOWING)
 VALUES ('mc001','극장판 체인소맨 : 폭탄편','액션','120','15세 이용가', '2025-10-20',
 '압도적 배틀 액션이 스크린에서 폭발한다!  데블 헌터로 일하는 소년 ''덴지''는 조직의 배신으로 죽음에 내몰린 순간 전기톱 악마견 ''포치타''와의 계약으로 하나로 합쳐져  누구도 막을 수 없는 존재 ''체인소 맨''으로 다시 태어난다.  악마와 사냥꾼, 그리고 정체불명의 적들이 얽힌 잔혹한 전쟁 속에서  ''레제''라는 이름의 미스터리한 소녀가 ''덴지'' 앞에 나타나는데…  ''덴지''는 사랑이라는 감정에 이끌려 지금껏 가장 위험한 배틀에 몸을 던진다! ',
-'poster.jpg','bg.jpg','15000','3000000','F','상영중');
+'mc001_poster.jpg','mc001_bg.jpg','15000','3000000','F','상영중');
 
 INSERT INTO MOVIE(MOVIE_CODE, MOVIE_NAME, MOVIE_GENRE, RUNNING_TIME, MOVIE_GRADE, RELEASE_DATE, INTRO, MAIN_IMAGE, BG_IMAGE, DAILY_AUDIENCE, TOTAL_AUDIENCE, MOVIE_DELETE, SHOWING)
 VALUES ('mc002','더 퍼스트 슬램덩크','스포츠','124','전체 이용가', '2025-01-04',
 '전국 제패를 꿈꾸는 북산고 농구부 5인방의 이야기를 그린 작품. 이번 극장판은 ''송태섭''을 중심으로 그의 과거와 현재가 교차되며 펼쳐지는 박진감 넘치는 경기를 담아냈다. 구판 애니메이션에서 미처 다루지 못한, 많은 팬들이 그토록 원했던 원작 최종 보스 산왕공고(산노)와의 인터하이 32강전을 영상화한 작품으로, 큰 틀에선 원작과 같으면서도 세부적으론 다른 연출과 스토리텔링을 사용한 게 돋보인다. ',
-'poster.jpg','bg.jpg','12000','4800000','F','상영중');
+'mc002_poster.jpg','mc002_bg.jpg','12000','4800000','F','상영중');
 
 INSERT INTO MOVIE(MOVIE_CODE, MOVIE_NAME, MOVIE_GENRE, RUNNING_TIME, MOVIE_GRADE, RELEASE_DATE, INTRO, MAIN_IMAGE, BG_IMAGE, DAILY_AUDIENCE, TOTAL_AUDIENCE, MOVIE_DELETE, SHOWING)
 VALUES ('mc003','엘리멘탈','애니메이션','109','전체 이용가', '2025-06-14',
 '불, 물, 흙, 공기 4개의 원소들이 살고 있는 ''엘리멘트 시티''. 재치 있고 불 같은 성격의 ''앰버''는 낯설고 새로운 세상에서 우연히 유쾌하고 감성적이며 물 흐르듯 사는 ''웨이드''를 만나 특별한 우정을 쌓아간다. 한 불 원소 부부가 돛단배를 타고 안개에 뒤덮인 바다를 가르며 어딘가로 향하는 모습을 비추면서 영화가 시작된다. 그렇게 도착한 곳은 여러 원소들이 함께 어울려 사는 도시인 엘리멘트 시티. 짐을 챙기고 배에서 내린 부부는 입국을 위해 검문소로 향한다.',
-'poster.jpg','bg.jpg','8000','7200000','F','상영중');
+'mc003_poster.jpg','mc003_bg.jpg','8000','7200000','F','상영중');
 
 INSERT INTO MOVIE(MOVIE_CODE, MOVIE_NAME, MOVIE_GENRE, RUNNING_TIME, MOVIE_GRADE, RELEASE_DATE, INTRO, MAIN_IMAGE, BG_IMAGE, DAILY_AUDIENCE, TOTAL_AUDIENCE, MOVIE_DELETE, SHOWING)
 VALUES ('mc004','엣지 오브 투모로우','액션/SF','113','12세 이용가', '2025-12-20',
 '외계 종족 ''미믹''의 침공으로 멸망 위기에 놓인 지구. 훈련 한번 받지않은 소심한 공보관 빌 케이지 소령(톰 크루즈)은 전투에 투입되자마자 외계인의 피를 뒤집어쓰고 사망한다. 그런데 눈을 뜨니 자신이 과거로 돌아와 같은 날을 반복하고 있다. 그는 반복되는 시간 속에서 전설적인 전사 리타 브라타스키(에밀리 블런트)를 만나 외계 종족을 이길 방법을 찾기 위해 끝없이 싸우고, 죽고, 다시 태어나는 지옥 같은 운명을 겪는다. 이 타임 루프를 멈추고 전쟁을 끝낼 수 있을까?',
-'poster.jpg','bg.jpg','5000','4699307','F','상영중');
+'mc004_poster.jpg','mc004_bg.jpg','5000','4699307','F','상영중');
 
-INSERT INTO MOVIE(MOVIE_CODE, MOVIE_NAME, MOVIE_GENRE, RUNNING_TIME, MOVIE_GRADE, RELEASE_DATE, INTRO, MAIN_IMAGE, BG_IMAGE, DAILY_AUDIENCE, TOTAL_AUDIENCE, MOVIE_DELETE, SHOWING)
-VALUES ('mc005','엣지 오브 투모로우','액션/SF','113','12세 이용가', '2025-12-20',
-'외계 종족 ''미믹''의 침공으로 멸망 위기에 놓인 지구. 훈련 한번 받지않은 소심한 공보관 빌 케이지 소령(톰 크루즈)은 전투에 투입되자마자 외계인의 피를 뒤집어쓰고 사망한다. 그런데 눈을 뜨니 자신이 과거로 돌아와 같은 날을 반복하고 있다. 그는 반복되는 시간 속에서 전설적인 전사 리타 브라타스키(에밀리 블런트)를 만나 외계 종족을 이길 방법을 찾기 위해 끝없이 싸우고, 죽고, 다시 태어나는 지옥 같은 운명을 겪는다. 이 타임 루프를 멈추고 전쟁을 끝낼 수 있을까?',
-'poster.jpg','bg.jpg','5000','4699307','F','상영중');
+
+INSERT ALL
+-- 오펜하이머 (mc005) (따옴표 수정 완료)
+INTO MOVIE(MOVIE_CODE, MOVIE_NAME, MOVIE_GENRE, RUNNING_TIME, MOVIE_GRADE, RELEASE_DATE, INTRO, MAIN_IMAGE, BG_IMAGE, DAILY_AUDIENCE, TOTAL_AUDIENCE, MOVIE_DELETE, SHOWING)
+VALUES ('mc005','오펜하이머','드라마/역사','180','15세 이용가', '2023-08-15',
+'1940년대, 제2차 세계대전이 한창이던 시기. 천재 물리학자 J. 로버트 오펜하이머는 미 육군의 레슬리 그로브스 장군에게 발탁되어 극비리에 진행되는 ''맨해튼 프로젝트''의 총 책임자로 임명된다. 그는 인류의 미래를 건 핵무기 개발이라는 막중한 임무를 수행하며, 과학적 성취와 도덕적 딜레마 사이에서 고뇌한다. 그의 연구는 세상을 영원히 바꿀 결과를 초래하게 되고, 오펜하이머는 자신이 만든 창조물의 무게를 감당해야만 한다. 이 영화는 한 천재 과학자의 빛과 그림자를 심도 있게 조명하며, 원자 폭탄 개발 과정과 그 이후의 격변을 드라마틱하게 그려낸다.',
+'mc005_poster.jpg','mc005_bg.jpg','6000','3200000','F','상영중')
+
+-- 스즈메의 문단속 (mc006)
+INTO MOVIE(MOVIE_CODE, MOVIE_NAME, MOVIE_GENRE, RUNNING_TIME, MOVIE_GRADE, RELEASE_DATE, INTRO, MAIN_IMAGE, BG_IMAGE, DAILY_AUDIENCE, TOTAL_AUDIENCE, MOVIE_DELETE, SHOWING)
+VALUES ('mc006','스즈메의 문단속','애니메이션/판타지','121','12세 이용가', '2023-03-08',
+'규슈의 한적한 마을에 사는 17세 소녀 스즈메는 ''문을 찾는다''는 이상한 청년 소타를 만난다. 호기심에 그를 쫓아 산속 폐허에서 낡은 문을 발견하고, 문을 열자 재난을 부르는 ''미미즈''가 나타난다. 소타는 재난을 막기 위해 전국을 떠돌며 문을 ''닫는'' 사명을 지닌 ''토지시''였고, 실수로 그를 어린 의자로 변하게 만든 스즈메는 자신의 잘못을 되돌리고 미미즈로 인해 발생할 수 있는 재난을 막기 위해 소타와 함께 일본 전역의 폐허에 나타나는 재난의 문을 닫기 위한 여정을 시작한다. 두 사람은 이 특별하고 신비한 여행을 통해 성장과 인연의 의미를 깨닫게 된다.',
+'mc006_poster.jpg','mc006_bg.jpg','4500','5540000','F','상영중')
+
+-- 아바타 물의 길 (mc007)
+INTO MOVIE(MOVIE_CODE, MOVIE_NAME, MOVIE_GENRE, RUNNING_TIME, MOVIE_GRADE, RELEASE_DATE, INTRO, MAIN_IMAGE, BG_IMAGE, DAILY_AUDIENCE, TOTAL_AUDIENCE, MOVIE_DELETE, SHOWING)
+VALUES ('mc007','아바타 물의 길','SF/액션/어드벤처','192','12세 이용가', '2022-12-14',
+'제이크 설리와 네이티리가 가족을 이루고 평화로운 삶을 이어가던 판도라. 하지만 지구인들의 재침공으로 다시금 평화가 깨지고, 제이크는 가족을 지키기 위해 낯선 바다로 피신한다. 그곳에서 그는 신비로운 물의 부족 ''멧케이나''족과 조우하며 바다에서 살아가는 법과 그들의 문화를 배운다. 그러나 인간들의 위협은 계속되고, 제이크 가족은 낯선 환경과 새로운 삶의 방식에 적응하면서도 사랑하는 사람들을 지키기 위한 필사적인 사투를 벌이게 된다. 아름답고 광활한 수중 세계를 배경으로 펼쳐지는 이들의 서사는 가족의 의미와 자연과의 조화를 다시 한번 생각하게 한다.',
+'mc007_poster.jpg','mc007_bg.jpg','3000','10800000','F','상영중')
+
+-- 가디언즈 오브 갤럭시3 (mc008)
+INTO MOVIE(MOVIE_CODE, MOVIE_NAME, MOVIE_GENRE, RUNNING_TIME, MOVIE_GRADE, RELEASE_DATE, INTRO, MAIN_IMAGE, BG_IMAGE, DAILY_AUDIENCE, TOTAL_AUDIENCE, MOVIE_DELETE, SHOWING)
+VALUES ('mc008','가디언즈 오브 갤럭시3','액션/어드벤처/SF','150','12세 이용가', '2023-05-03',
+'사랑하는 이를 잃은 슬픔에 빠진 스타로드(피터 퀼)와 가디언즈 멤버들은 더 이상 평화로운 은둔 생활을 이어가지 못한다. 팀의 과거와 깊이 얽힌 새로운 위협이 등장하며, 로켓의 목숨이 걸린 중대한 임무를 수행해야 하는 상황에 놓인다. 로켓의 잔혹한 탄생 배경과 숨겨진 과거가 드러나면서, 가디언즈는 그를 구하기 위한 절박하고 위험한 여정에 뛰어든다. 이번 미션에 실패하면 가디언즈의 존재 자체가 위태로워질 수 있기에, 멤버들은 모든 것을 걸고 헌신한다. 유쾌함 속에 숨겨진 진한 우정과 감동이 우주를 배경으로 펼쳐진다.',
+'mc008_poster.jpg','mc008_bg.jpg','5500','4200000','F','상영중')
+
+-- 탑건 매버릭 (mc009)
+INTO MOVIE(MOVIE_CODE, MOVIE_NAME, MOVIE_GENRE, RUNNING_TIME, MOVIE_GRADE, RELEASE_DATE, INTRO, MAIN_IMAGE, BG_IMAGE, DAILY_AUDIENCE, TOTAL_AUDIENCE, MOVIE_DELETE, SHOWING)
+VALUES ('mc009','탑건 매버릭','액션/드라마','130','15세 이용가', '2022-06-22',
+'최고의 파일럿이자 전설적인 인물 매버릭(피트 미첼)은 30년이 넘는 세월 동안 해군에서 복무하며 파일럿의 길을 고수한다. 어느 날, 그는 해군 파일럿 엘리트들의 교육을 담당하는 ''탑건'' 스쿨의 교관으로 복귀하게 된다. 그곳에서 매버릭은 과거 자신의 파트너 ''구스''의 아들인 ''루스터''를 비롯한 젊은 정예 요원들을 만나게 된다. 매버릭은 목숨을 건 위험천만한 임무를 위해 그들을 훈련시키면서, 과거의 그림자와 마주하게 되고 자신의 깊은 내면과도 싸워야 한다. 한계를 뛰어넘는 비행 액션과 함께 뜨거운 감동이 스크린을 가득 채운다.',
+'mc009_poster.jpg','mc009_bg.jpg','7000','8190000','F','상영중')
+
+-- 기생충 (mc010) (따옴표 수정 완료)
+INTO MOVIE(MOVIE_CODE, MOVIE_NAME, MOVIE_GENRE, RUNNING_TIME, MOVIE_GRADE, RELEASE_DATE, INTRO, MAIN_IMAGE, BG_IMAGE, DAILY_AUDIENCE, TOTAL_AUDIENCE, MOVIE_DELETE, SHOWING)
+VALUES ('mc010','기생충','드라마','131','15세 이용가', '2019-05-30',
+'전원 백수인 기택 가족은 반지하에 살며 힘든 생활을 이어간다. 그러던 중, 장남 기우가 고액 과외 면접을 위해 IT 기업 CEO인 박 사장의 대저택을 찾아가게 되면서 두 가족의 삶이 걷잡을 수 없는 방향으로 얽히기 시작한다. 기택 가족은 부유한 박 사장 가족에게 한 명씩 완벽하게 ''취업''하는 기상천외한 계획을 세우고, 곧 그들의 삶은 예상치 못한 방향으로 흘러간다. 이 영화는 두 극과 극의 가족을 통해 현대 사회의 빈부 격차와 계층 간의 문제를 날카롭게 풍자하며, 예측 불가능한 전개와 서스펜스로 관객을 사로잡는다. 칸 영화제 황금종려상 수상작.',
+'mc010_poster.jpg','mc010_bg.jpg','2000','10310375','T','상영종료')
+SELECT * FROM dual;
+
 
 
 /* 8. 예매율 (br1 -> br001) */
@@ -427,43 +463,125 @@ VALUES ('tc011','DVkAC4b6SWQ','mc004');
 INSERT INTO TRAILER(TRAILER_CODE, URL_PATH, MOVIE_CODE)
 VALUES ('tc012','1qg_ynu8FdU','mc004');
 
+INSERT ALL
+/* --- [mc005] 오펜하이머 트레일러 3개 (tc013 ~ tc015) --- */
+INTO TRAILER(TRAILER_CODE, URL_PATH, MOVIE_CODE) VALUES ('tc013','oSqK_v6zPoM','mc005')
+INTO TRAILER(TRAILER_CODE, URL_PATH, MOVIE_CODE) VALUES ('tc014','uYPbbksJxIg','mc005')
+INTO TRAILER(TRAILER_CODE, URL_PATH, MOVIE_CODE) VALUES ('tc015','mm8XfSs4JoA','mc005')
+
+/* --- [mc006] 스즈메의 문단속 트레일러 3개 (tc016 ~ tc018) --- */
+INTO TRAILER(TRAILER_CODE, URL_PATH, MOVIE_CODE) VALUES ('tc016','7kVu6Io4A4Y','mc006')
+INTO TRAILER(TRAILER_CODE, URL_PATH, MOVIE_CODE) VALUES ('tc017','4AX-we2X338','mc006')
+INTO TRAILER(TRAILER_CODE, URL_PATH, MOVIE_CODE) VALUES ('tc018','5suRaBCI21I','mc006')
+
+/* --- [mc007] 아바타: 물의 길 트레일러 3개 (tc019 ~ tc021) --- */
+INTO TRAILER(TRAILER_CODE, URL_PATH, MOVIE_CODE) VALUES ('tc019','d9MyW72ELq0','mc007')
+INTO TRAILER(TRAILER_CODE, URL_PATH, MOVIE_CODE) VALUES ('tc020','72KSf1Em1Jk','mc007')
+INTO TRAILER(TRAILER_CODE, URL_PATH, MOVIE_CODE) VALUES ('tc021','5vbMoYrViDw','mc007')
+
+/* --- [mc008] 가디언즈 오브 갤럭시 Vol.3 트레일러 3개 (tc022 ~ tc024) --- */
+INTO TRAILER(TRAILER_CODE, URL_PATH, MOVIE_CODE) VALUES ('tc022','XyHr-s3MfCQ','mc008')
+INTO TRAILER(TRAILER_CODE, URL_PATH, MOVIE_CODE) VALUES ('tc023','u3V5KDHRQvk','mc008')
+INTO TRAILER(TRAILER_CODE, URL_PATH, MOVIE_CODE) VALUES ('tc024','rMJ8qLe6q3A','mc008')
+
+/* --- [mc009] 탑건 매버릭 트레일러 3개 (tc025 ~ tc027) --- */
+INTO TRAILER(TRAILER_CODE, URL_PATH, MOVIE_CODE) VALUES ('tc025','BVa34EM3Lvw','mc009')
+INTO TRAILER(TRAILER_CODE, URL_PATH, MOVIE_CODE) VALUES ('tc026','-yVzb0bqx84','mc009')
+INTO TRAILER(TRAILER_CODE, URL_PATH, MOVIE_CODE) VALUES ('tc027','htAIuC6DTeE','mc009')
+
+/* --- [mc010] 기생충 트레일러 3개 (tc028 ~ tc030) --- */
+INTO TRAILER(TRAILER_CODE, URL_PATH, MOVIE_CODE) VALUES ('tc028','SEUXfv87Wpk','mc010')
+INTO TRAILER(TRAILER_CODE, URL_PATH, MOVIE_CODE) VALUES ('tc029','jBdRhhSt3Bc','mc010')
+INTO TRAILER(TRAILER_CODE, URL_PATH, MOVIE_CODE) VALUES ('tc030','V5tv6bfCG14','mc010')
+SELECT * FROM dual;
+
 /* 20. 이미지 테이블 데이터 생성 (4개씩 반영) */
 --insert All로 한번에 삽입.
 
  INSERT ALL
 /* --- [mc001] 이미지 6개 (img001 ~ img006) --- */
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img001','still_001.jpg','mc001')
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img002','still_002.jpg','mc001')
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img003','still_003.jpg','mc001')
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img004','still_004.jpg','mc001')
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img005','still_005.jpg','mc001')
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img006','still_006.jpg','mc001')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img001','mc001_still_001.jpg','mc001')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img002','mc001_still_002.jpg','mc001')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img003','mc001_still_003.jpg','mc001')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img004','mc001_still_004.jpg','mc001')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img005','mc001_still_005.jpg','mc001')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img006','mc001_still_006.jpg','mc001')
 
 /* --- [mc002] 이미지 6개 (img007 ~ img012) --- */
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img007','still_001.jpg','mc002')
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img008','still_002.jpg','mc002')
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img009','still_003.jpg','mc002')
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img010','still_004.jpg','mc002')
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img011','still_005.jpg','mc002')
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img012','still_006.jpg','mc002')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img007','mc002_still_001.jpg','mc002')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img008','mc002_still_002.jpg','mc002')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img009','mc002_still_003.jpg','mc002')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img010','mc002_still_004.jpg','mc002')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img011','mc002_still_005.jpg','mc002')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img012','mc002_still_006.jpg','mc002')
 
 /* --- [mc003] 이미지 6개 (img013 ~ img018) --- */
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img013','still_001.jpg','mc003')
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img014','still_002.jpg','mc003')
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img015','still_003.jpg','mc003')
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img016','still_004.jpg','mc003')
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img017','still_005.jpg','mc003')
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img018','still_006.jpg','mc003')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img013','mc003_still_001.jpg','mc003')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img014','mc003_still_002.jpg','mc003')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img015','mc003_still_003.jpg','mc003')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img016','mc003_still_004.jpg','mc003')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img017','mc003_still_005.jpg','mc003')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img018','mc003_still_006.jpg','mc003')
 
 /* --- [mc004] 이미지 6개 (img019 ~ img024) --- */
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img019','still_001.jpg','mc004')
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img020','still_002.jpg','mc004')
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img021','still_003.jpg','mc004')
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img022','still_004.jpg','mc004')
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img023','still_005.jpg','mc004')
-INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img024','still_006.jpg','mc004')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img019','mc004_still_001.jpg','mc004')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img020','mc004_still_002.jpg','mc004')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img021','mc004_still_003.jpg','mc004')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img022','mc004_still_004.jpg','mc004')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img023','mc004_still_005.jpg','mc004')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img024','mc004_still_006.jpg','mc004')
 
 SELECT * FROM DUAL;--이걸로 insertAll을 종료함.
+
+INSERT ALL
+-- 오펜하이머 (mc005) 이미지 6개 (img025 ~ img030)
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img025','mc005_still_001.jpg','mc005')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img026','mc005_still_002.jpg','mc005')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img027','mc005_still_003.jpg','mc005')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img028','mc005_still_004.jpg','mc005')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img029','mc005_still_005.jpg','mc005')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img030','mc005_still_006.jpg','mc005')
+
+-- 스즈메의 문단속 (mc006) 이미지 6개 (img031 ~ img036)
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img031','mc006_still_001.jpg','mc006')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img032','mc006_still_002.jpg','mc006')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img033','mc006_still_003.jpg','mc006')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img034','mc006_still_004.jpg','mc006')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img035','mc006_still_005.jpg','mc006')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img036','mc006_still_006.jpg','mc006')
+
+-- 아바타 물의 길 (mc007) 이미지 6개 (img037 ~ img042)
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img037','mc007_still_001.jpg','mc007')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img038','mc007_still_002.jpg','mc007')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img039','mc007_still_003.jpg','mc007')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img040','mc007_still_004.jpg','mc007')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img041','mc007_still_005.jpg','mc007')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img042','mc007_still_006.jpg','mc007')
+
+-- 가디언즈 오브 갤럭시3 (mc008) 이미지 6개 (img043 ~ img048)
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img043','mc008_still_001.jpg','mc008')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img044','mc008_still_002.jpg','mc008')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img045','mc008_still_003.jpg','mc008')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img046','mc008_still_004.jpg','mc008')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img047','mc008_still_005.jpg','mc008')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img048','mc008_still_006.jpg','mc008')
+
+-- 탑건 매버릭 (mc009) 이미지 6개 (img049 ~ img054)
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img049','mc009_still_001.jpg','mc009')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img050','mc009_still_002.jpg','mc009')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img051','mc009_still_003.jpg','mc009')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img052','mc009_still_004.jpg','mc009')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img053','mc009_still_005.jpg','mc009')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img054','mc009_still_006.jpg','mc009')
+
+-- 기생충 (mc010) 이미지 6개 (img055 ~ img060)
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img055','mc010_still_001.jpg','mc010')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img056','mc010_still_002.jpg','mc010')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img057','mc010_still_003.jpg','mc010')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img058','mc010_still_004.jpg','mc010')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img059','mc010_still_005.jpg','mc010')
+INTO MOVIE_IMAGE(IMG_CODE, IMG_PATH, MOVIE_CODE) VALUES ('img060','mc010_still_006.jpg','mc010')
+SELECT * FROM dual;
 
 
 /* 21. 공지사항 */
