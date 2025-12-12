@@ -260,7 +260,7 @@ body {
 .tabs {
   display: flex;
   gap: 0;
-  border-bottom: 2px solid #222;
+  border-bottom: 1px solid #222;
   margin-bottom: 40px;
   width: 100%;
 }
@@ -281,7 +281,8 @@ body {
 
 .tab.active {
   color: #000;
-  background:#B8F4FF;
+  /* background:#B8F4FF; */
+  border: 1px solid #000;
   border-radius: 10px;
 }
 

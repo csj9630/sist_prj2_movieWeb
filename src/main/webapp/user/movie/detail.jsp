@@ -5,6 +5,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ include file="../../fragments/siteProperty.jsp"%>
 
 <%
@@ -145,21 +146,21 @@ function closeImageModal() {
 						<span class="stat-icon">⭐</span>
 						<div class="stat-content">
 							<div class="stat-value rating-value">9.5</div>
-							<div class="stat-label">(42.6k)</div>
+							<div class="stat-label">평점</div>
 						</div>
 					</div>
 					<div class="stat-item">
-						<span class="stat-icon">♥</span>
+						<span class="stat-icon">🔵</span>
 						<div class="stat-content">
-							<div class="stat-value heart-value">8</div>
-							<div class="stat-label">관심</div>
+							<div class="stat-value heart-value"><fmt:formatNumber type="number" maxFractionDigits="3" value="${detail.dailyAudience}" /></div>
+							<div class="stat-label">일일 조회수</div>
 						</div>
 					</div>
 					<div class="stat-item">
 						<span class="stat-icon">👁</span>
 						<div class="stat-content">
-							<div class="stat-value">3,302,939</div>
-							<div class="stat-label">조회수</div>
+							<div class="stat-value"><fmt:formatNumber type="number" maxFractionDigits="3" value="${detail.totalAudience}" /></div>
+							<div class="stat-label">전체 조회수</div>
 						</div>
 					</div>
 				</div>
