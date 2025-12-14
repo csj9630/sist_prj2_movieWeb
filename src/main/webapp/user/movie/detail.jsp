@@ -42,87 +42,14 @@ request.setCharacterEncoding("UTF-8");
 
 <script type="text/javascript">
 
+//함수 정의는 movie_detail.js에 위치함.
 $(document).ready(function () {
-	introDivider();
-	initImageModal();
+	changeTab();//탭 기능
+	introDivider();//인트로 태그 적용
+	initImageModal();//이미지 확대
 });//document.ready
 
-function introDivider() {
-	 let text = $("#movie_intro").html().trim();
 
-	    // 1) HTML 태그 제거 (<br>, <p> 등)
-	    text = text.replace(/<[^>]+>/g, " ");
-
-	    // 2) 줄바꿈을 공백으로 통합
-	    text = text.replace(/\s+/g, " ").trim();
-
-	    // 3) 문장 단위 분리 (. ! ?)
-	    let sentences = text.split(/(?<=[.!?])\s+/);
-
-	    // 4) 공백 문장 제거
-	    sentences = sentences.map(s => s.trim()).filter(s => s.length > 0);
-	    
-	    // 5) 출력 생성
-	    let result = "";
-	    if (sentences.length > 0) {
-	        result += '<h2 class="content-title">'+sentences[0]+'</h2>';
-	    }
-	    for (let i = 1; i < sentences.length; i++) {
-	        result += '<p class="content-text">'+sentences[i]+'</p>';
-	    }
-
-	    $("#movie_intro").html(result);
-}//introDivider
-
-//이미지 모달 초기화
-function initImageModal() {
-	// 모달 HTML 동적 추가
-	if ($('#imageModal').length === 0) {
-		$('body').append(`
-			<div class="image-modal" id="imageModal">
-				<button class="modal-close" id="closeModal">&times;</button>
-				<div class="modal-content">
-					<img id="modalImage" src="" alt="">
-				</div>
-			</div>
-		`);
-	}
-
-	// 이미지 클릭 이벤트
-	$('.image-grid .image-item img').click(function() {
-		const imgSrc = $(this).attr('src');
-		console.log(imgSrc);
-		const imgAlt = $(this).attr('alt');
-		
-		$('#modalImage').attr('src', imgSrc).attr('alt', imgAlt);
-		$('#imageModal').addClass('active');
-		$('body').css('overflow', 'hidden');
-	});
-
-	// 모달 닫기
-	$('#closeModal, #imageModal').click(function(e) {
-		if (e.target === this) {
-			closeImageModal();
-		}
-	});
-
-	// ESC 키로 모달 닫기
-	$(document).keydown(function(e) {
-		if ($('#imageModal').hasClass('active') && e.key === 'Escape') {
-			closeImageModal();
-		}
-	});
-
-	// 모달 내부 클릭 시 전파 중지
-	$('.modal-content').click(function(e) {
-		e.stopPropagation();
-	});
-}
-
-function closeImageModal() {
-	$('#imageModal').removeClass('active');
-	$('body').css('overflow', 'auto');
-}
 
 </script>
 </head>
