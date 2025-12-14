@@ -1,5 +1,7 @@
 /*==============업데이트 내용============================*/
 /*
+2025-12-13 : PK에 Sequence 적용. movie, trailer, MOVIE_IMAGE
+
 2025-12-12 : 이미지 파일명을 mc001_still_001.jpg로 변경
 						영화 데이터 50개까지 추가
 2025-12-11 : movie, trailer, MOVIE_IMAGE 가데이터를 insert all로 수정 및 데이터  추가
@@ -1983,8 +1985,8 @@ COMMIT;
 /* 데이터 확인 (SELECT)              */
 /* ============================================== */
 SELECT * FROM ANNOUNCE;
-SELECT * FROM MOVIE_IMAGE;
-SELECT * FROM TRAILER;
+SELECT * FROM MOVIE_IMAGE; --스틸컷
+SELECT * FROM TRAILER; --트레일러
 SELECT * FROM REVIEW;
 SELECT * FROM PAYMENT;
 SELECT * FROM SEAT_BOOK;
@@ -1995,7 +1997,7 @@ SELECT * FROM MOVIE_DIRECTOR;
 SELECT * FROM SEAT;
 SELECT * FROM SOUND;
 SELECT * FROM THEATHER_INFO;
-SELECT * FROM MOVIE;
+SELECT * FROM MOVIE; --영화
 SELECT * FROM CINEMA_INFO;
 SELECT * FROM ACTOR;
 SELECT * FROM DIRECTOR;
