@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ include file="../../fragments/siteProperty.jsp"%>
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="auto">
 <head>
@@ -9,13 +10,11 @@
 
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<link rel="shortcut icon" href="http://localhost/sist_prj2_movieWeb/resources/images/favicon.ico">
+<link rel="shortcut icon" href="${commonURL}/images/favicon.ico">
 
-<title>2GV</title>
-<link rel="stylesheet" href="../../resources/css/megabox.min.css" media="all">
-<!-- <script type="text/javascript" async=""
-	src="./MEET PLAY SHARE, 메가박스_files/js"></script> -->
-<!-- <script async="" src="./MEET PLAY SHARE, 메가박스_files/js(1)"></script> -->
+<title>2GV 메인화면</title>
+<link rel="stylesheet" href="${commonURL}/resources/css/megabox.min.css"
+	media="all">
 <script>
 	window.dataLayer = window.dataLayer || [];
 	function gtag() {
@@ -24,7 +23,6 @@
 	gtag('js', new Date());
 	gtag('config', 'G-5JL3VPLV2E');
 </script>
-<!-- <script async="" src="./MEET PLAY SHARE, 메가박스_files/js(2)"></script> -->
 <script>
 	window.dataLayer = window.dataLayer || [];
 	function gtag() {
@@ -33,19 +31,15 @@
 	gtag('js', new Date());
 	gtag('config', 'G-LKZN3J8B1J');
 </script>
-<script src="../../resources/js/megabox.api.min.js"></script>
-<script src="../../resources/js/lozad.min.js"></script>
-<!-- <script src="./MEET PLAY SHARE, 메गा박스_files/megabox.common.min.js.다운로드"></script>
-<script
-	src="./MEET PLAY SHARE, 메가박스_files/megabox.netfunnel.min.js.다운로드"></script>
-<script src="./MEET PLAY SHARE, 메가박스_files/persona.js.다운로드" async=""></script> -->
+<script src="${commonURL}/resources/js/megabox.api.min.js"></script>
+<script src="${commonURL}/resources/js/lozad.min.js"></script>
 
-<script src="../../resources/js/ui.common.js"></script>
-<script src="../../resources/js/front.js"></script>
+<script src="${commonURL}/resources/js/ui.common.js"></script>
+<script src="${commonURL}/resources/js/front.js"></script>
 <link type="text/css" rel="stylesheet"
 	href="chrome-extension://fheoggkfdfchfphceeifdbepaooicaho/css/mcafee_fonts.css">
 </head>
-<link rel="stylesheet" href="../../resources/css/main.css"
+<link rel="stylesheet" href="${commonURL}/resources/css/main.css"
 	media="all">
 
 <body style="padding: 0px;">
@@ -55,9 +49,6 @@
 			height="0" width="0" style="display: none; visibility: hidden"></iframe>
 	</noscript>
 	<div class="body-wrap">
-		<!-- <script src="./MEET PLAY SHARE, 메가박스_files/hmac-sha256.js.다운로드"></script>
-		<script src="./MEET PLAY SHARE, 메गा박스_files/enc-base64-min.js.다운로드"></script>
-		<script src="./MEET PLAY SHARE, 메가박스_files/megabox-simpleBokd.js.다운로드"></script> -->
 
 		<div></div>
 
@@ -66,7 +57,6 @@
 		<header id="header" class="main-header no-bg">
 			<jsp:include page="../../fragments/mainHeader.jsp" />
 		</header>
-		<!-- <script src="./MEET PLAY SHARE, 메가박스_files/swiper.min.js.다운로드"></script> -->
 
 		<div class="container main-container area-ad">
 			<div id="contents">
@@ -76,7 +66,7 @@
 						<div class="bg">
 							<div class="bg-pattern"></div>
 							<img
-								src="../../resources/imgges/movie_bg.jpg"
+								src="${commonURL}/resources/images/movie_bg.jpg"
 								alt="still_01.jpg" onerror="noImg(this, &#39;main&#39;);">
 						</div>
 
@@ -102,7 +92,7 @@
 											<p class="rank">
 												1<span class="ir">위</span>
 											</p> <img
-											src="../../resources/images/zoo.jpg"
+											src="${commonURL}/resources/images/zoo.jpg"
 											alt="위키드: 포 굿" class="poster"
 											onerror="noImg(this, &#39;main&#39;);">
 											<div class="wrap">
@@ -134,7 +124,7 @@
 											<p class="rank">
 												2<span class="ir">위</span>
 											</p> <img
-											src="../../resources/images/zoo.jpg"
+											src="${commonURL}/resources/images/zoo.jpg"
 											alt="주토피아 2" class="poster"
 											onerror="noImg(this, &#39;main&#39;);">
 											<div class="wrap">
@@ -171,7 +161,7 @@
 											<p class="rank">
 												3<span class="ir">위</span>
 											</p> <img
-											src="../../resources/images/chain.jpg"
+											src="${commonURL}/resources/images/chain.jpg"
 											alt="나우 유 씨 미 3" class="poster"
 											onerror="noImg(this, &#39;main&#39;);">
 											<div class="wrap" style="display: none; opacity: 1;">
@@ -210,7 +200,7 @@
 											<p class="rank">
 												4<span class="ir">위</span>
 											</p> <img
-											src="../../resources/images/chain.jpg"
+											src="${commonURL}/resources/images/chain.jpg"
 											alt="극장판 체인소 맨: 레제편" class="poster"
 											onerror="noImg(this, &#39;main&#39;);">
 											<div class="wrap" style="display: none;">
@@ -268,18 +258,18 @@
 							</div>
 							<div class="moving-mouse">
 								<img class="iconset" alt=""
-									src="http://localhost/sist_prj2_movieWeb/resources/images/ico-mouse.png"
+									src="${commonURL}/resources/images/ico-mouse.png"
 									style="top: 0px;">
 							</div>
 							</div>
-						</div>
 					</div>
+				</div>
 			</div>
-			</div>
+		</div>
 		<footer id="footer">
 			<jsp:include page="../../fragments/footer.jsp"></jsp:include>
 		</footer>
-		</div>
+	</div>
 	<form id="mainForm"></form>
 
 	<div class="normalStyle"
@@ -287,5 +277,5 @@
 	<div class="alertStyle"
 		style="display: none; position: fixed; top: 0px; left: 0px; background: #000; opacity: 0.7; width: 100%; height: 100%; z-index: 5005;"></div>
 	<span id="PING_CONTENT_DLS_POPUP" style="display: none;"></span>
-	</body>
+</body>
 </html>

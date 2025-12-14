@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%@ include file="../../fragments/siteProperty.jsp"%>
 <html lang="en" data-bs-theme="auto">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>빠른예매 (좌석선택)</title>
-<link rel="shortcut icon" href="http://localhost/sist_prj2_movieWeb/resources/images/favicon.ico">
+<link rel="shortcut icon" href="${commonURL}/resources/images/favicon.ico">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<link rel="stylesheet" href="../../resources/css/megabox.min.css" media="all">
+<link rel="stylesheet" href="${commonURL}/resources/css/megabox.min.css" media="all">
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -541,7 +542,7 @@
 				</div>
 
 				<div class="screen-arc-image">
-					<img src="http://localhost/sist_prj2_movieWeb/resources/images/img-theater-screen.png" />
+					<img src="${commonURL}/resources/images/img-theater-screen.png" />
 				</div>
 
 				<div class="exit-icon-top">Top Exit</div>
@@ -555,7 +556,7 @@
 		<div class="sidebar">
 			<div class="sidebar-content">
 				<div class="movie-info">
-					<img src="http://localhost/sist_prj2_movieWeb/resources/images/zoo.jpg" alt="주토피아 2 포스터">
+					<img src="../../resources/images/zoo_book_payment.jpg" alt="주토피아 2 포스터">
 					<div>
 						<h4>
 							<span class="rating-all">ALL</span> <span style="color:#fff;">주토피아 2</span>
@@ -651,7 +652,7 @@
                 alertModal: $('#alert-modal-booking') // 모달 캐싱
             };
             
-            const NEXT_PAGE_URL = 'http://localhost/sist_prj2_movieWeb/user/payment/paymentFrm.jsp';
+            const NEXT_PAGE_URL = 'http://localhost/second_project_movie_reservation/index/paymentFrm.jsp';
             
             /*
             ========================================
