@@ -87,5 +87,48 @@ public class DetailDAO {
 
 		return dtDTO;
 	}// selectId
+	
+	
+	/**
+	 * 조회수를 업데이트
+	 * 
+	 * @param pDTO
+	 * @throws SQLException
+	 */
+	public int upDateAudience(int da,int ta,String code) throws SQLException {
+		int cnt = 0;
+		DbConn db = DbConn.getInstance("jdbc/dbcp");
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+
+			// 1.JNDI 사용객체 생성
+			// 2.DataSource 얻기
+			// 3.DataSource에서 Connection 얻기
+			con = db.getConn();
+
+			// 4.쿼리문 생성객체 얻기
+			StringBuilder upDateMember = new StringBuilder();
+			
+			upDateMember
+				.append(" update movie ")
+				.append(" set daily_audience=?, total_audience=? ")
+				.append(" where movie_code=? ");
+			pstmt = con.prepareStatement(upDateMember.toString());
+
+			// 5.바인드 변수 값 설정
+			pstmt.setInt(1, da);
+			pstmt.setInt(2, ta);
+			pstmt.setString(3, code);
+
+			// 6.쿼리문 수행 후 결과 얻기
+			cnt = pstmt.executeUpdate();
+		} finally {
+			// 7.연결 끊기
+			db.dbClose(null, pstmt, con);
+		} // end finally
+		return cnt;
+	}// insertMember
 
 }// class

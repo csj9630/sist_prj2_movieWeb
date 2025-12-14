@@ -1,6 +1,7 @@
 /*==============업데이트 내용============================*/
 /*
 2025-12-13 : PK에 Sequence 적용. movie, trailer, MOVIE_IMAGE
+						review에 가데이터 1개 테스트 추가.
 
 2025-12-12 : 이미지 파일명을 mc001_still_001.jpg로 변경
 						영화 데이터 50개까지 추가
@@ -270,6 +271,9 @@ VALUES('test2', 'q1w2e3', 'qq@naver.com', '테스트', '1999-05-23','여자', 'defaul
 INSERT INTO USERS(USERS_ID, USERS_PASS, EMAIL, USERS_NAME, BIRTH, GENDER, USERS_IMAGE, RECENT_LOGIN, JOIN_DATE, ACTIVE, PHONE_NUM)
 VALUES('test3', '1', 'user@naver.com', '유저', '1991-10-13','남자', 'default.jpg', SYSDATE, '2023-11-18', '활성', '010-1234-2231');
 
+INSERT INTO USERS(USERS_ID, USERS_PASS, EMAIL, USERS_NAME, BIRTH, GENDER, USERS_IMAGE, RECENT_LOGIN, JOIN_DATE, ACTIVE, PHONE_NUM)
+VALUES('chainsoSamaSaiko', 'q1w2e3r4', 'beam@gmail.com', '유저', '1992-03-03','남자', 'default.jpg', SYSDATE, '2023-09-03', '활성', '010-5555-5555');
+
 /* 2. 관리자 */
 INSERT INTO ADMIN(ADMIN_ID, ADMIN_PASS, CREATE_DATE) VALUES('admin','1234',SYSDATE);
 INSERT INTO ADMIN(ADMIN_ID, ADMIN_PASS, CREATE_DATE) VALUES('admin2','admin',SYSDATE);
@@ -303,7 +307,7 @@ INSERT INTO CINEMA_INFO(CINEMA_NUM, CINEMA_NAME, CINEMA_LOCATION) VALUES ('cn001
 INSERT INTO MOVIE(MOVIE_CODE, MOVIE_NAME, MOVIE_GENRE, RUNNING_TIME, MOVIE_GRADE, RELEASE_DATE, INTRO, MAIN_IMAGE, BG_IMAGE, DAILY_AUDIENCE, TOTAL_AUDIENCE, MOVIE_DELETE, SHOWING)
 VALUES (
     'mc' || LPAD(movie_seq.nextval, 3, '0'),
-    '극장판 체인소맨 : 폭탄편',
+    '극장판 체인소맨 : 레제편',
     '액션',
     '120',
     '15세 이용가',
@@ -1289,6 +1293,9 @@ VALUES ('rn002', '이건 좀 별로에요',55,SYSDATE,'bn002','test2');
 INSERT INTO REVIEW(REVIEW_NUM, REVIEW_CONTENT, REVIEW_SCORE, REVIEW_DATE, BOOK_NUM, USERS_ID)
 VALUES ('rn003', '잘 자다 왔어요',99,SYSDATE,'bn003','test3');
 
+INSERT INTO REVIEW(REVIEW_NUM, REVIEW_CONTENT, REVIEW_SCORE, REVIEW_DATE, BOOK_NUM, USERS_ID)
+VALUES ('rn004', '처음에 OST 나오면서 오프닝 영상 나오는데 너무 멋져서ㅜ 그거만 기억에 남아용 굿',100,SYSDATE,'bn001','chainsoSamaSaiko');
+
 /* 19. 트레일러 (tc001부터 시퀀스 적용) */
 INSERT INTO TRAILER(TRAILER_CODE, URL_PATH, MOVIE_CODE)
 VALUES ('tc'||LPAD(trailer_seq.NEXTVAL, 3, '0'),'fRqegBxEvEc','mc001');
@@ -2031,3 +2038,27 @@ select  img_code, img_path, movie_code  from movie_image  where movie_code='mc00
 SELECT TRAILER_CODE, URL_PATH, MOVIE_CODE
 FROM TRAILER
 WHERE MOVIE_CODE = 'mc001';
+
+
+
+SELECT
+    SI.movie_code  -- 상영 정보 테이블의 영화 코드
+FROM
+    REVIEW R
+JOIN
+    BOOK B ON R.book_num = B.book_num
+JOIN
+    SCREEN_INFO SI ON B.screen_code = SI.screen_code;
+
+
+SELECT  R.review_num,R.review_content, R.review_score, R.review_date, R.book_num, R.users_id
+FROM REVIEW R
+JOIN BOOK B ON R.book_num = B.book_num
+JOIN SCREEN_INFO SI ON B.screen_code = SI.screen_code
+WHERE SI.movie_code = 'mc001';
+
+/*
+update movie
+set DAILY_AUDIENCE = 1000, TOTAL_AUDIENCE  = 99999
+WHERE MOVIE_CODE = 'mc003';
+*/

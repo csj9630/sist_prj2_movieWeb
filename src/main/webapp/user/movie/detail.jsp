@@ -72,7 +72,7 @@ $(document).ready(function () {
 					<div class="stat-item">
 						<span class="stat-icon">⭐</span>
 						<div class="stat-content">
-							<div class="stat-value rating-value">9.5</div>
+							<div class="stat-value rating-value">${scoreAverage}</div>
 							<div class="stat-label">평점</div>
 						</div>
 					</div>
@@ -80,14 +80,14 @@ $(document).ready(function () {
 						<span class="stat-icon">🔵</span>
 						<div class="stat-content">
 							<div class="stat-value heart-value"><fmt:formatNumber type="number" maxFractionDigits="3" value="${detail.dailyAudience}" /></div>
-							<div class="stat-label">일일 조회수</div>
+							<div class="stat-label">일일 관람객수</div>
 						</div>
 					</div>
 					<div class="stat-item">
 						<span class="stat-icon">👁</span>
 						<div class="stat-content">
 							<div class="stat-value"><fmt:formatNumber type="number" maxFractionDigits="3" value="${detail.totalAudience}" /></div>
-							<div class="stat-label">전체 조회수</div>
+							<div class="stat-label">누적 관람객수</div>
 						</div>
 					</div>
 				</div>
@@ -103,7 +103,10 @@ $(document).ready(function () {
 				</div>
 				<div class="purchase-box">
 					<div class="purchase-item">
-						<input type="button" value="예매" class="reservation" />
+					<!--**************여기에 빠른 예매 경로 입력*****************  -->
+						<input type="button" value="예매" class="reservation"
+						onclick="location.href='index_temp.jsp';" />
+						
 					</div>
 				</div>
 			</div>
@@ -136,6 +139,8 @@ $(document).ready(function () {
 							<strong>상영시간</strong>${detail.runningTime}분</p>
 						<p>
 							<strong>등급</strong>${detail.grade}</p>
+						<p>
+							<strong>개봉일</strong>${detail.releaseDate}</p>
 					</div>
 				</div>
 			</div>
@@ -145,16 +150,15 @@ $(document).ready(function () {
 				<div class="content-box">
 					<div class="comment-area">
 						<h2 class="content-title" style="margin-bottom: 0">
-							${detail.name}에 대한 15,098개의 이야기가 있어요!</h2>
+							${detail.name}에 대한 <%=reviewList.size()%>개의 이야기가 있어요!</h2>
 					</div>
 
 					<!-- 공지 메시지 -->
-					<div class="comment-asdf">
+					<div class="comment-notice">
 						<div class="comment-avatar">M</div>
 						<div style="flex: 1">
-							<div class="comment-input">
-								최근 ${detail.name}에 관한 평점 게시물이 늘고 있습니다. 영화의 어떤 점이 좋았는지 이야기해주세요.<br />
-							</div>
+							<input type="text" class="comment-input" placeholder="최근 ${detail.name}에 관한 평점 게시물이 늘고 있습니다. 영화의 어떤 점이 좋았는지 이야기해주세요.
+							"/>
 							<div style="text-align: right">
 								<a href="#" class="comment-button"> ✏️ 관람평쓰기 </a>
 							</div>
@@ -163,28 +167,40 @@ $(document).ready(function () {
 
 					<!-- 댓글 목록 (기존 코드 유지) -->
 
-					<%-- 	<c:forEach var="comment" items="${detail.videoLink}" varStatus="status"> --%>
-					<div class="comment-item">
-						<div class="comment-header">
-							<div class="comment-user">
-								<div class="user-avatar">👤</div>
-								<span class="username">ha***o1110</span>
-							</div>
-							<div class="comment-actions">
-								<button class="comment-like">👍 0</button>
-								<button class="comment-menu">⋮</button>
-							</div>
-						</div>
-						<div class="comment-body">
-							<div class="comment-rating">
-								<span class="rating-label">관람평</span> <span class="rating-score">10</span>
-								<span class="rating-stars">⭐ +4</span>
-							</div>
-							<p class="comment-text">주요등장 캐릭터들이는 너무 매력있!!</p>
-							<span class="comment-time">10 분전</span>
-						</div>
+					<c:choose>
+					<c:when test="${empty reviewList}">
+					<div>
+					<h2 class="content-title">
+					작성된 리뷰가 없습니다. 영화의 어떤 점이 좋았는지 제일 먼저 써주세요!
+					</h2>
 					</div>
-					<!-- 나머지 댓글들... -->
+					</c:when>
+						<c:otherwise>
+							<c:forEach var="review" items="${reviewList}" varStatus="i">
+							<div class="comment-item">
+								<div class="comment-header">
+									<div class="comment-user">
+										<div class="user-avatar">👤</div>
+										<span class="username">${review.users_id }</span>
+									</div>
+							<!-- 		<div class="comment-actions">
+										<button class="comment-like">👍 0</button>
+										<button class="comment-menu">⋮</button>
+									</div> -->
+								</div>
+								<div class="comment-body">
+									<div class="comment-rating">
+										<span class="rating-label">관람평</span>
+										<span class="rating-stars">⭐ +${review.score }</span>
+									</div>
+									<p class="comment-text">${review.content }</p>
+									<span class="comment-time">${review.dateStr }</span>
+								</div>
+							</div>
+							<!-- 나머지 댓글들... -->
+							</c:forEach>
+						</c:otherwise>
+					</c:choose>
 				</div>
 			</div>
 		</div>
