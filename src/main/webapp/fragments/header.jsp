@@ -1,20 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-	
-	
-<h1 class="ci" >
-	<a href="https://www.megabox.co.kr/" title="MEGABOX 메인으로 가기" style="height:55px; background-image: url('http://localhost/sist_prj2_movieWeb/resources/images/header.png');"></a>
+<%@ include file="../../fragments/siteProperty.jsp"%>
+<h1 class="ci">
+	<a href="${commonURL}/user/main/index.jsp" title="2GV 메인으로 가기"
+		style="height:55px; background-image: url('${commonURL}/resources/images/header.png');"></a>
 </h1>
 <!-- 2019-04-15 마크업 수정 : 고객요청  -->
 <div class="util-area">
-
 	<div class="right-link">
 		<!-- 로그인전 -->
 		<div class="before" style="">
-			<a
-				href="http://localhost/sist_prj2_movieWeb/user/member/member_login.jsp"
-				title="로그인">로그인</a> <a href="http://localhost/sist_prj2_movieWeb/user/member/member_joinFrm.jsp"
-				title="회원가입">회원가입</a>
+			<a href="${commonURL}/user/member/memberLogin.jsp" title="로그인">로그인</a>
+			<a href="${commonURL}/user/member/memberJoinFrm.jsp" title="회원가입">회원가입</a>
 		</div>
 
 		<!-- 로그인후 -->
@@ -24,14 +21,14 @@
 				href="https://www.megabox.co.kr/movie" class="notice" title="알림">알림</a>
 		</div>
 
-		<a href="#">빠른예매</a>
+		<a href="https://www.megabox.co.kr/booking">빠른예매</a>
 	</div>
 </div>
 <!--// 2019-04-15 마크업 수정 : 고객요청  -->
 
 <div class="link-area">
 	<a href="https://www.megabox.co.kr/movie#layer_sitemap"
-		class="header-open-layer btn-layer-sitemap" title="사이트맵">사이트맵</a> 
+		class="header-open-layer btn-layer-sitemap" title="사이트맵">사이트맵</a>
 	<!-- 새로운 페이지(DB연결 필요)를 만들어야 해서 시간 남으면 하는걸로. -->
 	<!-- <a href="https://www.megabox.co.kr/booking/timetable" class="link-ticket" title="상영시간표">상영시간표</a> -->
 	<!-- 나의 페이지로 바로 가게 만들기 -->
@@ -204,7 +201,5 @@
 		</div>
 	</div>
 	<!--// wrap -->
-	
 </div>
-
 <!--// 레이어 : 사이트맵 -->
