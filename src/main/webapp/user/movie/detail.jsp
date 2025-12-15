@@ -105,8 +105,9 @@ $(document).ready(function () {
 					<div class="purchase-item">
 					<!--**************여기에 빠른 예매 경로 입력*****************  -->
 						<input type="button" value="예매" class="reservation"
-						onclick="location.href='index_temp.jsp';" />
-						
+						onclick="location.href='${commonURL}/user/fast_booking/fastBooking.jsp';" />
+<!-- 						onclick="location.href='index_temp.jsp';" />
+ -->						
 					</div>
 				</div>
 			</div>
