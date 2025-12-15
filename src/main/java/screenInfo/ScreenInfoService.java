@@ -26,11 +26,6 @@ public class ScreenInfoService {
 		
 		ScreenInfoDAO siDAO = ScreenInfoDAO.getInstance();
 		
-		// 1. 날짜 포맷 처리 (yyyy.MM.dd -> yyyy-MM-dd)
-		if (selectedDate == null || selectedDate.isEmpty()) {
-			// 날짜가 없으면 오늘 날짜로 설정하는 로직 등 추가 가능
-			return new LinkedHashMap<>();
-		} // end if
 		String sqlDate = selectedDate.replace('.', '-');
 		
 		// 2. DAO를 통해 원본 데이터 가져오기
