@@ -1,6 +1,5 @@
 package movie.detail;
 
-import java.sql.Date;
 
 public class DetailDTO {
 	// movie_code, movie_name, movie_genre, running_time, movie_grade, release_date,
@@ -10,7 +9,7 @@ public class DetailDTO {
 	//movie_code,movie_name,movie_genre,running_time,movie_grade,release_date,intro,main_image,bg_image,daily_audience,total_audience,movie_delete,showing
 	private String code, name, genre, grade, intro, mainImg, bgImg, deleteFlag, showingFlag;
 	private int runningTime, dailyAudience, totalAudience;
-	private Date releaseDate;
+	private String releaseDate;
 	public String getCode() {
 		return code;
 	}
@@ -83,18 +82,18 @@ public class DetailDTO {
 	public void setTotalAudience(int totalAudience) {
 		this.totalAudience = totalAudience;
 	}
-	public Date getReleaseDate() {
+	public String getReleaseDate() {
 		return releaseDate;
 	}
-	public void setReleaseDate(Date releaseDate) {
+	public void setReleaseDate(String releaseDate) {
 		this.releaseDate = releaseDate;
 	}
 	@Override
 	public String toString() {
-		return "DetailDTO [code=" + code + ", name=" + name + ", genre=" + genre + ", grade=" + grade + ", intro="
-				+ intro + ", mainImg=" + mainImg + ", bgImg=" + bgImg + ", deleteFlag=" + deleteFlag + ", showingFlag="
-				+ showingFlag + ", runningTime=" + runningTime + ", dailyAudience=" + dailyAudience + ", totalAudience="
-				+ totalAudience + ", releaseDate=" + releaseDate + "]";
+		return "DetailDTO [code=" + code + ",<br> name=" + name + ",<br> genre=" + genre + ",<br> grade=" + grade + ",<br> intro="
+				+ intro + ",<br> mainImg=" + mainImg + ",<br> bgImg=" + bgImg + ",<br> deleteFlag=" + deleteFlag + ",<br> showingFlag="
+				+ showingFlag + ",<br> runningTime=" + runningTime + ",<br> dailyAudience=" + dailyAudience + ",<br> totalAudience="
+				+ totalAudience + ",<br> releaseDate=" + releaseDate + "]";
 	}
 
 	

@@ -1,3 +1,5 @@
+<%@page import="movie.review.ReviewDTO"%>
+<%@page import="movie.review.ReviewService"%>
 <%@page import="movie.trailer.TrailerDTO"%>
 <%@page import="movie.trailer.TrailerService"%>
 <%@page import="java.util.List"%>
@@ -12,22 +14,33 @@
 
 
 <%
-String movieName = request.getParameter("name");
+String movieCode = request.getParameter("name");
 String movieImgPath = "resources/images/movieImg";
 
 DetailService ds = DetailService.getInstance();
-DetailDTO dtDTO = ds.searchMovieDetail(movieName);
+DetailDTO dtDTO = ds.searchMovieDetail(movieCode);
 
 ImageService is = ImageService.getInstance();
-List<ImageDTO> imgList = is.searchImageList(movieName);
+List<ImageDTO> imgList = is.searchImageList(movieCode);
 
 TrailerService ts = TrailerService.getInstance();
-List<TrailerDTO> trailerList = ts.searchTrailerList(movieName);
+List<TrailerDTO> trailerList = ts.searchTrailerList(movieCode);
 
+ReviewService rs = ReviewService.getInstance();
+List<ReviewDTO> reviewList = rs.searchReviewList(movieCode);
+
+//int reviewCount = reviewList.size();
+
+//영화 평점
+double scoreAverage = rs.getScoreAverage(reviewList);
+
+//double scoreAverage = 0;
 pageContext.setAttribute("movieImgPath",movieImgPath );
 pageContext.setAttribute("detail", dtDTO);
 pageContext.setAttribute("imgList", imgList);
 pageContext.setAttribute("trailerList", trailerList);
+pageContext.setAttribute("reviewList", reviewList);
+pageContext.setAttribute("scoreAverage", scoreAverage);
 
 
 %>
