@@ -1,6 +1,61 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="movie_mypage_book.BookDTO"%>
+<%@page import="java.util.List"%>
+<%@page import="movie_mypage_book.BookService"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 <%@ include file="../../fragments/siteProperty.jsp"%>
+<%@ page import="java.time.LocalDate" %>
+<%
+request.setCharacterEncoding("UTF-8");
+// 1. [Session 처리]
+String userId = (String) session.getAttribute("userId");
+if (userId == null)
+	userId = "test1"; 
+
+// 2. [파라미터 수신]
+String paramType = request.getParameter("type");
+String paramDate = request.getParameter("date"); // YYYY-MM format for PAST
+
+String type = "ACTIVE"; // Default
+if(paramType != null && !paramType.isEmpty()) {
+	type = paramType;
+}
+
+// 년, 월 계산
+String searchYear = String.valueOf(LocalDate.now().getYear()); // Default to current year
+String searchMonth = "";
+
+if("ACTIVE".equals(type)) {
+	// 예매내역: 당월
+	searchYear = String.valueOf(LocalDate.now().getYear());
+	searchMonth = String.valueOf(LocalDate.now().getMonthValue());
+} else if("PAST".equals(type)) {
+	// 지난내역: 선택된 날짜 파싱 (paramDate ex: 2025-11)
+	if(paramDate != null && paramDate.contains("-")) {
+		String[] parts = paramDate.split("-");
+		if(parts.length >= 2) {
+			searchYear = parts[0];
+			searchMonth = parts[1];
+		}
+	} else if(paramDate != null && paramDate.contains("/")) { // JS에서 2025/11로 넘길수도 있음
+		String[] parts = paramDate.split("/");
+		if(parts.length >= 2) {
+			searchYear = parts[0];
+			searchMonth = parts[1];
+		}
+	}
+}
+
+// 3. [DB 연동 및 데이터 조회]
+BookService service = BookService.getInstance();
+// 파라미터 전달: userId, type("ACTIVE"/"PAST"), year, month
+List<BookDTO> bookList = service.getBookList(userId, type, searchYear, searchMonth); 
+
+if (bookList == null) {
+	bookList = new ArrayList<BookDTO>();
+}
+%>
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -35,6 +90,11 @@ pageEncoding="UTF-8"%>
 
       // 3. 페이지 초기화 로직 분리
       function initBookingPage() {
+        // Query Params (JSP에서 값을 꽂아주거나 URLSearchParams 사용)
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentType = urlParams.get('type') || "ACTIVE";
+        const currentDate = urlParams.get('date') || ""; // "YYYY-MM" or "YYYY/MM"
+
         const menuItems = document.querySelectorAll("[data-menu]");
         const menuContents = document.querySelectorAll(".menu-content");
         const type1Radio = document.getElementById("type1");
@@ -43,7 +103,7 @@ pageEncoding="UTF-8"%>
         const dateSelect = document.getElementById("dateSelect");
         const searchBtn = document.getElementById("searchBtn");
 
-        // 현재 날짜로 dateDisplay 설정
+        // 현재 날짜로 dateDisplay 설정 (서버시간 기준이 좋으나 JS로 간략히)
         const now = new Date();
         const currentYear = now.getFullYear();
         const currentMonth = now.getMonth() + 1;
@@ -51,11 +111,40 @@ pageEncoding="UTF-8"%>
             dateDisplay.textContent = currentYear + "년 " + currentMonth + "월";
         }
 
-        // 기본값(예매내역)일 때 조회 버튼 비활성화
-        if(searchBtn) searchBtn.disabled = true;
-
         // 12개월 옵션 생성
         generateMonthOptions();
+
+        // ----------------------------------------------------
+        // [초기 상태 설정] : 파라미터에 따라 라디오버튼/셀렉트박스 세팅
+        if(currentType === "PAST") {
+        	if(type2Radio) type2Radio.checked = true;
+        	
+        	// UI 상태 변경
+        	if(dateDisplay) dateDisplay.style.display = "none";
+            if(dateSelect) dateSelect.style.display = "inline-block";
+            if(searchBtn) searchBtn.disabled = false;
+            
+            // 날짜 선택값 복원
+            if(currentDate && dateSelect) {
+            	// 옵션 값 포맷이 "YYYY/M" 형태인지 확인 필요. generateMonthOptions에서 "YYYY/M"으로 생성함.
+            	// 파라미터가 "YYYY-MM" 등으로 올 수도 있으니 포맷 통일 필요.
+            	// 일단 단순 값 일치 시도
+            	for(let i=0; i < dateSelect.options.length; i++) {
+            		// "/"로 비교
+            		if(dateSelect.options[i].value === currentDate.replace("-", "/")) {
+            			dateSelect.selectedIndex = i;
+            			break;
+            		}
+            	}
+            }
+        } else {
+        	// ACTIVE (기본)
+        	if(type1Radio) type1Radio.checked = true;
+        	if(dateDisplay) dateDisplay.style.display = "inline-block";
+            if(dateSelect) dateSelect.style.display = "none";
+            if(searchBtn) searchBtn.disabled = true;
+        }
+        // ----------------------------------------------------
 
         // 라디오 버튼 변경 이벤트
         if(type1Radio) {
@@ -63,7 +152,9 @@ pageEncoding="UTF-8"%>
               if (this.checked) {
                 dateDisplay.style.display = "inline-block";
                 dateSelect.style.display = "none";
-                searchBtn.disabled = true; // 예매내역일 때 조회 버튼 비활성화
+                searchBtn.disabled = true; 
+                // 예매내역 클릭 시 바로 이동하려면:
+                window.location.href = "mypageBook1.jsp?type=ACTIVE";
               }
             });
         }
@@ -73,7 +164,7 @@ pageEncoding="UTF-8"%>
               if (this.checked) {
                 dateDisplay.style.display = "none";
                 dateSelect.style.display = "inline-block";
-                searchBtn.disabled = false; // 지난내역일 때 조회 버튼 활성화
+                searchBtn.disabled = false;
               }
             });
         }
@@ -81,20 +172,12 @@ pageEncoding="UTF-8"%>
         // 조회 버튼 클릭 이벤트
         if(searchBtn) {
             searchBtn.addEventListener("click", function () {
-              const selectedType = type1Radio.checked ? "예매취소" : "지난내역";
-              let selectedValue = "";
-    
-              if (type1Radio.checked) {
-                selectedValue = dateDisplay.innerText; // dateInput.value 수정: dateDisplay 텍스트 사용
-              } else {
-                selectedValue = dateSelect.options[dateSelect.selectedIndex].text;
+              // 지난 내역 조회
+              if(type2Radio.checked) {
+              	  const selectedDate = dateSelect.value; // "YYYY/M"
+              	  // 페이지 이동
+              	  window.location.href = "mypageBook1.jsp?type=PAST&date=" + encodeURIComponent(selectedDate);
               }
-    
-              console.log("조회 유형: " + selectedType);
-              console.log("선택된 기간: " + selectedValue);
-    
-              // 여기에 실제 조회 로직 추가 (예: AJAX 요청)
-              alert(selectedType + " - " + selectedValue + " 조회합니다.");
             });
         }
 
@@ -217,59 +300,51 @@ pageEncoding="UTF-8"%>
                 </select>
                 <button class="btn-search" id="searchBtn">조회</button>
               </div>
-            </div>
-
-            <!-- 빈 상태 -->
-            <div class="empty-state">예매 내역이 없습니다.</div>
 
             <!-- 예매확인/소식 -->
             <div class="info-box">
-              <div class="info-box-header">예매확인/소식</div>
+              <div class="info-box-header">예매내역</div>
               <table class="info-table">
                 <thead>
                   <tr>
-                    <th>최근결재</th>
+                    <th>영화명</th>
                     <th>예매일</th>
                     <th>극장</th>
                     <th>상영일시</th>
-                    <th>취소금액</th>
+                    <th>예매취소여부</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <%--
-                  TODO: JSP 스크립틀릿으로 Java 백엔드 데이터 출력 
-                  DTO, DAO, Service를 통해 예매 내역 리스트를 가져와서 반복문으로 출력
-                  
-                  예시 (스크립틀릿 사용):
-                  =
                   <%
-                  List<BookingDTO> bookingList = (List<BookingDTO>) request.getAttribute("bookingList");
-                    if (bookingList != null && !bookingList.isEmpty()) {
-                      for (BookingDTO booking : bookingList) {
+                    // 3. [데이터 출력]
+                    if (bookList != null && !bookList.isEmpty()) {
+                      for (BookDTO booking : bookList) {
                   %>
                         <tr>
-                          <td><%= booking.getMovieTitle() %></td>
-                          <td><%= booking.getBookingDate() %></td>
-                          <td><%= booking.getTheaterName() %></td>
-                          <td><%= booking.getScreeningDateTime() %></td>
-                          <td><%= booking.getCancelAmount() %>원</td>
+                          <td><%= booking.getMovie_name() %></td>
+                          <td><%= booking.getBookTimeStr() %></td>
+                          <td><%= booking.getTheater_name() %></td>
+                          <td><%= booking.getScreen_date() %></td>
+                          <td><%= "T".equals(booking.getBook_state()) ? "예매 중" : "취소" %></td>
                         </tr>
                   <%
                       }
                     } else {
                   %>
                       <tr>
-                        <td colspan="5" style="padding: 40px; color: #999">
-                          최근내역이 없습니다.
+                        <td colspan="5" style="padding: 40px; color: #999; text-align: center;">
+                          예매 내역이 없습니다.
                         </td>
                       </tr>
                   <%
                     }
                   %>
-                --%>
                 </tbody>
               </table>
             </div>
+            </div>
+
+
 
             <!-- 이용안내 -->
             <div class="guide-section">
