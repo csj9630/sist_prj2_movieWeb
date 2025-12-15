@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%@ include file="../../fragments/siteProperty.jsp"%>
 <html lang="en" data-bs-theme="auto">
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>2GV, 회원가입</title>
-<link rel="shortcut icon" href="http://localhost/sist_prj2_movieWeb/resources/images/favicon.ico">
-<link rel="stylesheet" href="../../resources/css/megabox.min.css" media="all">
+<link rel="shortcut icon" href="${commonURL}/resources/images/favicon.ico">
+<link rel="stylesheet" href="${commonURL}/resources/css/megabox.min.css" media="all">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
 <style>
 /* === 기본 설정 === */
@@ -67,7 +68,7 @@
 }
 
 /* === 아이디 중복확인 그룹 === */
-.id-group {
+.users_id-group {
     display: flex;
     gap: 10px;
 }
@@ -253,66 +254,179 @@
 .modal-confirm-btn:hover {
     background-color: #442a80;
 }
+
+/* === 성별 라디오 버튼 그룹 (추가된 CSS) === */
+.gender-group {
+    display: flex; /* 라벨과 버튼을 가로로 정렬 */
+    gap: 15px; /* 라디오 버튼 간격 */
+    align-items: center;
+    padding: 10px 0; /* 상하 여백 조정 */
+}
+
+/* 라디오 버튼 자체의 스타일 재정의 */
+.gender-group .radio-input {
+    width: auto !important; /* form-input의 100% 너비 무력화 */
+    height: auto !important; /* form-input의 50px 높이 무력화 */
+    margin-right: 5px; /* 라디오 버튼과 텍스트 간격 */
+    flex-shrink: 0;
+    accent-color: #555; /* 체크 색상 */
+}
+
+/* 라디오 버튼 텍스트 (폼 라벨과 구별) */
+.gender-group .radio-label {
+    font-size: 15px;
+    color: #333;
+    font-weight: 400;
+    margin-right: 10px;
+}
 </style>
 <script type="text/javascript">
 $(function(){
+
 	$("#btnCheck").click(function(){
 		findId();
 	});
-	/* $("#btn").click(function(){
-		//유효성 검증 후
-		$("#joinFrm").submit(); //값을 back-end로 전송
-	});//click */
 	
-	//이벤트 처리
+	//이벤트 처리: 아이디 중복확인 팝업 열기
 	function findId(){
-		//alert( window.screenX+ " / "+window.screenY)
-		window.open("checkId.jsp?id="+$("#id").val(),"idWin",
+		// #users_id로 수정됨
+		window.open("checkId.jsp?id="+$("#users_id").val(),"idWin", 
 			"width=515,height=405,top="+(window.screenY+150)
 			+",left="+(window.screenX+200));
 	}
 	
-	//중복체크 처리를 진행했는지 확인 후 하지 않았다면 중복 확인을 하라고 시킴.
-	$("#btn").click(function(){
+	//joinform 유효성 검사(아이디 중복체크, 비밀번호 형태, 비밀번호 확인 일치여부)
+	$("#btnJoin").click(function(e){
+		e.preventDefault();
+		
 	    var isChecked = $("#isIdChecked").val();
 	    
-	    if (isChecked != 'true') { // 혹은 'Y'
-	        alert("아이디 중복 확인을 완료해 주세요.");
-	        return;
+	    // 이름 유효성 검사
+	    if($("#users_name").val().trim() ==="") {
+	    	alert("이름을 입력해주세요.");
+	    	$("#users_name").focus();
+	    	return;
+	    }
+        
+        // 성별 유효성 검사
+        if ($("input[name='gender']:checked").length === 0) {
+            alert("성별을 선택해주세요.");
+            $("input[name='gender']:first").focus(); 
+            return;
+        }
+	    
+	    // 생년월일 유효성 검사
+	    if($("#birth").val().trim() ==="") {
+	    	alert("생년월일을 입력해주세요.");
+	    	$("#birth").focus();
+	    	return;
 	    }
 	    
-	    // 중복 확인이 완료되었으므로 폼 제출 진행
-	    $("#joinFrm").submit(); 
+	    // 아이디 중복 확인 유효성 검사
+	    if (isChecked != 'true') { // 'false'가 아닌 'true'여야 통과
+	        alert("아이디 중복 확인을 완료해 주세요.");
+	        $("#btnCheck").focus();
+	        return;
+	    }
+		
+		const usersPass = $("#users_pass").val();
+		const checkPass = $("#checkPassword").val();
+
+	    // 비밀번호 유효성 검사
+	    if(!passCondition(usersPass)) {
+	    	alert("비밀번호는 영문 및 숫자 포함 8자리 이상이어야 합니다.");
+	    	$("#users_pass").focus(); // #users_pass로 수정됨
+	    	return;
+	    } 
+	    
+	    // 비밀번호 일치 확인 유효성 검사
+	    if(!isPasswordMatch(usersPass, checkPass)){
+	    	alert("비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
+	    	$("#checkPassword").focus(); // 포커스 추가
+	    	return;
+	    }
+	    
+	    // 이메일 유효성 검사
+	    if($("#mail").val().trim() ==="") {
+	    	alert("메일을 입력해주세요.");
+	    	$("#mail").focus(); // 포커스 추가
+	    	return;
+	    }
+	    
+	    // 도메인 유효성 검사
+	    if($("#domain").val().trim() === "") {
+	    	alert("도메인을 선택(또는 입력)해주세요."); // 메시지 수정 제안
+	    	$("#domain").focus(); // 포커스 추가
+	    	return;
+	    }
+	    
+	    // 휴대폰 번호 유효성 검사
+	    if(!isPhoneNumber($("#phone_num").val())) {
+	    	alert("핸드폰 번호를 '010-XXXX-XXXX' 형식으로 입력하여 주십시오.");
+	    	$("#phone_num").focus(); // #phone_num으로 수정됨
+	    	return;
+	    }
+	    
+	    // 모든 유효성 검사 통과 시 폼 제출
+	    $("#joinFrm").submit();
 	});
 	
-	$("#id").on("input", function() {
+	$("#users_id").on("input", function() {
         // 아이디 값이 변경되면 중복 체크 상태를 초기화
         $("#isIdChecked").val('false');
         $("#idCheckMsg").html(''); // 메시지 지우기
-        $("#id").prop('disabled', false); // 혹시 비활성화되어 있었다면 다시 활성화
+        $("#users_id").prop('disabled', false); // ID: #users_id로 수정
         $("#btnCheck").prop('disabled', false); // 버튼 활성화
-        // 이 외에도 중복확인 버튼의 스타일 (active 클래스) 등을 재조정해야 합니다.
+        
+        // 입력 값이 있을 때만 버튼 활성화 스타일 적용
+        if (this.value.trim().length > 0) {
+            $("#btnCheck").addClass('active');
+        } else {
+            $("#btnCheck").removeClass('active');
+        }
     });
-	
-	//비밀번호 유효성 검사
-	function validatePassword(password) {
-	    // 영문, 숫자 포함, 8자리 이상 정규표현식
-	    var regex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d\W]{8,}$/;
-	    
-	    // 비밀번호가 공백이거나 정규표현식에 맞지 않으면 false 반환
-	    if (password.trim() === "") {
-	        return false;
-	    }
-	    return regex.test(password);
-	}//validatePassword
 	
 	
 });//ready
+//비밀번호 유효성 검사
+function passCondition(password) {
+    // 영문, 숫자 포함, 8자리 이상 정규표현식
+    var regex = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
+    if (password.trim() === "") {
+        return false;
+    }
+    return regex.test(password);
+}
+
+/* 비밀번호와 비밀번호 확인란이 서로 일치하는지 검사 */
+function isPasswordMatch(password, checkPassword){
+    if( checkPassword.trim() === "" ) {
+        return false; // 확인란이 비어있으면 실패
+    }
+    if( password !== checkPassword ) {
+        return false; // 두 값이 다르면 실패
+    }
+    return true; // 일치함
+}
+
+/* 휴대폰번호 입력 체크 정규식 */
+function isPhoneNumber(phone) {
+    const regex = /^010-\d{4}-\d\d\d\d$/;
+    
+    // 입력된 값이 비어있는지 확인 (공백 포함)
+    if (phone.trim() === "") {
+        return false;
+    }
+    // 정규표현식 검사
+    return regex.test(phone);
+}
 </script>
 
 </head>
 
 <body>
+
+
     <div class="body-wrap">
         <header id="header">
             <jsp:include page="../../fragments/header.jsp" />
@@ -322,32 +436,42 @@ $(function(){
             <div class="inner-wrap">
                 <div class="location">
                     <span>Home</span>
-                    <a href="http://localhost/sist_prj2_movieWeb/user/member/memberLogin.jsp" title="회원">회원</a>
+                    <a href="${commonURL}/user/member/memberLogin.jsp" title="회원">회원</a>
                     <a href="#" title="회원가입">회원가입</a>
                 </div>
             </div>
         </div>
-
+		
         <div class="signup-wrapper" style="margin-bottom: 40px; margin-top: 40px;">
             <h1 class="signup-title">회원가입</h1>
 
-            <form id="joinFrm" name="joinFrm" method="POST" action="memberJoinFrmProcess.jsp">
-		<!-- 중복확인 절차를 진행 했는지 확인하기 위한 input -->
-				<input type="hidden" name="isIdChecked" id="isIdChecked" value="false">
+		<form id="joinFrm" name="joinFrm" method="post" action="memberJoinFrmProcess.jsp">
+		<input type="hidden" name="isIdChecked" id="isIdChecked" value="false">
                 <div class="form-group">
                     <label class="form-label">이름</label>
-                    <input type="text" class="form-input" name="name" placeholder="실제 성명 입력">
+                    <input type="text" class="form-input" id="users_name" name="users_name" placeholder="이름 입력" value="이정우">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">성별</label>
+                    <div class="gender-group">
+                        <input type="radio" class="radio-input" id="gender_male" name="gender" value="남자" checked="checked">
+                        <label for="gender_male" class="radio-label">남자</label>
+
+                        <input type="radio" class="radio-input" id="gender_female" name="gender" value="여자">
+                        <label for="gender_female" class="radio-label">여자</label>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">생년월일</label>
-                    <input type="date" class="form-input" name="birth"  placeholder="0000 - 00 - 00" max="9999-12-31" min="1900-01-01">
+                    <input type="date" class="form-input" name="birth" id="birth"  placeholder="0000 - 00 - 00" max="9999-12-31" min="1900-01-01" value="1995-05-13">
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">아이디</label>
-                    <div class="id-group">
-                        <input type="text" class="form-input" id="id" placeholder="아이디 입력" name="id">
+                    <div class="users_id-group">
+                        <input type="text" class="form-input" id="users_id" placeholder="아이디 입력" name="users_id" value="lee" >
                         <input type="button" class="btn-check" id="btnCheck" value="중복 확인"/>
                     </div>
                     <div id="idCheckMsg" style="font-size: 13px; color: gray; margin-top: 5px;"></div>
@@ -356,7 +480,7 @@ $(function(){
                 <div class="form-group">
                     <label class="form-label">비밀번호</label>
                     <div class="password-group">
-                        <input type="password" name="password" class="form-input" placeholder="영문, 숫자, 특수기호를 포함한 8글자 이상">
+                        <input type="password" name="users_pass" id ="users_pass" class="form-input" placeholder="영문, 숫자룰 포함한 8글자 이상" value="12341234a">
                         <div class="password-icon">
                             <svg class="icon-show" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                             <svg class="icon-hide" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
@@ -367,7 +491,7 @@ $(function(){
                 <div class="form-group">
                     <label class="form-label">비밀번호 확인</label>
                     <div class="password-group">
-                        <input type="password" class="form-input" name="chkPassword" placeholder="영문, 숫자, 특수기호를 포함한 8글자 이상">
+                        <input type="password" class="form-input" id="checkPassword" name="chkPassword" placeholder="영문, 숫자를 포함한 8글자 이상" value="12341234a">
                         <div class="password-icon">
                             <svg class="icon-show" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                             <svg class="icon-hide" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
@@ -377,8 +501,8 @@ $(function(){
 
                 <div class="form-group">
                     <label class="form-label">Email</label>
-                    <input type="text" class="form-input" name="mail" placeholder="example" style="width:50%;">@
-                    <select name="domain" class="form-input" style="width:45%;">
+                    <input type="text" class="form-input" name="mail" id="mail" placeholder="example" style="width:50%;" value="leetest">@
+                    <select name="domain" id="domain" class="form-input" style="width:45%;">
 			<option value="google.com">google.com</option>
 			<option value="naver.com">naver.com</option>
 			<option value="daum.net">daum.net</option>
@@ -388,32 +512,15 @@ $(function(){
 
                 <div class="form-group">
                     <label class="form-label">휴대폰 번호</label>
-                    <input type="tel" name="phone" class="form-input" placeholder="010-1234-5678">
+                    <input type="tel" name="phone_num" id="phone_num" class="form-input" placeholder="010-1234-5678" value="010-1111-2222">
                 </div>
 
                 <div class="terms-group">
                     <input type="checkbox" class="terms-checkbox" id="terms" checked>
                     <label for="terms">By signing up, I agree with the <a href="#" class="terms-link">Privacy Policy</a></label>
                 </div>
-				<input type="button" value="회원가입" class="btn-submit" id="btn"/>
+				<input type="button" value="회원가입" class="btn-submit" id="btnJoin"/>
             </form>
-        </div>
-	
-        <div class="modal-overlay" id="signupModal">
-            <div class="modal-window">
-                <div class="modal-header">
-                    <span>알림</span>
-                    <button class="modal-close-btn" onclick="closeModal()">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    회원가입이 성공적으로 완료되었습니다.<br> 로그인 화면으로 이동합니다.
-                </div>
-                <div class="modal-footer">
-                    <button class="modal-confirm-btn" onclick="closeModal()">확인</button>
-                </div>
-            </div>
         </div>
 
         <div class="quick-area">
@@ -424,65 +531,3 @@ $(function(){
             <jsp:include page="../../fragments/footer.jsp"></jsp:include>
         </footer>
     </div>
-
-<script>
-    // === 1. 아이디 입력 감지 및 버튼 활성화 ===
-    const idInput = document.getElementById('id');
-    const checkBtn = document.getElementById('btnCheck');
-
-    if(idInput && checkBtn) {
-        idInput.addEventListener('input', function() {
-            if (this.value.trim().length > 0) {
-                checkBtn.classList.add('active');
-            } else {
-                checkBtn.classList.remove('active');
-            }
-        });
-
-        checkBtn.addEventListener('click', function() {
-            if (!this.classList.contains('active')) return; 
-            if (idInput.value.trim() !== "") {
-                alert("사용 가능한 아이디입니다.");
-            } else {
-                alert("아이디를 입력해주세요.");
-                idInput.focus();
-            }
-        });
-    }
-
-    // === 2. 비밀번호 눈 모양 토글 ===
-    const passwordIcons = document.querySelectorAll('.password-icon');
-    passwordIcons.forEach(iconBtn => {
-        iconBtn.addEventListener('click', function() {
-            const inputField = this.previousElementSibling;
-            if (inputField && inputField.tagName === 'INPUT') {
-                const currentType = inputField.getAttribute('type');
-                if (currentType === 'password') {
-                    inputField.setAttribute('type', 'text');
-                    this.classList.add('view-password');
-                } else {
-                    inputField.setAttribute('type', 'password');
-                    this.classList.remove('view-password');
-                }
-            }
-        });
-    });
-
-    // === 3. 모달 팝업 제어 ===
-    const signupBtn = document.getElementById('btnSignup');
-    const modal = document.getElementById('signupModal');
-
-    if(signupBtn && modal) {
-        signupBtn.addEventListener('click', function(e) {
-            e.preventDefault(); 
-            modal.classList.add('show'); 
-        });
-    }
-
-    function closeModal() {
-        if(modal) modal.classList.remove('show');
-    }
-</script>
-
-</body>
-</html>

@@ -1,16 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ include file="../../fragments/siteProperty.jsp"%>
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="auto">
 <head>
 <meta charset="UTF-8">
-<link rel="shortcut icon" href="http://localhost/sist_prj2_movieWeb/resources/images/favicon.ico">
+<link rel="shortcut icon" href="${commonURL}/resources/images/favicon.ico">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>결제 체크</title>
 
 <!-- 기존 메가박스 CSS (경로 주의: 공백이나 한글이 포함된 경로는 웹에서 인식 못할 수 있음) -->
-<link rel="stylesheet" href="../../resources/css/megabox.min.css" media="all">
+<link rel="stylesheet" href="${commonURL}/resources/css/megabox.min.css" media="all">
 
 <!-- Tailwind CSS (반드시 포함되어야 함) -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -130,7 +131,7 @@
 							class="w-24 h-36 bg-gray-800 text-white flex items-center justify-center text-xs text-center shrink-0 overflow-hidden">
 							<!-- 이미지 -->
 							<img
-								src="http://localhost/sist_prj2_movieWeb/resources/images/zoo_book_payment.jpg"
+								src="${commonURL}/resources/images/zoo_book_payment.jpg"
 								onerror="this.src='https://via.placeholder.com/100x150?text=Poster'"
 								alt="포스터" class="w-full h-full object-cover">
 						</div>
@@ -365,7 +366,7 @@
                 alertModal.classList.remove('hidden');
             } else {
                 // 결제 성공 시 페이지 이동 (카드 결제 페이지)
-                location.href = 'http://localhost/sist_prj2_movieWeb/user/payment/payment.jsp'; 
+                location.href = '${commonURL}/user/payment/payment.jsp'; 
                 // 또는 서버 로직에 따라 form submit 등을 수행
             }
         }

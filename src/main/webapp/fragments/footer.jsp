@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="../../fragments/siteProperty.jsp"%>
     <!-- footer-top -->
     <div class="footer-top">
     </div>
@@ -7,7 +8,7 @@
     <!-- footer-bottom -->
     <div class="footer-bottom">
         <div class="inner-wrap">
-            <div class="ci" style="background-image: url('http://localhost/sist_prj2_movieWeb/resources/images/footer.png'); width:150px; height:59px;"></div>
+            <div class="ci" style="background-image: url('${commonURL}/resources/images/footer.png'); width:150px; height:59px;"></div>
             <div class="footer-info">
                 <div>
                     <address>서울 강남구 테헤란로70길 12</address>

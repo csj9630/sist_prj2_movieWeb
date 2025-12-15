@@ -2,17 +2,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ include file="../../fragments/siteProperty.jsp"%>
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="auto">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
-<title>JSP 템플릿</title>
-<script src="http://192.168.10.76/jsp_prj/common/js/color-modes.js"></script>
+<title>아이디 중복체크</title>
 
-<link rel="shortcut icon"
-	href="http://192.168.10.76/jsp_prj/common/images/favicon2.ico" />
+<link rel="shortcut icon" href="${commonURL}/resources/images/favicon.ico">
 
 <!-- bootstrap CDN 시작-->
 <link
@@ -28,8 +27,6 @@
 
 
 <meta name="theme-color" content="#712cf9">
-<link href="http://192.168.10.76/jsp_prj/common/css/carousel.css"
-	rel="stylesheet">
 
 
 <style type="text/css">
@@ -179,7 +176,7 @@ body {
 	    $opener("#isIdChecked").val('true');
 	    
 	    // 2. id 필드에 값 설정
-	    $opener("#id").val(id); 
+	    $opener("#users_id").val(id); 
 	    
 	    // ⭐⭐⭐ 3. 메시지 출력 영역에 메시지 설정 ⭐⭐⭐
 	    $opener("#idCheckMsg").html('*중복 확인이 완료되었습니다*'); 
