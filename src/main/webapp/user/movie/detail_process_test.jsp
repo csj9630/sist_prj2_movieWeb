@@ -1,14 +1,12 @@
-<%@page import="movie.detail.DetailService"%>
 <%@page import="movie.review.ReviewDTO"%>
 <%@page import="movie.review.ReviewService"%>
+<%@page import="movie.image.ImageDTO"%>
 <%@page import="movie.trailer.TrailerDTO"%>
 <%@page import="movie.trailer.TrailerService"%>
-<%@page import="movie.image.ImageDTO"%>
 <%@page import="java.util.List"%>
 <%@page import="movie.image.ImageService"%>
 <%@page import="movie.detail.DetailDTO"%>
-<%@page import="movie.detail.DetailDAO"%>
-
+<%@page import="movie.detail.DetailService"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
