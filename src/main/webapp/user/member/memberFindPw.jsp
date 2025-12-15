@@ -3,7 +3,7 @@
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ include file="../../fragments/siteProperty.jsp"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html lang="en" data-bs-theme="auto">
 <head>
 <meta charset="UTF-8">
@@ -304,59 +304,38 @@ let isCodeAuthenticated = false;
 		 //비밀번호 변경 버튼 클릭 후 유효성 검사 및 데이터 back-end로 전송
 		$("#btnChangePw").click(function(e) {
 			e.preventDefault();
-
-			// 이름 유효성 검사
-			if ($("#users_id").val().trim() === "") {
-				alert("아이디를 입력해주세요.");
-				$("#users_id").focus();
+			validUsers_id
+			// 아이디 유효성 검사
+			if(!validUsers_id()) {
 				return;
-			}
+			};
 			
 			// 이름 유효성 검사
-			if ($("#users_name").val().trim() === "") {
-				alert("이름을 입력해주세요.");
-				$("#users_name").focus();
+			if(!validUsers_name()) {
 				return;
-			}
-
+			};
 
 			// 이메일 유효성 검사
-			if ($("#mail").val().trim() === "") {
-				alert("메일을 입력해주세요.");
-				$("#mail").focus(); // 포커스 추가
+			if(!validMail()) {
 				return;
-			}
+			};
 
 			// 도메인 유효성 검사
-			if ($("#domain").val().trim() === "") {
-				alert("도메인을 선택(또는 입력)해주세요."); 
-				$("#domain").focus(); // 포커스 추가
+			if(!validDomain()) {
 				return;
-			}
+			};
+			
 			
 			// 인증번호 유효성 검사
-			if ($("#checkCode1").val().trim() === "" || $("#checkCode2").val().trim() === "" || $("#checkCode3").val().trim() === "" || $("#checkCode4").val().trim() === "" ||
-					$("#checkCode5").val().trim() === "") {
-				alert("인증번호를 입력해주세요."); 
-				$("#checkCode1").focus(); // 포커스 추가
+			if(!validEmailCode()) {
 				return;
-			}
-			/* var checkPwCode = $("#checkCode1").val() + $("#checkCode2").val() + $("#checkCode3").val() + $("#checkCode4").val() + $("#checkCode5").val(); */
+			};
 			
 			
 			// 비밀번호 유효성 검사
-			if ($("#users_pass").val().trim() === "") {
-				alert("새 비밀번호를 입력해주세요."); 
-				$("#users_pass").focus(); // 포커스 추가
+			if(!validUsers_pass()) {
 				return;
-			}
-			
-			// 비밀번호 확인 유효성 검사
-			if ($("#checkPassword").val().trim() === "") {
-				alert("비밀번호 확인을 입력해주세요."); 
-				$("#checkPassword").focus(); // 포커스 추가
-				return;
-			}
+			};
 			
 			const usersPass = $("#users_pass").val();
 			const checkPass = $("#checkPassword").val();
@@ -366,35 +345,64 @@ let isCodeAuthenticated = false;
 		    	alert("새 비밀번호는 영문 및 숫자 포함 8자리 이상이어야 합니다.");
 		    	$("#users_pass").focus(); 
 		    	return;
-		    } 
+		    }//end if
+			
+			// 비밀번호 확인 유효성 검사
+			if(!validCheckPassword()) {
+				return;
+			};
+			
 			
 		    // 비밀번호 일치 확인 유효성 검사
 		    if(!isPasswordMatch(usersPass, checkPass)){
 		    	alert("비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
 		    	$("#checkPassword").focus(); // 포커스 추가
 		    	return;
-		    }
+		    }//end if
 			
-
 			// 모든 유효성 검사 통과 시 폼 제출
 			/* $("#findIdFrm").submit(); */
 			 $("#resultModal").addClass("show"); 
 		});
 
-		$("#test").click(function(){
-			ck();
-		});
 		
-		
+		//인정 버튼을 누르면 ajax를 사용하여 페이지를 새로고침 하지 않고 세션의 값을 받아와서 입력된 값과 비교.
+		$('#authConfirmBtn').click(function() {
+			//인증확인 버튼 눌렸을 시 우선 유효성 검사 진행
+			if(!validEmailCode()) {
+				return;
+			};
+			
+			//사용자가 입력한 코드 값
+	        var inputCode = $("#checkCode1").val() + $("#checkCode2").val() + $("#checkCode3").val() + $("#checkCode4").val() + $("#checkCode5").val();
+			
+	        $.ajax({
+	            url: 'checkPwCode.jsp', // AJAX 요청 대상 JSP 파일
+	            type: 'POST',
+	            dataType: 'json', // 서버의 응답을 JSON 형식으로 예상
+	            data: {
+	                code: inputCode // 사용자 입력 코드를 json 형태로 서버로 전송
+	            },
+	            success: function(response) {
+	                if (response.status === 'success') {
+	                    alert(response.message);
+	                    // 성공 시 다음 단계 (비밀번호 변경 폼 노출 등) 로직 처리
+	                } else if(response.status === 'fail'){
+	                	//코드가 일치하지 않을 경우
+	                	alert(response.message);
+	                } else if(response.status === 'error'){
+						//에러(세션 만료 등)
+	                	alert(response.message);
+	                }
+	            },
+	            error: function() {
+	                // 통신 오류 발생 시 처리
+	                alert('서버 통신에 실패했습니다.');
+	            }
+	        });
+	    });
 	});//ready
 
-	function ck() {
-		var checkPwCode = $("#checkCode1").val() + $("#checkCode2").val() + $("#checkCode3").val() + $("#checkCode4").val() + $("#checkCode5").val();
-		/* var serverAuthCode = '<c:out value="${ sessionScope.authCode }" />'; */
-		alert(checkPwCode + " / " + receivedAuthCode);
-		alert(checkPwCode === serverAuthCode);
-	}
-	
 	
 	//비밀번호 유효성 검사
 	function passCondition(password) {
@@ -415,13 +423,79 @@ let isCodeAuthenticated = false;
 	        return false; // 두 값이 다르면 실패
 	    }
 	    return true; // 일치함
-	}
+	}//end isPasswordMatch
+	
+	//인증확인 버튼 유효성 검사
+	function validEmailCode() {
+		if ($("#checkCode1").val().trim() === "" || $("#checkCode2").val().trim() === "" || $("#checkCode3").val().trim() === "" || $("#checkCode4").val().trim() === "" ||
+				$("#checkCode5").val().trim() === "") {
+			alert("인증번호를 입력해주세요."); 
+			$("#checkCode1").focus(); // 포커스 추가
+			return false;
+		}//end if
+		return true;
+	}//validEmailCode
+	
+	function validUsers_id() {
+		if ($("#users_id").val().trim() === "") {
+			alert("아이디를 입력해주세요.");
+			$("#users_id").focus();
+			return false;
+		}//end if
+		return true;
+	}//validUsers_id
+	
+	function validUsers_name() {
+		if ($("#users_name").val().trim() === "") {
+			alert("이름을 입력해주세요.");
+			$("#users_name").focus();
+			return false;
+		}//end if
+		return true;
+	}//validUsers_name
+	
+	function validMail() {
+		if ($("#mail").val().trim() === "") {
+			alert("메일을 입력해주세요.");
+			$("#mail").focus(); // 포커스 추가
+			return false;
+		}//end if
+		return true;
+	}//validMail
+	
+	function validDomain() {
+		if ($("#domain").val().trim() === "") {
+			alert("도메인을 선택(또는 입력)해주세요."); 
+			$("#domain").focus(); // 포커스 추가
+			return false;
+		}//end if
+		return true;
+	}//validDomain
+	
+	function validUsers_pass() {
+		if ($("#users_pass").val().trim() === "") {
+			alert("새 비밀번호를 입력해주세요."); 
+			$("#users_pass").focus(); // 포커스 추가
+			return false;
+		}//end if
+		return true;
+	}//validUsers_pass
+	
+	function validCheckPassword() {
+		// 비밀번호 확인 유효성 검사
+		if ($("#checkPassword").val().trim() === "") {
+			alert("비밀번호 확인을 입력해주세요."); 
+			$("#checkPassword").focus(); // 포커스 추가
+			return false;
+		}//end if
+		return true;
+	}//validCheckPassword
 	
 	
 </script>
 </head>
 <body>
-<input type="button" id="test" value="아">
+	<input type="button" id="test" value="아">
 	<header id="header"><jsp:include
 			page="../../fragments/header.jsp" /></header>
 
@@ -478,11 +552,14 @@ let isCodeAuthenticated = false;
 					<label class="form-label">인증번호</label>
 					<div class="auth-code-wrapper">
 						<div class="auth-box-container">
-							<input type="text" class="auth-box" maxlength="1" id="checkCode1" value="1">
-							<input type="text" class="auth-box" maxlength="1" id="checkCode2" value="1">
-							<input type="text" class="auth-box" maxlength="1" id="checkCode3" value="1">
-							<input type="text" class="auth-box" maxlength="1" id="checkCode4" value="1">
-							<input type="text" class="auth-box" maxlength="1" id="checkCode5" value="1">
+							<input type="text" class="auth-box" maxlength="1" id="checkCode1"
+								value="1"> <input type="text" class="auth-box"
+								maxlength="1" id="checkCode2" value="1"> <input
+								type="text" class="auth-box" maxlength="1" id="checkCode3"
+								value="1"> <input type="text" class="auth-box"
+								maxlength="1" id="checkCode4" value="1"> <input
+								type="text" class="auth-box" maxlength="1" id="checkCode5"
+								value="1">
 						</div>
 						<button type="button" class="btn-small btn-dark"
 							id="authConfirmBtn">인증확인</button>
@@ -558,10 +635,10 @@ let isCodeAuthenticated = false;
 		</div>
 	</div>
 	<%
-	 String sessioncode = (String) session.getAttribute("authCode");
+	String sessioncode = (String) session.getAttribute("authCode");
 	System.out.println(sessioncode);
 	%>
-	<c:out value="${ sessionScope.authCode }"/>
+	<c:out value="${ sessionScope.authCode }" />
 
 
 	<footer id="footer"><jsp:include
@@ -606,7 +683,7 @@ let isCodeAuthenticated = false;
         // -----------------------------------------------------------
         authReqBtn.addEventListener('click', function() {
             // 버튼이 비활성화(회색) 상태면 클릭 안 되게 막기
-            if (this.classList.contains('btn-gray')) return;
+            //if (this.classList.contains('btn-gray')) return;
 
             const mailVal = mailInput.value;
             const domainVal = domainSelect.value;
