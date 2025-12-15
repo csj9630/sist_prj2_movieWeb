@@ -10,7 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 
-<title>상세 전용 홈</title>
+<title>상세 전용 임시홈</title>
 <link rel="shortcut icon"
 	href="http://192.168.10.82/jsp_prj/common/images/favicon.ico">
 
