@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import DBConnection.DbConn;
+
 public class MovieDAO {
 	private static MovieDAO mDAO;
 	
@@ -58,7 +60,7 @@ public class MovieDAO {
 		
 		try {
 			con=dbCon.getConn();
-			String countAll="select count(*) cnt from movie where release_date > to_char(sysdate)";
+			String countAll="select count(*) cnt from movie where release_date > sysdate";
 			pstmt=con.prepareStatement(countAll);
 			
 			rs=pstmt.executeQuery();
@@ -152,48 +154,37 @@ public class MovieDAO {
 	}//selectMoviePage
 	
 	//개봉작 영화 리스트
-	public List<MovieDTO> selectReleaseMoviePage(int currentPage, int size) throws SQLException {
-		List<MovieDTO> pageMovieList=new ArrayList<MovieDTO>();
-		DbConn dbCon=DbConn.getInstance("jdbc/dbcp");
-		
-		Connection con=null;
-		PreparedStatement pstmt=null;
-		ResultSet rs=null;
-		
-		int offset=(currentPage-1) * size;
-		
-		try {
-			con=dbCon.getConn();
-			StringBuilder selectPage=new StringBuilder();
-			selectPage
-			.append("	select movie_code, main_image, movie_grade, movie_name, release_date	")
-			.append("	from movie	")
-			.append("	order by movie_code desc	")
-			.append("	OFFSET ? ROWS FETCH NEXT ? ROWS ONLY	");
-			
-			pstmt=con.prepareStatement(selectPage.toString());
-			pstmt.setInt(1, offset);
-			pstmt.setInt(2, size);
-			
-			rs=pstmt.executeQuery();
-			MovieDTO mDTO=null;
-			
-			while(rs.next()) {
-				mDTO=new MovieDTO();
-				mDTO.setMoviecode(rs.getString("movie_code"));
-				mDTO.setMoviemainimg(rs.getString("main_image"));
-				mDTO.setMoviegrade(rs.getString("movie_grade"));
-				mDTO.setMoviename(rs.getString("movie_name"));
-				mDTO.setMoviereleasedate(rs.getString("release_date"));
-				
-				pageMovieList.add(mDTO);
-			}
-		} finally {
-			dbCon.dbClose(rs, pstmt, con);
-		}
-		
-		return pageMovieList;
-	}//selectReleaseMoviePage
+	/*
+	 * public List<MovieDTO> selectReleaseMoviePage(int currentPage, int size)
+	 * throws SQLException { List<MovieDTO> pageMovieList=new ArrayList<MovieDTO>();
+	 * DbConn dbCon=DbConn.getInstance("jdbc/dbcp");
+	 * 
+	 * Connection con=null; PreparedStatement pstmt=null; ResultSet rs=null;
+	 * 
+	 * int offset=(currentPage-1) * size;
+	 * 
+	 * try { con=dbCon.getConn(); StringBuilder selectPage=new StringBuilder();
+	 * selectPage
+	 * .append("	select movie_code, main_image, movie_grade, movie_name, release_date	"
+	 * ) .append("	from movie	") .append("	order by movie_code desc	")
+	 * .append("	OFFSET ? ROWS FETCH NEXT ? ROWS ONLY	");
+	 * 
+	 * pstmt=con.prepareStatement(selectPage.toString()); pstmt.setInt(1, offset);
+	 * pstmt.setInt(2, size);
+	 * 
+	 * rs=pstmt.executeQuery(); MovieDTO mDTO=null;
+	 * 
+	 * while(rs.next()) { mDTO=new MovieDTO();
+	 * mDTO.setMoviecode(rs.getString("movie_code"));
+	 * mDTO.setMoviemainimg(rs.getString("main_image"));
+	 * mDTO.setMoviegrade(rs.getString("movie_grade"));
+	 * mDTO.setMoviename(rs.getString("movie_name"));
+	 * mDTO.setMoviereleasedate(rs.getString("release_date"));
+	 * 
+	 * pageMovieList.add(mDTO); } } finally { dbCon.dbClose(rs, pstmt, con); }
+	 * 
+	 * return pageMovieList; }//selectReleaseMoviePage
+	 */	
 	
 	//상영 예정작 영화 리스트
 	public List<MovieDTO> selectUpcommingMoviePage(int currentPage, int size) throws SQLException {
@@ -212,6 +203,7 @@ public class MovieDAO {
 			selectPage
 			.append("	select movie_code, main_image, movie_grade, movie_name, release_date	")
 			.append("	from movie	")
+			.append("	where release_date > sysdate	")
 			.append("	order by movie_code desc	")
 			.append("	OFFSET ? ROWS FETCH NEXT ? ROWS ONLY	");
 			

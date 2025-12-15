@@ -18,7 +18,8 @@ public class MovieService {
 		return ms;
 	}//getInstance
 	
-	public int totalBoxoffice() {
+	// 박스오피스 영화 개수
+	public int totalBoxOffice() {
 		int cnt=0;
 		MovieDAO mDAO=MovieDAO.getInstance();
 		
@@ -28,9 +29,9 @@ public class MovieService {
 			e.printStackTrace();
 		}
 		return cnt;
-	}//totalBoxoffice
-	
-	public int totalUpcomming() {
+	}
+	// 상영예정작 영화 개수
+	public int totalUpComming() {
 		int cnt=0;
 		MovieDAO mDAO=MovieDAO.getInstance();
 		
@@ -40,7 +41,7 @@ public class MovieService {
 			e.printStackTrace();
 		}
 		return cnt;
-	}//totalUpcomming
+	}
 	
 	public List<MovieDTO> showAllMovie() {
 		List<MovieDTO> allMovieList=null;
@@ -55,12 +56,27 @@ public class MovieService {
 		return allMovieList;
 	}//showAllMovie
 	
+	//페이지 네이션된 박스오피스 리스트 출력
 	public List<MovieDTO> showPageMovie(int currentPage, int size) {
 		List<MovieDTO> pageMovieList=null;
 		MovieDAO mDAO=MovieDAO.getInstance();
 		
 		try {
 			pageMovieList=mDAO.selectMoviePage(currentPage, size);
+		} catch(SQLException se) {
+			se.printStackTrace();
+		}//end catch
+		
+		return pageMovieList;
+	}//showPageMovie
+	
+	//페이지 네이션된 상영예정작 리스트 출력
+	public List<MovieDTO> showUpCommingMovie(int currentPage, int size) {
+		List<MovieDTO> pageMovieList=null;
+		MovieDAO mDAO=MovieDAO.getInstance();
+		
+		try {
+			pageMovieList=mDAO.selectUpcommingMoviePage(currentPage, size);
 		} catch(SQLException se) {
 			se.printStackTrace();
 		}//end catch
