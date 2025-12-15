@@ -1,8 +1,13 @@
+<%@page import="java.util.List"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.util.Map"%>
+<%@page import="screenInfo.ScreenInfoService"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Calendar"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%> <!-- page directive -->
 <%@taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="../../fragments/siteProperty.jsp"%>
 <!DOCTYPE html>
 <!-- saved from url=(0050)https://www.megabox.co.kr/theater/time?brchNo=1372 -->
 <html>
@@ -11,23 +16,23 @@
 
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<link rel="shortcut icon" href="http://localhost/sist_prj2_movieWeb/resources/images/favicon.ico"/>
+<link rel="shortcut icon" href="${commonURL}/resources/images/favicon.ico"/>
 
 <title>(강남)상영시간표 &gt; 투지브이</title>
 
-<link rel="stylesheet" href="http://localhost/sist_prj2_movieWeb/resources/css/megabox.min.css" media="all" />
+<link rel="stylesheet" href="${commonURL}/resources/css/megabox.min.css" media="all" />
 
 <!-- jQuery CDN 시작 -->
-<script src="http://localhost/sist_prj2_movieWeb/resources/js/jquery-1.12.4.js"></script>
-<script src="http://localhost/sist_prj2_movieWeb/resources/js/jquery-ui.1.12.1.js"></script>
-<script src="http://localhost/sist_prj2_movieWeb/resources/js/gsaps.js"></script>
-<script src="http://localhost/sist_prj2_movieWeb/resources/js/bootstrap-custom.js"></script>
-<script src="http://localhost/sist_prj2_movieWeb/resources/js/bootstrap-select.js"></script>
+<script src="${commonURL}/resources/js/jquery-1.12.4.js"></script>
+<script src="${commonURL}/resources/js/jquery-ui.1.12.1.js"></script>
+<script src="${commonURL}/resources/js/gsaps.js"></script>
+<script src="${commonURL}/resources/js/bootstrap-custom.js"></script>
+<script src="${commonURL}/resources/js/bootstrap-select.js"></script>
 
-<script src="http://localhost/sist_prj2_movieWeb/resources/js/commons.js"></script>
-<script src="http://localhost/sist_prj2_movieWeb/resources/js/mega.prototype.js"></script>
-<script src="http://localhost/sist_prj2_movieWeb/resources/js/megaboxCom.js"></script>
-<script src="http://localhost/sist_prj2_movieWeb/resources/js/front.js"></script>
+<script src="${commonURL}/resources/js/commons.js"></script>
+<script src="${commonURL}/resources/js/mega.prototype.js"></script>
+<script src="${commonURL}/resources/js/megaboxCom.js"></script>
+<script src="${commonURL}/resources/js/front.js"></script>
 
 <script type="text/javascript">
 
@@ -57,9 +62,9 @@
 
 	<div class="body-wrap">
 
-<script src="http://localhost/sist_prj2_movieWeb/resources/js/hmac-sha256.js"></script>
-<script src="http://localhost/sist_prj2_movieWeb/resources/js/enc-base64-min.js"></script>
-<script src="http://localhost/sist_prj2_movieWeb/resources/js/megabox-simpleBokd.js"></script>
+<script src="${commonURL}/resources/js/hmac-sha256.js"></script>
+<script src="${commonURL}/resources/js/enc-base64-min.js"></script>
+<script src="${commonURL}/resources/js/megabox-simpleBokd.js"></script>
 <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩된 후 실행
     
@@ -92,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 
 		<!-- header -->
 		<header id="header">
-			<c:import url = "http://localhost/sist_prj2_movieWeb/fragments/header.jsp"/>
+			<c:import url = "${commonURL}/fragments/header.jsp"/>
 		</header>
 		<!--// header -->
 
@@ -102,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 					<div class="location">
 						<span>Home</span> <a href="https://www.megabox.co.kr/theater/list"
 							title="극장 페이지로 이동">극장</a> <a
-							href="http://localhost/sist_prj2_movieWeb/user/dailyScreenSchedule/dailyScreenSchedule.jsp"
+							href="${commonURL}/user/dailyScreenSchedule/dailyScreenSchedule.jsp"
 							title="상영시간표 페이지로 이동">상영시간표</a>
 					</div>
 				</div>
@@ -115,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 				<div class="theater-detail-page" style = "height: 130px;">
 
 					<div class="bg-img"
-						style="background-image: url(http://localhost/sist_prj2_movieWeb/resources/images/img-theater-detail.jpg);"></div>
+						style="background-image: url(${commonURL}/resources/images/img-theater-detail.jpg);"></div>
 					<div class="bg-pattern"></div>
 					<div class="bg-mask"></div>
 
@@ -133,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 						
 						<div id="tab" class="tab-cont on">
 							<%-- Calendar cal = Calendar.getInstance(); --%>
-							<a href="http://localhost/sist_prj2_movieWeb/screenSchedule/screenSchedule.jsp"
+							<a href="${commonURL}/screenSchedule/screenSchedule.jsp"
 								class="ir">상영시간표 탭 화면 입니다.</a>
 							<h2 class="tit small" style="display: none;">무대인사</h2>
 							<div class="movie-greeting" style="display: none;"></div>
@@ -166,11 +171,11 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 												    }
 													
 												    // 요일 한글 배열
-												    String[] dayNames = {"", "일", "월", "화", "수", "목", "금", "토"};
-												    String[] dayNamesEn = {"", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+												    String[] dayNames = {"", "토", "일", "월", "화", "수", "목", "금"};
+												    String[] dayNamesEn = {"", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"};
 												%>
 												
-												<div class="date-list" style = "width: 1040px;">
+												<div class="date-list" style = "width: 1190px;">
 												    <%
 												    // 3. 14일치 날짜 생성 반복문
 												    for (int i = 0; i < 17; i++) {
@@ -184,8 +189,8 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 												        
 												        // CSS 클래스 계산 (토요일, 일요일, 그리고 선택된 날짜 'on')
 												        String btnClass = "";
-												        if (dayOfWeek == Calendar.SATURDAY) btnClass = "sat";
-												        else if (dayOfWeek == Calendar.SUNDAY) btnClass = "holi";
+												        if (dayOfWeek == Calendar.SUNDAY) btnClass = "sat";
+												        else if (dayOfWeek == Calendar.MONDAY) btnClass = "holi";
 												        
 												        // 현재 출력중인 날짜가 선택된 날짜와 같으면 'on' 클래스 추가
 												        if (dateData.equals(selectedDate)) {
@@ -250,740 +255,130 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 								<div class="tab-block tab-layer mb30" style="display: none;">
 									<ul></ul>
 								</div>
-								<div class="theater-list">
-									<div class="theater-tit">
-										<p class="movie-grade age-all"></p>
-										<p>
-											<a
-												href="https://www.megabox.co.kr/movie-detail?rpstMovieNo=25089000"
-												title="주토피아 2 상세보기">주토피아 2</a>
-										</p>
-										<p class="infomation">
-											<span>상영중</span>/상영시간 108분
-										</p>
-									</div>
-									<div class="theater-type-box">
-										<div class="theater-type">
-											<p class="theater-name">1관</p>
-											<p class="chair">총 116석</p>
-										</div>
-										<div class="theater-time">
-											<div class="theater-type-area">2D(자막)</div>
-											<div class="theater-time-box">
-												<table class="time-list-table">
-													<caption>상영시간을 보여주는 표 입니다.</caption>
-													<colgroup>
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-													</colgroup>
-													<tbody>
-														<tr>
-															<td class="" brch-no="1372" play-schdl-no="2511301372005"
-																rpst-movie-no="25089000" theab-no="01"
-																play-de="20251130" play-seq="5" netfnl-adopt-at="N">
-																<div class="td-ab">
-																	<div class="txt-center">
-																		<a
-																			href="https://www.megabox.co.kr/theater/time?brchNo=1372"
-																			title="영화예매하기">
-																			<div class="ico-box">
-																				<i class="iconset ico-off"></i>
-																			</div>
-																			<p class="time">18:20</p>
-																			<p class="chair">15석</p>
-																			<div class="play-time">
-																				<p>18:20~20:18</p>
-																				<p>5회차</p>
-																			</div>
-																		</a>
-																	</div>
-																</div>
-															</td>
-															<td class="" brch-no="1372" play-schdl-no="2511301372006"
-																rpst-movie-no="25089000" theab-no="01"
-																play-de="20251130" play-seq="6" netfnl-adopt-at="N">
-																<div class="td-ab">
-																	<div class="txt-center">
-																		<a
-																			href="https://www.megabox.co.kr/theater/time?brchNo=1372"
-																			title="영화예매하기">
-																			<div class="ico-box">
-																				<i class="iconset ico-off"></i>
-																			</div>
-																			<p class="time">20:40</p>
-																			<p class="chair">42석</p>
-																			<div class="play-time">
-																				<p>20:40~22:38</p>
-																				<p>6회차</p>
-																			</div>
-																		</a>
-																	</div>
-																</div>
-															</td>
-															<td class="" brch-no="1372" play-schdl-no="2511301372007"
-																rpst-movie-no="25089000" theab-no="01"
-																play-de="20251130" play-seq="7" netfnl-adopt-at="N">
-																<div class="td-ab">
-																	<div class="txt-center">
-																		<a
-																			href="https://www.megabox.co.kr/theater/time?brchNo=1372"
-																			title="영화예매하기">
-																			<div class="ico-box">
-																				<i class="iconset ico-off"></i>
-																			</div>
-																			<p class="time">23:00</p>
-																			<p class="chair">114석</p>
-																			<div class="play-time">
-																				<p>23:00~24:58</p>
-																				<p>7회차</p>
-																			</div>
-																		</a>
-																	</div>
-																</div>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-										</div>
-									</div>
-									<div class="theater-type-box">
-										<div class="theater-type">
-											<p class="theater-name">3관</p>
-											<p class="chair">총 116석</p>
-										</div>
-										<div class="theater-time">
-											<div class="theater-type-area">2D(자막)</div>
-											<div class="theater-time-box">
-												<table class="time-list-table">
-													<caption>상영시간을 보여주는 표 입니다.</caption>
-													<colgroup>
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-													</colgroup>
-													<tbody>
-														<tr>
-															<td class="" brch-no="1372" play-schdl-no="2511301372042"
-																rpst-movie-no="25089000" theab-no="03"
-																play-de="20251130" play-seq="5" netfnl-adopt-at="N">
-																<div class="td-ab">
-																	<div class="txt-center">
-																		<a
-																			href="https://www.megabox.co.kr/theater/time?brchNo=1372"
-																			title="영화예매하기">
-																			<div class="ico-box">
-																				<i class="iconset ico-off"></i>
-																			</div>
-																			<p class="time">18:50</p>
-																			<p class="chair">9석</p>
-																			<div class="play-time">
-																				<p>18:50~20:48</p>
-																				<p>5회차</p>
-																			</div>
-																		</a>
-																	</div>
-																</div>
-															</td>
-															<td class="" brch-no="1372" play-schdl-no="2511301372014"
-																rpst-movie-no="25089000" theab-no="03"
-																play-de="20251130" play-seq="6" netfnl-adopt-at="N">
-																<div class="td-ab">
-																	<div class="txt-center">
-																		<a
-																			href="https://www.megabox.co.kr/theater/time?brchNo=1372"
-																			title="영화예매하기">
-																			<div class="ico-box">
-																				<i class="iconset ico-off"></i>
-																			</div>
-																			<p class="time">21:10</p>
-																			<p class="chair">69석</p>
-																			<div class="play-time">
-																				<p>21:10~23:08</p>
-																				<p>6회차</p>
-																			</div>
-																		</a>
-																	</div>
-																</div>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-										</div>
-									</div>
-									<div class="theater-type-box">
-										<div class="theater-type">
-											<p class="theater-name">4관</p>
-											<p class="chair">총 53석</p>
-										</div>
-										<div class="theater-time">
-											<div class="theater-type-area">2D(자막)</div>
-											<div class="theater-time-box">
-												<table class="time-list-table">
-													<caption>상영시간을 보여주는 표 입니다.</caption>
-													<colgroup>
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-													</colgroup>
-													<tbody>
-														<tr>
-															<td class="" brch-no="1372" play-schdl-no="2511301372020"
-																rpst-movie-no="25089000" theab-no="04"
-																play-de="20251130" play-seq="5" netfnl-adopt-at="N">
-																<div class="td-ab">
-																	<div class="txt-center">
-																		<a
-																			href="https://www.megabox.co.kr/theater/time?brchNo=1372"
-																			title="영화예매하기">
-																			<div class="ico-box">
-																				<i class="iconset ico-off"></i>
-																			</div>
-																			<p class="time">19:25</p>
-																			<p class="chair">7석</p>
-																			<div class="play-time">
-																				<p>19:25~21:23</p>
-																				<p>5회차</p>
-																			</div>
-																		</a>
-																	</div>
-																</div>
-															</td>
-															<td class="" brch-no="1372" play-schdl-no="2511301372021"
-																rpst-movie-no="25089000" theab-no="04"
-																play-de="20251130" play-seq="6" netfnl-adopt-at="N">
-																<div class="td-ab">
-																	<div class="txt-center">
-																		<a
-																			href="https://www.megabox.co.kr/theater/time?brchNo=1372"
-																			title="영화예매하기">
-																			<div class="ico-box">
-																				<i class="iconset ico-off"></i>
-																			</div>
-																			<p class="time">21:45</p>
-																			<p class="chair">46석</p>
-																			<div class="play-time">
-																				<p>21:45~23:43</p>
-																				<p>6회차</p>
-																			</div>
-																		</a>
-																	</div>
-																</div>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-										</div>
-									</div>
-									<div class="theater-type-box">
-										<div class="theater-type">
-											<p class="theater-name">7관[Laser]</p>
-											<p class="chair">총 46석</p>
-										</div>
-										<div class="theater-time">
-											<div class="theater-type-area">2D(자막)</div>
-											<div class="theater-time-box">
-												<table class="time-list-table">
-													<caption>상영시간을 보여주는 표 입니다.</caption>
-													<colgroup>
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-													</colgroup>
-													<tbody>
-														<tr>
-															<td class="" brch-no="1372" play-schdl-no="2511301372066"
-																rpst-movie-no="25089000" theab-no="07"
-																play-de="20251130" play-seq="6" netfnl-adopt-at="N">
-																<div class="td-ab">
-																	<div class="txt-center">
-																		<a
-																			href="https://www.megabox.co.kr/theater/time?brchNo=1372"
-																			title="영화예매하기">
-																			<div class="ico-box">
-																				<i class="iconset ico-off"></i>
-																			</div>
-																			<p class="time">20:10</p>
-																			<p class="chair">13석</p>
-																			<div class="play-time">
-																				<p>20:10~22:08</p>
-																				<p>6회차</p>
-																			</div>
-																		</a>
-																	</div>
-																</div>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="theater-list">
-									<div class="theater-tit">
-										<p class="movie-grade age-all"></p>
-										<p>
-											<a
-												href="https://www.megabox.co.kr/movie-detail?rpstMovieNo=25081900"
-												title="위키드: 포 굿 상세보기">위키드: 포 굿</a>
-										</p>
-										<p class="infomation">
-											<span>상영중</span>/상영시간 137분
-										</p>
-									</div>
-									<div class="theater-type-box">
-										<div class="theater-type">
-											<p class="theater-name">2관</p>
-											<p class="chair">총 53석</p>
-										</div>
-										<div class="theater-time">
-											<div class="theater-type-area">2D(자막)</div>
-											<div class="theater-time-box">
-												<table class="time-list-table">
-													<caption>상영시간을 보여주는 표 입니다.</caption>
-													<colgroup>
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-													</colgroup>
-													<tbody>
-														<tr>
-															<td class="" brch-no="1372" play-schdl-no="2511301372072"
-																rpst-movie-no="25081900" theab-no="02"
-																play-de="20251130" play-seq="6" netfnl-adopt-at="N">
-																<div class="td-ab">
-																	<div class="txt-center">
-																		<a
-																			href="https://www.megabox.co.kr/theater/time?brchNo=1372"
-																			title="영화예매하기">
-																			<div class="ico-box">
-																				<i class="iconset ico-off"></i>
-																			</div>
-																			<p class="time">21:35</p>
-																			<p class="chair">53석</p>
-																			<div class="play-time">
-																				<p>21:35~24:02</p>
-																				<p>6회차</p>
-																			</div>
-																		</a>
-																	</div>
-																</div>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-										</div>
-									</div>
-									<div class="theater-type-box">
-										<div class="theater-type">
-											<p class="theater-name">6관[Laser]</p>
-											<p class="chair">총 56석</p>
-										</div>
-										<div class="theater-time">
-											<div class="theater-type-area">2D(자막)</div>
-											<div class="theater-time-box">
-												<table class="time-list-table">
-													<caption>상영시간을 보여주는 표 입니다.</caption>
-													<colgroup>
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-													</colgroup>
-													<tbody>
-														<tr>
-															<td class="" brch-no="1372" play-schdl-no="2511301372038"
-																rpst-movie-no="25081900" theab-no="06"
-																play-de="20251130" play-seq="5" netfnl-adopt-at="N">
-																<div class="td-ab">
-																	<div class="txt-center">
-																		<a
-																			href="https://www.megabox.co.kr/theater/time?brchNo=1372"
-																			title="영화예매하기">
-																			<div class="ico-box">
-																				<i class="iconset ico-off"></i>
-																			</div>
-																			<p class="time">18:40</p>
-																			<p class="chair">2석</p>
-																			<div class="play-time">
-																				<p>18:40~21:07</p>
-																				<p>5회차</p>
-																			</div>
-																		</a>
-																	</div>
-																</div>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="theater-list">
-									<div class="theater-tit">
-										<p class="movie-grade age-12"></p>
-										<p>
-											<a
-												href="https://www.megabox.co.kr/movie-detail?rpstMovieNo=25084800"
-												title="나우 유 씨 미 3 상세보기">나우 유 씨 미 3</a>
-										</p>
-										<p class="infomation">
-											<span>상영중</span>/상영시간 112분
-										</p>
-									</div>
-									<div class="theater-type-box">
-										<div class="theater-type">
-											<p class="theater-name">2관</p>
-											<p class="chair">총 53석</p>
-										</div>
-										<div class="theater-time">
-											<div class="theater-type-area">2D(자막)</div>
-											<div class="theater-time-box">
-												<table class="time-list-table">
-													<caption>상영시간을 보여주는 표 입니다.</caption>
-													<colgroup>
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-													</colgroup>
-													<tbody>
-														<tr>
-															<td class="" brch-no="1372" play-schdl-no="2511301372039"
-																rpst-movie-no="25084800" theab-no="02"
-																play-de="20251130" play-seq="5" netfnl-adopt-at="N">
-																<div class="td-ab">
-																	<div class="txt-center">
-																		<a
-																			href="https://www.megabox.co.kr/theater/time?brchNo=1372"
-																			title="영화예매하기">
-																			<div class="ico-box">
-																				<i class="iconset ico-off"></i>
-																			</div>
-																			<p class="time">19:15</p>
-																			<p class="chair">9석</p>
-																			<div class="play-time">
-																				<p>19:15~21:17</p>
-																				<p>5회차</p>
-																			</div>
-																		</a>
-																	</div>
-																</div>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="theater-list">
-									<div class="theater-tit">
-										<p class="movie-grade age-15"></p>
-										<p>
-											<a
-												href="https://www.megabox.co.kr/movie-detail?rpstMovieNo=25065200"
-												title="극장판 체인소 맨: 레제편 상세보기">극장판 체인소 맨: 레제편</a>
-										</p>
-										<p class="infomation">
-											<span>상영중</span>/상영시간 100분
-										</p>
-									</div>
-									<div class="theater-type-box">
-										<div class="theater-type">
-											<p class="theater-name">7관[Laser]</p>
-											<p class="chair">총 46석</p>
-										</div>
-										<div class="theater-time">
-											<div class="theater-type-area">2D(자막)</div>
-											<div class="theater-time-box">
-												<table class="time-list-table">
-													<caption>상영시간을 보여주는 표 입니다.</caption>
-													<colgroup>
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-													</colgroup>
-													<tbody>
-														<tr>
-															<td class="" brch-no="1372" play-schdl-no="2511301372071"
-																rpst-movie-no="25065200" theab-no="07"
-																play-de="20251130" play-seq="7" netfnl-adopt-at="N">
-																<div class="td-ab">
-																	<div class="txt-center">
-																		<a
-																			href="https://www.megabox.co.kr/theater/time?brchNo=1372"
-																			title="영화예매하기">
-																			<div class="ico-box">
-																				<i class="iconset ico-off"></i>
-																			</div>
-																			<p class="time">22:25</p>
-																			<p class="chair">35석</p>
-																			<div class="play-time">
-																				<p>22:25~24:15</p>
-																				<p>7회차</p>
-																			</div>
-																		</a>
-																	</div>
-																</div>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="theater-list">
-									<div class="theater-tit">
-										<p class="movie-grade age-15"></p>
-										<p>
-											<a
-												href="https://www.megabox.co.kr/movie-detail?rpstMovieNo=25083300"
-												title="국보 상세보기">국보</a>
-										</p>
-										<p class="infomation">
-											<span>상영중</span>/상영시간 175분
-										</p>
-									</div>
-									<div class="theater-type-box">
-										<div class="theater-type">
-											<p class="theater-name">6관[Laser]</p>
-											<p class="chair">총 56석</p>
-										</div>
-										<div class="theater-time">
-											<div class="theater-type-area">2D(자막)</div>
-											<div class="theater-time-box">
-												<table class="time-list-table">
-													<caption>상영시간을 보여주는 표 입니다.</caption>
-													<colgroup>
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-													</colgroup>
-													<tbody>
-														<tr>
-															<td class="" brch-no="1372" play-schdl-no="2511301372064"
-																rpst-movie-no="25083300" theab-no="06"
-																play-de="20251130" play-seq="6" netfnl-adopt-at="N">
-																<div class="td-ab">
-																	<div class="txt-center">
-																		<a
-																			href="https://www.megabox.co.kr/theater/time?brchNo=1372"
-																			title="영화예매하기">
-																			<div class="ico-box">
-																				<i class="iconset ico-off"></i>
-																			</div>
-																			<p class="time">21:25</p>
-																			<p class="chair">45석</p>
-																			<div class="play-time">
-																				<p>21:25~24:30</p>
-																				<p>6회차</p>
-																			</div>
-																		</a>
-																	</div>
-																</div>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="theater-list">
-									<div class="theater-tit">
-										<p class="movie-grade age-12"></p>
-										<p>
-											<a
-												href="https://www.megabox.co.kr/movie-detail?rpstMovieNo=25077300"
-												title="세계의 주인 상세보기">세계의 주인</a>
-										</p>
-										<p class="infomation">
-											<span>상영중</span>/상영시간 119분
-										</p>
-									</div>
-									<div class="theater-type-box">
-										<div class="theater-type">
-											<p class="theater-name">5관[Laser]</p>
-											<p class="chair">총 54석</p>
-										</div>
-										<div class="theater-time">
-											<div class="theater-type-area">2D</div>
-											<div class="theater-time-box">
-												<table class="time-list-table">
-													<caption>상영시간을 보여주는 표 입니다.</caption>
-													<colgroup>
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-													</colgroup>
-													<tbody>
-														<tr>
-															<td class="" brch-no="1372" play-schdl-no="2511301372067"
-																rpst-movie-no="25077300" theab-no="05"
-																play-de="20251130" play-seq="5" netfnl-adopt-at="N">
-																<div class="td-ab">
-																	<div class="txt-center">
-																		<a
-																			href="https://www.megabox.co.kr/theater/time?brchNo=1372"
-																			title="영화예매하기">
-																			<div class="ico-box">
-																				<i class="iconset ico-off"></i>
-																			</div>
-																			<p class="time">18:10</p>
-																			<p class="chair">26석</p>
-																			<div class="play-time">
-																				<p>18:10~20:19</p>
-																				<p>5회차</p>
-																			</div>
-																		</a>
-																	</div>
-																</div>
-															</td>
-															<td class="" brch-no="1372" play-schdl-no="2511301372034"
-																rpst-movie-no="25077300" theab-no="05"
-																play-de="20251130" play-seq="6" netfnl-adopt-at="N">
-																<div class="td-ab">
-																	<div class="txt-center">
-																		<a
-																			href="https://www.megabox.co.kr/theater/time?brchNo=1372"
-																			title="영화예매하기">
-																			<div class="ico-box">
-																				<i class="iconset ico-off"></i>
-																			</div>
-																			<p class="time">20:35</p>
-																			<p class="chair">44석</p>
-																			<div class="play-time">
-																				<p>20:35~22:44</p>
-																				<p>6회차</p>
-																			</div>
-																		</a>
-																	</div>
-																</div>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="theater-list">
-									<div class="theater-tit">
-										<p class="movie-grade age-15"></p>
-										<p>
-											<a
-												href="https://www.megabox.co.kr/movie-detail?rpstMovieNo=25089400"
-												title="넌센스 상세보기">넌센스</a>
-										</p>
-										<p class="infomation">
-											<span>상영중</span>/상영시간 116분
-										</p>
-									</div>
-									<div class="theater-type-box">
-										<div class="theater-type">
-											<p class="theater-name">5관[Laser]</p>
-											<p class="chair">총 54석</p>
-										</div>
-										<div class="theater-time">
-											<div class="theater-type-area">2D</div>
-											<div class="theater-time-box">
-												<table class="time-list-table">
-													<caption>상영시간을 보여주는 표 입니다.</caption>
-													<colgroup>
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-														<col style="width: 99px;">
-													</colgroup>
-													<tbody>
-														<tr>
-															<td class="" brch-no="1372" play-schdl-no="2511301372065"
-																rpst-movie-no="25089400" theab-no="05"
-																play-de="20251130" play-seq="7" netfnl-adopt-at="N">
-																<div class="td-ab">
-																	<div class="txt-center">
-																		<a
-																			href="https://www.megabox.co.kr/theater/time?brchNo=1372"
-																			title="영화예매하기">
-																			<div class="ico-box">
-																				<i class="iconset ico-off"></i>
-																			</div>
-																			<p class="time">23:00</p>
-																			<p class="chair">54석</p>
-																			<div class="play-time">
-																				<p>23:00~25:06</p>
-																				<p>7회차</p>
-																			</div>
-																		</a>
-																	</div>
-																</div>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-										</div>
-									</div>
+								<%
+								    // 1. 파라미터 받기
+								    selectedDate = request.getParameter("date");
+								    if (selectedDate == null || selectedDate.isEmpty()) {
+								        selectedDate = new SimpleDateFormat("yyyy.MM.dd").format(new Date());
+								    }
+								
+								    // 2. Service 호출하여 데이터 가져오기
+								    ScreenInfoService sis = ScreenInfoService.getInstance();
+								    // 복잡한 로직 없이 결과만 딱 받아옵니다.
+								    Map<String, Map<String, List<Map<String, String>>>> movieScheduleMap = 
+								    		sis.getMovieSchedule(selectedDate);
+								%>
+								
+								<div class="schedule-output-area">
+								<%
+								    // 데이터가 비어있을 경우 처리
+								    if (movieScheduleMap.isEmpty()) {
+								%>
+								        <div class="no-data">상영 스케줄이 없습니다.</div>
+								<%
+								    } else {
+								        // 기존의 3중 for문 반복 출력 로직 그대로 사용
+								        for (Map.Entry<String, Map<String, List<Map<String, String>>>> movieEntry : movieScheduleMap.entrySet()) {
+								        	String currentMovieName = movieEntry.getKey();
+								            Map<String, List<Map<String, String>>> theaterGroup = movieEntry.getValue();
+								            
+								            // 첫 번째 상영 시간표에서 영화 정보 (상영시간 등)를 가져옵니다.
+								            // 그룹화 구조상 첫 번째 상영관의 첫 번째 스케줄 정보를 사용합니다.
+								            Map<String, String> firstSchedule = null;
+								            for (List<Map<String, String>> schedules : theaterGroup.values()) {
+								                if (!schedules.isEmpty()) {
+								                    firstSchedule = schedules.get(0);
+								                    break;
+								                }
+								            }
+								            
+								            // null 체크 (데이터가 없는 경우를 대비)
+								            if (firstSchedule == null) continue;
+								            String runningTime = firstSchedule.get("RUNNING_TIME");
+								            // String movieCode = firstSchedule.get("MOVIE_CODE"); // 영화 상세 페이지 URL 등에 사용 가능
+									        %>
+									            <div class="theater-list">
+									                <div class="theater-tit">
+									                    <p class="movie-grade age-all"></p> <p>
+									                        <a href="/movie-detail?movieCode=<%= firstSchedule.get("MOVIE_CODE") %>" title="<%= currentMovieName %> 상세보기">
+									                            <%= currentMovieName %>
+									                        </a>
+									                    </p>
+									                    <p class="infomation">
+									                        <span>상영중</span>/상영시간 <%= runningTime %>분
+									                    </p>
+									                </div>
+									                
+									                <%
+									                // 2. 중간 반복문: 상영관별 반복 (theater-type-box)
+									                for (Map.Entry<String, List<Map<String, String>>> theaterEntry : theaterGroup.entrySet()) {
+									                    String currentTheaterName = theaterEntry.getKey();
+									                    List<Map<String, String>> scheduleList = theaterEntry.getValue();
+									                    
+									                    // 첫 번째 상영 시간표에서 상영관 좌석 정보를 가져옵니다.
+									                    String totalSeat = scheduleList.get(0).get("TOTAL_SEAT"); 
+									                %>
+									                <div class="theater-type-box">
+									                    <div class="theater-type">
+									                        <p class="theater-name"><%= currentTheaterName %></p>
+									                        <p class="chair">총 <%= totalSeat %>석</p>
+									                    </div>
+									                    <div class="theater-time">
+									                        <div class="theater-type-area">2D(자막)</div> <div class="theater-time-box">
+									                            <table class="time-list-table">
+									                                <tbody>
+									                                    <tr>
+									                                    <%
+									                                    // 3. 내부 반복문: 상영 시간별 반복 (td)
+									                                    // 한 줄에 8개씩 출력하는 로직이 필요할 경우 여기서 복잡해집니다.
+									                                    // 여기서는 간단하게 한 줄에 모두 출력한다고 가정합니다.
+									                                    int playCount = 1; // 회차 계산용 임시 변수
+									                                    for (Map<String, String> schedule : scheduleList) {
+									                                        String screenOpen = schedule.get("SCREEN_OPEN"); // 예: 18:20
+									                                        String remainSeat = schedule.get("REMAIN_SEAT"); // 예: 15석
+									                                        // 상영 종료 시간 계산 로직이 필요합니다. (SCREEN_OPEN + RUNNING_TIME)
+									                                        
+									                                        // TODO: 종료 시간, 회차 계산 로직을 실제 데이터로 대체하세요.
+									                                        String endTime = "20:18";
+									                                        String sqlDate = selectedDate.replace('.', '-');
+									                                    %>
+									                                        <td class="" 
+									                                            play-de="<%= sqlDate.replace("-", "") %>" 
+									                                            play-seq="<%= playCount %>" 
+									                                            rpst-movie-no="<%= firstSchedule.get("MOVIE_CODE") %>"
+									                                            theab-no="XX" > <div class="td-ab">
+									                                                <div class="txt-center">
+									                                                    <a href="/reserve" title="영화예매하기">
+									                                                        <div class="ico-box">
+									                                                            <i class="iconset ico-off"></i> </div>
+									                                                        <p class="time"><%= screenOpen %></p>
+									                                                        <p class="chair"><%= remainSeat %></p>
+									                                                        <div class="play-time">
+									                                                            <p><%= screenOpen %>~<%= endTime %></p>
+									                                                            <p><%= playCount %>회차</p>
+									                                                        </div>
+									                                                    </a>
+									                                                </div>
+									                                            </div>
+									                                        </td>
+									                                    <%
+									                                        playCount++;
+									                                    } // End of 상영 시간 반복
+									                                    %>
+									                                    </tr>
+									                                </tbody>
+									                            </table>
+									                        </div>
+									                    </div>
+									                </div>
+									                <%
+									                } // End of 상영관 반복
+									                %>
+									            </div>
+									        <%
+									        }
+									    }
+									%>
 								</div>
 							</div>
 							<div class="box-border v1 mt30" style = "border: 0px solid;">
@@ -998,13 +393,13 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 		</div>
 		
 		<div class="quick-area" style="display: none;">
-			<a href="http://localhost/sist_prj2_movieWeb/screenSchedule/screenSchedule.jsp"
+			<a href="${commonURL}/screenSchedule/screenSchedule.jsp"
 				class="btn-go-top" title="top" style="position: fixed;">top</a>
 		</div>
 		
 		<!-- footer -->
 		<footer id="footer">
-			<c:import url = "http://localhost/sist_prj2_movieWeb/fragments/footer.jsp"/>
+			<c:import url = "${commonURL}/fragments/footer.jsp"/>
 		</footer>
 		<!--// footer -->
 
