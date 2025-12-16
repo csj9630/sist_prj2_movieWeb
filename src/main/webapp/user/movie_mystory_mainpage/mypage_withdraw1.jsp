@@ -14,35 +14,70 @@
     <script type="text/javascript">
       // 초기화
       window.onload = function() {
-        // 취소 버튼
-        const cancelBtn = document.querySelector(".btn-cancel");
-        if(cancelBtn) {
-            cancelBtn.addEventListener("click", function () {
-                history.back();
-            });
-        }
-        
-        // 비밀번호 입력창에서 엔터 키 입력 시 submitAuth 호출
         const passInput = document.querySelector('input[name="pass"]');
         if(passInput) {
             passInput.addEventListener("keypress", function(e) {
                 if(e.key === 'Enter') {
-                    e.preventDefault(); // 기본 폼 제출 방지
-                    submitAuth();
+                    e.preventDefault(); 
+                    checkAuth();
                 }
             });
         }
       };
 
-      function submitAuth() {
+      function checkAuth() {
             const pass = document.querySelector('input[name="pass"]').value;
+            const messageBox = document.getElementById("auth-msg");
+            const btnConfirm = document.getElementById("btn-confirm");
+
             if(!pass) {
                 alert("비밀번호를 입력해주세요.");
                 return;
             }
-            document.authForm.submit();
+            
+            // AJAX 요청
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "mypage_withdraw1_process.jsp", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState === 4 && xhr.status === 200) {
+                    const response = xhr.responseText.trim();
+                    if(response === "success") {
+                        messageBox.style.display = "block";
+                        messageBox.style.color = "blue";
+                        messageBox.innerText = "인증이 되었습니다.";
+                        // 확인 버튼 활성화 (혹은 클릭 가능 상태로 플래그 설정)
+                        btnConfirm.disabled = false;
+                        btnConfirm.classList.add("active");
+                    } else {
+                        messageBox.style.display = "block";
+                        messageBox.style.color = "red";
+                        messageBox.innerText = "비밀번호가 일치하지 않습니다.";
+                        btnConfirm.disabled = true;
+                        btnConfirm.classList.remove("active");
+                    }
+                }
+            };
+            xhr.send("mode=ajax&pass=" + encodeURIComponent(pass));
+      }
+
+      function goNext() {
+          const btnConfirm = document.getElementById("btn-confirm");
+          if(btnConfirm.disabled) {
+              alert("먼저 비밀번호 인증을 완료해주세요.");
+              return;
+          }
+          location.href = "mypage_withdraw2.jsp";
       }
     </script>
+    <style>
+        #auth-msg {
+            display: none;
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </style>
   </head>
   <body>
     <!-- 헤더 -->
@@ -87,17 +122,17 @@
               회원님의 개인정보 보호를 위해 비밀번호를 입력해주세요.
             </p>
 
-            <form name="authForm" action="mypage_withdraw1_process.jsp" method="post">
-                <div class="auth-form">
-                  <span class="auth-label">비밀번호</span>
-                  <input type="password" name="pass" class="auth-input" placeholder="비밀번호" />
-                  <button type="button" class="btn-auth-check" onclick="submitAuth()">인증</button>
-                </div>
-            </form>
+            <div class="auth-form">
+              <span class="auth-label">비밀번호</span>
+              <input type="password" name="pass" class="auth-input" placeholder="비밀번호" />
+              <button type="button" class="btn-auth-check" onclick="checkAuth()">인증</button>
+            </div>
+            
+            <div id="auth-msg"></div>
 
-            <div class="btn-group">
-              <button type="button" class="btn-cancel" onclick="history.back()">취소</button>
-              <button type="button" class="btn-confirm" onclick="submitAuth()">확인</button>
+            <div class="btn-group" style="margin-top: 20px;">
+              <!-- 취소 버튼 제거됨 -->
+              <button type="button" class="btn-confirm" id="btn-confirm" onclick="goNext()" disabled>확인</button>
             </div>
           </div>
         </main>
