@@ -53,6 +53,13 @@ public class UserInfoService {
 		return flag;
 	}// searchId
 
+	/**
+	 * 회원 추가 메소드
+	 * 
+	 * @param uDTO
+	 * @param key
+	 * @return
+	 */
 	public boolean addMember(userDTO uDTO, String key) {
 
 		boolean flag = false;
@@ -147,23 +154,66 @@ public class UserInfoService {
 		return flagId;
 	}// searchMember
 
-	/*
-	 * public String searchUserId(userDTO uDTO,String key) { UserDAO uDAO =
-	 * UserDAO.getInstance();
-	 * 
-	 * // SiteProperty에 있는 key 가져오기(복호화) String key = SiteProperty.spVO.getKey();
-	 * System.out.println("------" + key);
-	 * 
-	 * //찾은 아이디를 넣을 변수 String findId= ""; try { //이메일, 이름, 핸드폰 번호 복호화 필요. findId =
-	 * uDAO.selectUserId(uDTO); if (uDTO != null) { // 이름과 이메일은 암호화되어 있다. => 복호화 필요
-	 * DataDecryption dd = new DataDecryption(key);
-	 * uDTO.setUsers_name(dd.decrypt(uDTO.getUsers_name()));
-	 * uDTO.setEmail(dd.decrypt(uDTO.getEmail()));
-	 * uDTO.setPhone_num(dd.decrypt(uDTO.getPhone_num()));
-	 * 
-	 * } // end if } catch (SQLException e) { e.printStackTrace(); } catch
-	 * (Exception e) { e.printStackTrace(); }
-	 * 
-	 * return pDTO; }// searchMember
-	 */
+	// 사용자 정보 확인(비밀번호 변경 시 사용)
+	public boolean checkUserPwInfo(userDTO uDTO, String key) {
+		// select 결과
+		boolean flag = false;
+
+		UserDAO uDAO = UserDAO.getInstance();
+		System.out.println("유저 다오 네임 : " + uDTO.getUsers_name());
+		System.out.println("유저 다오 메일 : " + uDTO.getEmail());
+		DataEncryption de = new DataEncryption(key);
+		if (uDTO.getUsers_name() != null && !"".equals(uDTO.getUsers_name())) {
+			try {
+				uDTO.setUsers_name(de.encrypt(uDTO.getUsers_name()));
+			} catch (Exception e) {
+				e.printStackTrace();
+			} // end catch
+		} // end if
+		if (uDTO.getEmail() != null && !"".equals(uDTO.getEmail())) {
+			try {
+				uDTO.setEmail(de.encrypt(uDTO.getEmail()));
+			} catch (Exception e) {
+				e.printStackTrace();
+			} // end catch
+		} // end if
+		try {
+			//pw찾기에 입력한 데이터 기반으로 DB 조회
+			/* flag = uDAO.selectUserPw(uDTO); */
+			if (uDAO.selectUserPw(uDTO)) {
+				// 검색 결과가 존재한다면 새로운 비밀번호로 update해주기
+				if(changePw(uDTO) == 1) {
+					//패스워드 변경 선공했으면 true 반환
+					return flag=true;
+				}//end if
+			}//end if
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} // end catch
+		return flag;
+	}// addMember
+
+	
+	//비밀번호 변경 메소드
+	public int changePw(userDTO uDTO) {
+		UserDAO uDAO = UserDAO.getInstance();
+		// 업데이트 결과
+		int result = 0;
+		// 저장될 데이터의 중요도에 따라 일방향 해시, 암호화 처리.
+		// null이나 ""는 일방향해시, 암호화를 하면 error 발생.
+		if (uDTO.getUsers_pass() != null && !"".equals(uDTO.getUsers_pass())) {
+			try {
+				uDTO.setUsers_pass((DataEncryption.messageDigest("SHA-1", uDTO.getUsers_pass())));
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			} // end catch
+		} // end if
+		try {
+			result = uDAO.updatePw(uDTO);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}//catch
+		return result;
+	}//changePw
+	
 }// class

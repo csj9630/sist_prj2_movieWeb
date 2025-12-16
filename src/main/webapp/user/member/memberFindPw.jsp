@@ -12,7 +12,7 @@
 <link rel="shortcut icon"
 	href="${commonURL}/resources/images/favicon.ico">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<title>비밀번호 찾기</title>
+<title>비밀번호 변경</title>
 <link rel="stylesheet" href="${commonURL}/resources/css/megabox.min.css"
 	media="all">
 
@@ -287,7 +287,9 @@ body {
 </style>
 
 <script type="text/javascript">
-let isCodeAuthenticated = false;
+//인증확인 절차를 통과하였는지 확인할 변수
+let isCheckCode = false;
+//인증확인을 완료하였을 경우, 인증번호 입력을 안 해도 괜찮게 할 변수.
 	$(function() {
 		
 		/* modal창 닫기 */
@@ -324,8 +326,6 @@ let isCodeAuthenticated = false;
 			if(!validDomain()) {
 				return;
 			};
-			
-			
 			// 인증번호 유효성 검사
 			if(!validEmailCode()) {
 				return;
@@ -336,7 +336,6 @@ let isCodeAuthenticated = false;
 			if(!validUsers_pass()) {
 				return;
 			};
-			
 			const usersPass = $("#users_pass").val();
 			const checkPass = $("#checkPassword").val();
 			
@@ -352,24 +351,27 @@ let isCodeAuthenticated = false;
 				return;
 			};
 			
-			
 		    // 비밀번호 일치 확인 유효성 검사
 		    if(!isPasswordMatch(usersPass, checkPass)){
 		    	alert("비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
 		    	$("#checkPassword").focus(); // 포커스 추가
 		    	return;
 		    }//end if
-			
-			// 모든 유효성 검사 통과 시 폼 제출
-			/* $("#findIdFrm").submit(); */
-			 $("#resultModal").addClass("show"); 
+		    
+		    
+			// 모든 유효성 검사 통과 시 ajax를 통해 DB와 통신 후 결과 전달
+			if(isCheckCode) {
+			resultFindPw();
+			} else{
+				alert("인증번호 확인 절차를 진행해주십시오.");
+			}
 		});
 
 		
-		//인정 버튼을 누르면 ajax를 사용하여 페이지를 새로고침 하지 않고 세션의 값을 받아와서 입력된 값과 비교.
+		//인증확인 버튼을 누르면 ajax를 사용하여 페이지를 새로고침 하지 않고 세션의 값을 받아와서 입력된 값과 비교.
 		$('#authConfirmBtn').click(function() {
 			//인증확인 버튼 눌렸을 시 우선 유효성 검사 진행
-			if(!validEmailCode()) {
+			if(!validEmailCode() && isCheckCode == false) {
 				return;
 			};
 			
@@ -385,12 +387,19 @@ let isCodeAuthenticated = false;
 	            },
 	            success: function(response) {
 	                if (response.status === 'success') {
+	                	//인증 여부 확인용 변수
+	                	isCheckCode = true;
 	                    alert(response.message);
 	                    // 성공 시 다음 단계 (비밀번호 변경 폼 노출 등) 로직 처리
 	                } else if(response.status === 'fail'){
 	                	//코드가 일치하지 않을 경우
 	                	alert(response.message);
 	                } else if(response.status === 'error'){
+	                	//인증 완료시 세션 값이 삭제되므로, 이미 인증을 완료한 상태라면 alert(response.message);대신 완료 했다는 창을 대신 띄워짐.
+	                	if(isCheckCode == true) {
+	                	alert("이미 인증을 완료하셨습니다.");	
+	                	return;
+	                	}//end if
 						//에러(세션 만료 등)
 	                	alert(response.message);
 	                }
@@ -403,6 +412,42 @@ let isCodeAuthenticated = false;
 	    });
 	});//ready
 
+	//비밀번호 변경 버튼 클릭시, form 유효성 검사 통과 후, db와 통신하여 입력받은 데이터가 존재하는지 확인 후 결과창 띄워주기.
+	function resultFindPw() {
+	//form에서 필요한 데이터 받아와서 json 데이터로 저장
+	var inputData="users_id="+$("#users_id").val()+"&users_name="+$("#users_name").val()
+	+"&email="+($("#mail").val()+"@"+$("#domain").val())+"&users_pass="+$("#users_pass").val();
+
+		$.ajax({
+		    url: 'memberFindPwProcess.jsp', 
+		    type: 'POST',
+		    data: inputData,
+		    dataType: "JSON",
+		    success: function(response) {
+		        if (response.status === 'success') {
+		             $("#resultModal").addClass("show"); // 모달 표시 (현재 페이지 유지)
+		             $("#sucessModal").text(response.msg);
+		             // 모달 닫기 버튼 (#btnClosePw) 클릭 시 로그인 페이지로 이동 처리
+		             $("#btnClosePw").off('click').on('click', function() {
+		                 $("#resultModal").removeClass("show");
+		                 window.location.href = "${commonURL}/user/member/memberLogin.jsp"; // 로그인 페이지 이동
+		             });
+
+		        } else if (response.status === 'fail') {
+		        	 $("#resultModal").addClass("show"); // 모달 표시 (현재 페이지 유지)
+		             $("#sucessModal").text(response.msg);
+		        	 /* $("#resultModal").removeClass("show"); */
+		        } else {
+		        	 $("#resultModal").addClass("show"); // 모달 표시 (현재 페이지 유지)
+		             $("#sucessModal").text(response.msg);
+		        }
+		    },
+		    error: function() {
+		        alert('서버 통신에 실패했습니다. 네트워크 연결을 확인하세요.');
+		    }
+		});
+	}
+	
 	
 	//비밀번호 유효성 검사
 	function passCondition(password) {
@@ -439,6 +484,8 @@ let isCodeAuthenticated = false;
 	function validUsers_id() {
 		if ($("#users_id").val().trim() === "") {
 			alert("아이디를 입력해주세요.");
+			/* $("#resultModal").addClass("show"); // 모달 표시 (현재 페이지 유지) */
+			/* $("#sucessModal").text("아이디를 입력해주세요."); */
 			$("#users_id").focus();
 			return false;
 		}//end if
@@ -503,18 +550,18 @@ let isCodeAuthenticated = false;
 		<div class="inner-wrap">
 			<div class="location">
 				<span>Home</span> <a href="${commonURL}/user/member/memberLogin.jsp"
-					title="회원">회원</a> <a href="#">비밀번호 찾기</a>
+					title="회원">회원</a> <a href="#">비밀번호 변경</a>
 			</div>
 		</div>
 	</div>
 
 	<div class="main-container-white">
 		<div class="wrapper">
-			<h1 class="title">아이디 / 비밀번호 찾기</h1>
+			<h1 class="title">아이디 / 비밀번호 변경</h1>
 
 			<div class="tab-container">
 				<a href="${commonURL}/user/member/memberFindId.jsp" class="tab-item">아이디
-					찾기</a> <a href="#" class="tab-item active">비밀번호 찾기</a>
+					찾기</a> <a href="#" class="tab-item active">비밀번호 변경</a>
 			</div>
 
 			<form id="findPwFrm" name="findPwFrm" method="post">
@@ -538,7 +585,7 @@ let isCodeAuthenticated = false;
 					<label class="form-label">Email</label>
 					<div class="input-with-btn">
 						<input type="text" class="form-input" name="mail" id="mail"
-							placeholder="example" style="width: 50%;" value="으악">@ <select
+							placeholder="example" style="width: 50%;" value="1">@ <select
 							name="domain" id="domain" class="form-input" style="width: 45%;">
 							<option value="google.com">google.com</option>
 							<option value="naver.com">naver.com</option>
@@ -626,7 +673,7 @@ let isCodeAuthenticated = false;
 				<span>알림</span>
 				<button class="modal-close-btn" id="closeModal">✕</button>
 			</div>
-			<div class="modal-body">
+			<div class="modal-body" id="sucessModal">
 				비밀번호 변경이 성공적으로 완료되었습니다.<br>로그인 화면으로 이동합니다.
 			</div>
 			<div class="modal-footer">
