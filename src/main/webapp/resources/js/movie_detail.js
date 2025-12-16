@@ -114,3 +114,34 @@ function closeImageModal() {
 	$('body').css('overflow', 'auto');
 }
 
+//*********댓글 토글 메뉴 관련*********
+// 메뉴 토글 (클릭 시 열기/닫기)
+function toggleMenu(commentId) {
+    const menu = document.getElementById('menu-' + commentId);
+    const isVisible = menu.style.display === 'block';
+    
+    // 다른 열린 메뉴 모두 닫기
+    document.querySelectorAll('.menu-dropdown').forEach(m => {
+        m.style.display = 'none';
+    });
+    
+    // 현재 메뉴 토글
+    menu.style.display = isVisible ? 'none' : 'block';
+}
+
+// 댓글 수정
+function editComment(commentId) {
+    // 수정 모드로 전환
+    const commentContent = document.querySelector(`#comment-${commentId} .comment-content`);
+    const currentText = commentContent.textContent;
+    
+    commentContent.innerHTML = `
+        <textarea id="edit-textarea-${commentId}" class="edit-textarea">${currentText}</textarea>
+        <div class="edit-buttons">
+            <button onclick="saveEdit(${commentId})">저장</button>
+            <button onclick="cancelEdit(${commentId}, '${currentText}')">취소</button>
+        </div>
+    `;
+    
+    toggleMenu(commentId);
+}

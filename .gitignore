@@ -1,6 +1,8 @@
 # Eclipse/IntelliJ 등 IDE에서 컴파일된 클래스 파일
 # Java 클래스 파일 (Class files)
 **/*.class
+build/classes
+
 
 # 배포/실행 가능한 아카이브 파일
 # WAR (Web Application ARchive) file

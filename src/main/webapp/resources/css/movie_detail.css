@@ -209,7 +209,7 @@ body {
 }
 
 .purchase-box {
-  background: rgba(20, 20, 20, 0.95);
+  background: rgba(20, 20, 20, 0.9);
   border-radius: 8px;
   padding: 16px 20px;
   margin-top: 20px;
@@ -225,6 +225,7 @@ body {
   padding: 3px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   font-size: 14px;
+  width: 100%;
 }
 
 .purchase-item:last-child {
@@ -671,6 +672,9 @@ body {
   .hero-stats {
     justify-content: center;
   }
+  .hero-poster {
+   flex-direction: row;
+  }
 
   .poster {
     width: 240px;
@@ -679,7 +683,10 @@ body {
 
   .purchase-box {
     width: 240px;
+     margin-top: 240px;
   }
+ 
+
 }
 
 @media (max-width: 768px) {
