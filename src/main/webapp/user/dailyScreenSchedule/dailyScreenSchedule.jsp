@@ -1,3 +1,5 @@
+<%@page import="java.time.LocalDateTime"%>
+<%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.util.Map"%>
@@ -173,6 +175,7 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 												    // 요일 한글 배열
 												    String[] dayNames = {"", "토", "일", "월", "화", "수", "목", "금"};
 												    String[] dayNamesEn = {"", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"};
+												    
 												%>
 												
 												<div class="date-list" style = "width: 1190px;">
@@ -256,132 +259,175 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 									<ul></ul>
 								</div>
 								<%
-								    // 1. 파라미터 받기
+								    // ---------------------------------------------------------
+								    // 1. 요청 파라미터 처리 및 Service 호출
+								    // ---------------------------------------------------------
+								    
+								    // 사용자가 선택한 날짜 가져오기 (없으면 오늘 날짜)
 								    selectedDate = request.getParameter("date");
 								    if (selectedDate == null || selectedDate.isEmpty()) {
 								        selectedDate = new SimpleDateFormat("yyyy.MM.dd").format(new Date());
 								    }
-								
-								    // 2. Service 호출하여 데이터 가져오기
+								    
+								    // HTML 속성용 날짜 포맷 (예: 2025.11.30 -> 20251130)
+								    String playDe = selectedDate.replace(".", "").replace("-", "");
+									
+								    // Service 객체 생성 및 데이터 가져오기
+								    // (JSP에서는 SQL이나 DB 연결 정보를 전혀 몰라도 됩니다)
 								    ScreenInfoService sis = ScreenInfoService.getInstance();
-								    // 복잡한 로직 없이 결과만 딱 받아옵니다.
 								    Map<String, Map<String, List<Map<String, String>>>> movieScheduleMap = 
 								    		sis.getMovieSchedule(selectedDate);
+								    
+								    SimpleDateFormat screenSdf = new SimpleDateFormat("HH:mm");
+								    
 								%>
 								
 								<div class="schedule-output-area">
+								
 								<%
-								    // 데이터가 비어있을 경우 처리
-								    if (movieScheduleMap.isEmpty()) {
+								    // 데이터가 아예 없는 경우에 대한 안내 메시지 처리
+								    if (movieScheduleMap == null || movieScheduleMap.isEmpty()) {
 								%>
-								        <div class="no-data">상영 스케줄이 없습니다.</div>
+								        <div class="no-data" style="text-align: center; padding: 50px 0;">
+								            <p>해당 날짜에 상영 스케줄이 없습니다.</p>
+								        </div>
 								<%
 								    } else {
-								        // 기존의 3중 for문 반복 출력 로직 그대로 사용
+								        // ---------------------------------------------------------
+								        // Loop 1: 영화별 반복 (Key: 영화이름, Value: 상영관 맵)
+								        // ---------------------------------------------------------
 								        for (Map.Entry<String, Map<String, List<Map<String, String>>>> movieEntry : movieScheduleMap.entrySet()) {
-								        	String currentMovieName = movieEntry.getKey();
+								            String currentMovieName = movieEntry.getKey();
 								            Map<String, List<Map<String, String>>> theaterGroup = movieEntry.getValue();
 								            
-								            // 첫 번째 상영 시간표에서 영화 정보 (상영시간 등)를 가져옵니다.
-								            // 그룹화 구조상 첫 번째 상영관의 첫 번째 스케줄 정보를 사용합니다.
+								            // 영화 정보 출력을 위해 첫 번째 스케줄 데이터를 샘플로 가져옴
 								            Map<String, String> firstSchedule = null;
-								            for (List<Map<String, String>> schedules : theaterGroup.values()) {
-								                if (!schedules.isEmpty()) {
-								                    firstSchedule = schedules.get(0);
+								            for (List<Map<String, String>> list : theaterGroup.values()) {
+								                if (!list.isEmpty()) {
+								                    firstSchedule = list.get(0);
 								                    break;
 								                }
 								            }
 								            
-								            // null 체크 (데이터가 없는 경우를 대비)
+								            // 데이터 방어 코드
 								            if (firstSchedule == null) continue;
+											
 								            String runningTime = firstSchedule.get("RUNNING_TIME");
-								            // String movieCode = firstSchedule.get("MOVIE_CODE"); // 영화 상세 페이지 URL 등에 사용 가능
-									        %>
-									            <div class="theater-list">
-									                <div class="theater-tit">
-									                    <p class="movie-grade age-all"></p> <p>
-									                        <a href="/movie-detail?movieCode=<%= firstSchedule.get("MOVIE_CODE") %>" title="<%= currentMovieName %> 상세보기">
-									                            <%= currentMovieName %>
-									                        </a>
-									                    </p>
-									                    <p class="infomation">
-									                        <span>상영중</span>/상영시간 <%= runningTime %>분
-									                    </p>
-									                </div>
-									                
-									                <%
-									                // 2. 중간 반복문: 상영관별 반복 (theater-type-box)
-									                for (Map.Entry<String, List<Map<String, String>>> theaterEntry : theaterGroup.entrySet()) {
-									                    String currentTheaterName = theaterEntry.getKey();
-									                    List<Map<String, String>> scheduleList = theaterEntry.getValue();
-									                    
-									                    // 첫 번째 상영 시간표에서 상영관 좌석 정보를 가져옵니다.
-									                    String totalSeat = scheduleList.get(0).get("TOTAL_SEAT"); 
-									                %>
-									                <div class="theater-type-box">
-									                    <div class="theater-type">
-									                        <p class="theater-name"><%= currentTheaterName %></p>
-									                        <p class="chair">총 <%= totalSeat %>석</p>
-									                    </div>
-									                    <div class="theater-time">
-									                        <div class="theater-type-area">2D(자막)</div> <div class="theater-time-box">
-									                            <table class="time-list-table">
-									                                <tbody>
-									                                    <tr>
-									                                    <%
-									                                    // 3. 내부 반복문: 상영 시간별 반복 (td)
-									                                    // 한 줄에 8개씩 출력하는 로직이 필요할 경우 여기서 복잡해집니다.
-									                                    // 여기서는 간단하게 한 줄에 모두 출력한다고 가정합니다.
-									                                    int playCount = 1; // 회차 계산용 임시 변수
-									                                    for (Map<String, String> schedule : scheduleList) {
-									                                        String screenOpen = schedule.get("SCREEN_OPEN"); // 예: 18:20
-									                                        String remainSeat = schedule.get("REMAIN_SEAT"); // 예: 15석
-									                                        // 상영 종료 시간 계산 로직이 필요합니다. (SCREEN_OPEN + RUNNING_TIME)
-									                                        
-									                                        // TODO: 종료 시간, 회차 계산 로직을 실제 데이터로 대체하세요.
-									                                        String endTime = "20:18";
-									                                        String sqlDate = selectedDate.replace('.', '-');
-									                                    %>
-									                                        <td class="" 
-									                                            play-de="<%= sqlDate.replace("-", "") %>" 
-									                                            play-seq="<%= playCount %>" 
-									                                            rpst-movie-no="<%= firstSchedule.get("MOVIE_CODE") %>"
-									                                            theab-no="XX" > <div class="td-ab">
-									                                                <div class="txt-center">
-									                                                    <a href="/reserve" title="영화예매하기">
-									                                                        <div class="ico-box">
-									                                                            <i class="iconset ico-off"></i> </div>
-									                                                        <p class="time"><%= screenOpen %></p>
-									                                                        <p class="chair"><%= remainSeat %></p>
-									                                                        <div class="play-time">
-									                                                            <p><%= screenOpen %>~<%= endTime %></p>
-									                                                            <p><%= playCount %>회차</p>
-									                                                        </div>
-									                                                    </a>
-									                                                </div>
-									                                            </div>
-									                                        </td>
-									                                    <%
-									                                        playCount++;
-									                                    } // End of 상영 시간 반복
-									                                    %>
-									                                    </tr>
-									                                </tbody>
-									                            </table>
-									                        </div>
-									                    </div>
-									                </div>
-									                <%
-									                } // End of 상영관 반복
-									                %>
-									            </div>
-									        <%
-									        }
-									    }
-									%>
+								            String movieCode = firstSchedule.get("MOVIE_CODE");
+								            String movieGrade = firstSchedule.get("MOVIE_GRADE"); // 등급 데이터
+								            
+								            // 등급에 따른 CSS 클래스 결정 로직 (View 로직)
+								            String gradeClass = "age-all";
+								            if (movieGrade != null) {
+								                if (movieGrade.contains("12")) gradeClass = "age-12";
+								                else if (movieGrade.contains("15")) gradeClass = "age-15";
+								                else if (movieGrade.contains("19") || movieGrade.contains("청불")) gradeClass = "age-19";
+								                else if (movieGrade.contains("전체")) gradeClass = "age-all";
+								            }
+								%>
+								    <div class="theater-list">
+								        <div class="theater-tit">
+								            <p class="movie-grade <%= gradeClass %>"></p>
+								            <p>
+								                <a href="/movie-detail?movieCode=<%= movieCode %>" title="<%= currentMovieName %> 상세보기">
+								                    <%= currentMovieName %>
+								                </a>
+								            </p>
+								            <p class="infomation">
+								                <span>상영중</span>/상영시간 <%= runningTime %>분
+								            </p>
+								        </div>
+								
+								        <%
+								            // ---------------------------------------------------------
+								            // Loop 2: 상영관별 반복 (Key: 상영관이름, Value: 스케줄 리스트)
+								            // ---------------------------------------------------------
+								            for (Map.Entry<String, List<Map<String, String>>> theaterEntry : theaterGroup.entrySet()) {
+								                String currentTheaterName = theaterEntry.getKey();
+								                List<Map<String, String>> scheduleList = theaterEntry.getValue();
+								                
+								                // 상영관 좌석수는 해당 관의 스케줄 중 하나에서 가져옴
+								                String totalSeat = scheduleList.get(0).get("TOTAL_SEAT");
+								        %>
+								        <div class="theater-type-box">
+								            <div class="theater-type">
+								                <p class="theater-name"><%= currentTheaterName %></p>
+								                <p class="chair">총 <%= totalSeat %>석</p>
+								            </div>
+								            <div class="theater-time">
+								                <div class="theater-type-area">2D(자막)</div> <div class="theater-time-box">
+								                    <table class="time-list-table">
+								                        <caption>상영시간표</caption>
+								                        <colgroup>
+								                            <col style="width: 99px;"><col style="width: 99px;"><col style="width: 99px;"><col style="width: 99px;">
+								                            <col style="width: 99px;"><col style="width: 99px;"><col style="width: 99px;"><col style="width: 99px;">
+								                        </colgroup>
+								                        <tbody>
+								                            <tr>
+								                                <%
+								                                    // ---------------------------------------------------------
+								                                    // Loop 3: 시간표(회차)별 반복
+								                                    // ---------------------------------------------------------
+								                                    int playCount = 1; // 회차 카운트 (DB에 회차 정보가 없다면 임의 증가)
+								                                    for (Map<String, String> schedule : scheduleList) {
+								                                        String screenCode = schedule.get("SCREEN_CODE");  // 시작 시간
+								                                        String screenOpen = schedule.get("SCREEN_OPEN");  // 시작 시간
+								                                        String screenOpenTime = screenOpen.substring(screenOpen.indexOf(" "), screenOpen.lastIndexOf(":")).trim();
+								                                        String remainSeat = schedule.get("REMAIN_SEAT");  // 잔여 좌석
+								                                        
+								                                        // 종료 시간 계산 (시작시간 + 러닝타임) 로직이 필요하다면 여기서 처리하거나
+								                                        // Service에서 계산해서 'SCREEN_END'로 넘겨주는 것이 가장 좋습니다.
+								                                        // 현재는 임시 값으로 처리합니다.
+								                                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+								                                        LocalDateTime screenOpenDateTime = LocalDateTime.parse(screenOpen, formatter);
+								                                        long minutesToAdd = Long.parseLong(runningTime);
+								                                        LocalDateTime screenEndDateTime = screenOpenDateTime.plusMinutes(minutesToAdd);
+								                                        String screenEnd = screenEndDateTime.toString();
+								                                        String screenEndTime = screenEnd.substring(screenEnd.indexOf("T") + 1);
+								                                        
+								                                %>
+								                                <td class="" 
+								                                    play-de="<%= playDe %>" 
+								                                    play-seq="<%= playCount %>" 
+								                                    rpst-movie-no="<%= movieCode %>">
+								                                    <div class="td-ab">
+								                                        <div class="txt-center">
+								                                            <a href="/booking?screen_code=<%= screenCode %>" title="영화예매하기">
+								                                                <div class="ico-box">
+								                                                    <i class="iconset ico-off"></i>
+								                                                </div>
+								                                                <p class="time"><%= screenOpenTime %></p>
+								                                                <p class="chair"><%= remainSeat %></p>
+								                                                <div class="play-time">
+								                                                    <p><%= screenOpenTime %>~<%= screenEndTime %></p>
+								                                                    <p><%= playCount %>회차</p>
+								                                                </div>
+								                                            </a>
+								                                        </div>
+								                                    </div>
+								                                </td>
+								                                <%
+								                                        playCount++;
+								                                    } // End Loop 3 (시간표)
+								                                %>
+								                            </tr>
+								                        </tbody>
+								                    </table>
+								                </div>
+								            </div>
+								        </div>
+								        <%
+								            } // End Loop 2 (상영관)
+								        %>
+								    </div>
+								<%
+								        } // End Loop 1 (영화)
+								    } // End if-else (데이터 유무 확인)
+								%>
+								</div>
 								</div>
 							</div>
-							<div class="box-border v1 mt30" style = "border: 0px solid;">
+							<div class="box-border v1 mt30" style = "border: 0px solid; margin-bottom: 30px;">
 								<li>지연입장에 의한 관람불편을 최소화하고자 본 영화는 약 10분 후 시작됩니다.</li>
 								<li>쾌적한 관람 환경을 위해 상영시간 이전에 입장 부탁드립니다.</li>
 							</div>
@@ -390,19 +436,18 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 				</div>
 			</div>
 			<!--// contents -->
-		</div>
-		
 		<div class="quick-area" style="display: none;">
 			<a href="${commonURL}/screenSchedule/screenSchedule.jsp"
 				class="btn-go-top" title="top" style="position: fixed;">top</a>
 		</div>
-		
 		<!-- footer -->
 		<footer id="footer">
 			<c:import url = "${commonURL}/fragments/footer.jsp"/>
 		</footer>
 		<!--// footer -->
+		</div>
+		
+		
 
-	</div>
 </body>
 </html>
