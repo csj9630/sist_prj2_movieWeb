@@ -31,7 +31,7 @@ if("ACTIVE".equals(type)) {
 	searchYear = String.valueOf(LocalDate.now().getYear());
 	searchMonth = String.valueOf(LocalDate.now().getMonthValue());
 } else if("PAST".equals(type)) {
-	// 지난내역: 선택된 날짜 파싱 (paramDate ex: 2025-11)
+	// 지난내역: 선택된 날짜 파싱 (paramDate ex: 2025-11)//삭제예정
 	if(paramDate != null && paramDate.contains("-")) {
 		String[] parts = paramDate.split("-");
 		if(parts.length >= 2) {
@@ -324,7 +324,45 @@ if (bookList == null) {
                           <td><%= booking.getMovie_name() %></td>
                           <td><%= booking.getBookTimeStr() %></td>
                           <td><%= booking.getTheater_name() %></td>
-                          <td><%= booking.getScreen_date() %></td>
+                          <td>
+                              <%= booking.getScreen_date() %>
+                              <%-- 
+                                  [유효성 검증: 상영일시 < 예매일자 체크]
+                                  현재 데이터가 테스트 데이터라 상영일이 예매일보다 과거인 경우가 있음.
+                                  추후 실제 운영 시 아래 로직 활성화 고려.
+                              --%>
+                              <%
+                                  try {
+                                      // 날짜 형식이 다를 수 있으므로 포맷터 준비
+                                      // book_time: "25/12/15" (yy/MM/dd)
+                                      // screen_date: "2025-10-11 00:00:00" (yyyy-MM-dd HH:mm:ss)
+                                      
+                                      String bDateStr = booking.getBookTimeStr();
+                                      String sDateStr = booking.getScreen_date();
+                                      
+                                      if(bDateStr != null && sDateStr != null) {
+                                          java.text.SimpleDateFormat sdfBook = new java.text.SimpleDateFormat("yy/MM/dd");
+                                          java.text.SimpleDateFormat sdfScreen = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                          
+                                          java.util.Date bDate = sdfBook.parse(bDateStr);
+                                          java.util.Date sDate = sdfScreen.parse(sDateStr);
+                                          
+                                          if(sDate.before(bDate)) {
+                                              // [대처방안 예시]
+                                              // 1. 텍스트 강조 (빨간색)
+                                              // out.print("<span style='color:red; font-weight:bold; display:block;'>(날짜오류)</span>");
+                                              
+                                              // 2. 해당 행 숨기기 (tr style="display:none") - 위쪽 tr 태그 제어 필요
+                                              
+                                              // 3. 관리자 알림 또는 로그
+                                              // System.err.println("DatErr: " + booking.getBook_num());
+                                          }
+                                      }
+                                  } catch(Exception e) {
+                                      // 날짜 파싱 에러 무시
+                                  }
+                              %>
+                          </td>
                           <td><%= "T".equals(booking.getBook_state()) ? "예매 중" : "취소" %></td>
                         </tr>
                   <%
