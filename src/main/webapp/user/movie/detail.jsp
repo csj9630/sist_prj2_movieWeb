@@ -24,7 +24,6 @@ request.setCharacterEncoding("UTF-8");
 <link rel="stylesheet" href="${commonURL}/resources/css/megabox.min.css" />
 <link rel="stylesheet"
 	href="${commonURL}/resources/css/movie_detail.css" />
-<script src="${commonURL}/resources/js/movie_detail.js"></script>
 <link rel="shortcut icon"
 	href="${commonURL}/resources/images/favicon.ico">
 
@@ -39,6 +38,8 @@ request.setCharacterEncoding("UTF-8");
 <!-- jQuery CDN -->
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="${commonURL}/resources/js/movie_detail.js"></script>
+<script src="${commonURL}/resources/js/movie_detail_review.js"></script>
 
 <script type="text/javascript">
 
@@ -79,14 +80,20 @@ $(document).ready(function () {
 					<div class="stat-item">
 						<span class="stat-icon">🔵</span>
 						<div class="stat-content">
-							<div class="stat-value heart-value"><fmt:formatNumber type="number" maxFractionDigits="3" value="${detail.dailyAudience}" /></div>
+							<div class="stat-value heart-value">
+								<fmt:formatNumber type="number" maxFractionDigits="3"
+									value="${detail.dailyAudience}" />
+							</div>
 							<div class="stat-label">일일 관람객수</div>
 						</div>
 					</div>
 					<div class="stat-item">
 						<span class="stat-icon">👁</span>
 						<div class="stat-content">
-							<div class="stat-value"><fmt:formatNumber type="number" maxFractionDigits="3" value="${detail.totalAudience}" /></div>
+							<div class="stat-value">
+								<fmt:formatNumber type="number" maxFractionDigits="3"
+									value="${detail.totalAudience}" />
+							</div>
 							<div class="stat-label">누적 관람객수</div>
 						</div>
 					</div>
@@ -103,11 +110,13 @@ $(document).ready(function () {
 				</div>
 				<div class="purchase-box">
 					<div class="purchase-item">
-					<!--**************여기에 빠른 예매 경로 입력*****************  -->
+						<!--**************여기에 빠른 예매 경로 입력*****************  -->
+						<form id="reserve" name="reserve" class="purchase-item" action="">
 						<input type="button" value="예매" class="reservation"
-						onclick="location.href='${commonURL}/user/fast_booking/fastBooking.jsp';" />
-<!-- 						onclick="location.href='index_temp.jsp';" />
- -->						
+							onclick="location.href='${commonURL}/user/fast_booking/fastBooking.jsp';" />
+						<input type="hidden" value=" ${detail.code}" alt="영화코드">
+						<!-- 						onclick="location.href='index_temp.jsp';" />
+ -->					</form>
 					</div>
 				</div>
 			</div>
@@ -127,8 +136,10 @@ $(document).ready(function () {
 		<div class="tab-contents">
 			<!-- 작품정보 탭 -->
 			<div class="tab-content active" id="info">
-				<div class="content-box" >
-				<div id="movie_intro"><c:out value="${detail.intro}"/></div>
+				<div class="content-box">
+					<div id="movie_intro">
+						<c:out value="${detail.intro}" />
+					</div>
 
 
 					<div class="divider"></div>
@@ -151,15 +162,18 @@ $(document).ready(function () {
 				<div class="content-box">
 					<div class="comment-area">
 						<h2 class="content-title" style="margin-bottom: 0">
-							${detail.name}에 대한 <%=reviewList.size()%>개의 이야기가 있어요!</h2>
+							${detail.name}에 대한
+							<%=reviewList.size()%>개의 이야기가 있어요!
+						</h2>
 					</div>
 
 					<!-- 공지 메시지 -->
 					<div class="comment-notice">
 						<div class="comment-avatar">M</div>
 						<div style="flex: 1">
-							<input type="text" class="comment-input" placeholder="최근 ${detail.name}에 관한 평점 게시물이 늘고 있습니다. 영화의 어떤 점이 좋았는지 이야기해주세요.
-							"/>
+							<input type="text" class="comment-input"
+								placeholder="최근 ${detail.name}에 관한 평점 게시물이 늘고 있습니다. 영화의 어떤 점이 좋았는지 이야기해주세요.
+							" />
 							<div style="text-align: right">
 								<a href="#" class="comment-button"> ✏️ 관람평쓰기 </a>
 							</div>
@@ -169,36 +183,43 @@ $(document).ready(function () {
 					<!-- 댓글 목록 (기존 코드 유지) -->
 
 					<c:choose>
-					<c:when test="${empty reviewList}">
-					<div>
-					<h2 class="content-title">
-					작성된 리뷰가 없습니다. 영화의 어떤 점이 좋았는지 제일 먼저 써주세요!
-					</h2>
-					</div>
-					</c:when>
+						<c:when test="${empty reviewList}">
+							<div>
+								<h2 class="content-title">작성된 리뷰가 없습니다. 영화의 어떤 점이 좋았는지 제일
+									먼저 써주세요!</h2>
+							</div>
+						</c:when>
 						<c:otherwise>
 							<c:forEach var="review" items="${reviewList}" varStatus="i">
-							<div class="comment-item">
-								<div class="comment-header">
-									<div class="comment-user">
-										<div class="user-avatar">👤</div>
-										<span class="username">${review.users_id }</span>
+								<div class="comment-item">
+									<div class="comment-header">
+										<div class="comment-user">
+											<div class="user-avatar">👤</div>
+											<span class="username">${review.users_id }</span>
+										</div>
+										<%-- <c:if test="${sessionScope.userId == comment.userId}"> --%>
+										<c:if test="${true}">
+										<div class="comment-actions">
+											<!-- <button class="comment-like">👍 0</button> -->
+											<button class="comment-menu">⋮</button>
+											<div id="menu-${comment.commentId}" class="menu-dropdown"
+												style="display: none;">
+												<button onclick="editComment(${comment.commentId})">수정</button>
+												<button onclick="deleteComment(${comment.commentId})">삭제</button>
+											</div>
+										</div>
+										</c:if>
 									</div>
-							<!-- 		<div class="comment-actions">
-										<button class="comment-like">👍 0</button>
-										<button class="comment-menu">⋮</button>
-									</div> -->
-								</div>
-								<div class="comment-body">
-									<div class="comment-rating">
-										<span class="rating-label">관람평</span>
-										<span class="rating-stars">⭐ +${review.score }</span>
+									<div class="comment-body">
+										<div class="comment-rating">
+											<span class="rating-label">관람평</span> <span
+												class="rating-stars">⭐ +${review.score }</span>
+										</div>
+										<p class="comment-text">${review.content }</p>
+										<span class="comment-time">${review.dateStr }</span>
 									</div>
-									<p class="comment-text">${review.content }</p>
-									<span class="comment-time">${review.dateStr }</span>
 								</div>
-							</div>
-							<!-- 나머지 댓글들... -->
+								<!-- 나머지 댓글들... -->
 							</c:forEach>
 						</c:otherwise>
 					</c:choose>
@@ -208,7 +229,7 @@ $(document).ready(function () {
 
 		<!-- 예고편/스틸컷 탭 -->
 
-		
+
 		<div class="tab-content" id="episodes">
 			<div class="content-box">
 				<div class="video-section">
@@ -238,7 +259,7 @@ $(document).ready(function () {
 								</div>
 							</c:forEach>
 						</div>
-					</div> 
+					</div>
 				</div>
 
 				<!-- 이미지 앨범 -->
@@ -247,13 +268,15 @@ $(document).ready(function () {
 					<div class="image-grid">
 						<c:forEach var="img" items="${imgList}" varStatus="status">
 							<div class="image-item">
-								<img src="${commonURL}/${movieImgPath}/${img.movie_code}/${img.img_path}" alt="${detail.name} ${status.count}" />
+								<img
+									src="${commonURL}/${movieImgPath}/${img.movie_code}/${img.img_path}"
+									alt="${detail.name} ${status.count}" />
 							</div>
 						</c:forEach>
 					</div>
 				</div>
 			</div>
-		</div> 
+		</div>
 	</div>
 
 
