@@ -410,6 +410,146 @@ let isCheckCode = false;
 	            }
 	        });
 	    });
+		
+		
+		
+		/* mmmmmmmmmmmmmmmmmmmmmmm */
+		
+		//이메일 요청 버튼 활성화 JS
+		function updateEmailAuthBtnState() {
+            // 변수 대신 직접 선택자 사용
+            const mailVal = $('#mail').val().trim();
+            const domainVal = $('#domain').val().trim();
+            const authReqBtn = $('#authReqBtn');
+
+            if (mailVal.length > 0 && domainVal.length > 0) {
+                authReqBtn.addClass('active').removeClass('btn-gray');
+            } else {
+                authReqBtn.removeClass('active').addClass('btn-gray');
+            }
+        }
+        
+        // 이메일 입력 및 도메인 선택 변경 시 버튼 상태 업데이트
+        $('#mail').on('input', updateEmailAuthBtnState);
+        $('#domain').on('change', updateEmailAuthBtnState);
+     
+      //버튼 활성화 상태 관련 js
+        $('#authReqBtn').on('click', function() {
+            const authReqBtn = $(this);
+            // 버튼이 비활성화 상태면 요청 방지
+            if (!authReqBtn.hasClass('active')) return; 
+
+            const mailVal = $('#mail').val();
+            const domainVal = $('#domain').val();
+            
+            if(!mailVal || !domainVal) {
+                alert("이메일을 입력하세요.");
+                return;
+            }
+
+            const emailVal = mailVal + '@' + domainVal;
+
+          //이메일 인증 번호 날릴 때 사용할 ajax.
+            $.ajax({
+                url: '/second_project_movie_reservation/quickMail', 
+                type: 'POST',
+                data: {
+                    email: emailVal 
+                },
+                dataType: 'text', 
+                
+                success: function(result) {
+                    const response = result.trim();
+                    
+                    if (response === "OK") { 
+                        alert("인증 메일이 발송되었습니다! 메일함을 확인하세요.");
+                    } else { 
+                        alert("인증 메일 발송에 실패했습니다. 입력 정보를 확인하거나 잠시 후 다시 시도해 주세요. (코드: " + response + ")");
+                    }
+                },
+                error: function() {
+                    console.error("AJAX Error: 서버 통신 실패");
+                    alert('네트워크 연결 실패 또는 서버와의 통신에 오류가 발생했습니다.');
+                }
+            });
+        });
+        // ==========================================================
+        
+        // 2. 비밀번호 눈 토글 
+        $('.password-icon').on('click', function() {
+            const input = $(this).prev('input'); 
+            if (input.attr('type') === 'password') { 
+                input.attr('type', 'text'); 
+                $(this).addClass('view-password'); 
+            } else { 
+                input.attr('type', 'password'); 
+                $(this).removeClass('view-password'); 
+            }
+        });
+
+        // 4. [인증번호] 숫자만 입력 & 자동 이동 & 버튼 활성화 
+        
+        // 인증번호 버튼 상태 업데이트 함수
+        function updateAuthBtnState() {
+            let allFilled = true;
+            const codeBoxes = $('.auth-box');
+            const authConfirmBtn = $('#authConfirmBtn');
+            
+            codeBoxes.each(function() { 
+                if($(this).val().trim().length !== 1) allFilled = false; 
+            });
+
+            if(allFilled) {
+                authConfirmBtn.addClass('active').removeClass('btn-dark');
+            } else {
+                authConfirmBtn.removeClass('active').addClass('btn-dark');
+            }
+        }
+
+        const codeBoxes = $('.auth-box'); // codeBoxes 변수는 반복문 밖에 선언하여 재사용
+        
+        codeBoxes.each(function(index) {
+            const box = $(this);
+            
+            box.on('input', function(e) {
+                this.value = this.value.replace(/[^0-9]/g, '');
+
+                if (this.value.length === 1 && index < codeBoxes.length - 1) {
+                    codeBoxes.eq(index + 1).focus(); 
+                } else if (this.value.length === 1 && index === codeBoxes.length - 1) {
+                    box.blur(); 
+                }
+                
+                updateAuthBtnState();
+            });
+            
+            box.on('keyup', function(e) {
+                 if ([9, 13, 16, 17, 18, 20, 27, 33, 34, 35, 36, 37, 38, 39, 40, 91, 93].includes(e.keyCode)) {
+                    return; 
+                }
+
+                if (this.value.length > 1) {
+                    this.value = this.value.slice(-1); 
+                    if (index < codeBoxes.length - 1) {
+                        codeBoxes.eq(index + 1).focus();
+                    } else {
+                         box.blur(); 
+                    }
+                }
+            });
+
+
+            box.on('keydown', function(e) {
+                if (e.key === 'Backspace') {
+                    if (this.value === '' && index > 0) {
+                        e.preventDefault(); 
+                        codeBoxes.eq(index - 1).focus().val('');
+                    }
+                    setTimeout(updateAuthBtnState, 10);
+                }
+            });
+        });
+
 	});//ready
 
 	//비밀번호 변경 버튼 클릭시, form 유효성 검사 통과 후, db와 통신하여 입력받은 데이터가 존재하는지 확인 후 결과창 띄워주기.
@@ -691,7 +831,7 @@ let isCheckCode = false;
 	<footer id="footer"><jsp:include
 			page="../../fragments/footer.jsp" /></footer>
 
-	<script>
+	<!-- <script>
        
 
         // 2. 비밀번호 눈 토글 (유지)
@@ -828,6 +968,6 @@ let isCheckCode = false;
                 }
             });
         });
-    </script>
+    </script> -->
 </body>
 </html>
