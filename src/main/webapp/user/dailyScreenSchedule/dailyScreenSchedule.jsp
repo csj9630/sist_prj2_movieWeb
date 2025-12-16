@@ -1,3 +1,5 @@
+<%@page import="java.time.LocalDateTime"%>
+<%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.util.Map"%>
@@ -173,6 +175,7 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 												    // 요일 한글 배열
 												    String[] dayNames = {"", "토", "일", "월", "화", "수", "목", "금"};
 												    String[] dayNamesEn = {"", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"};
+												    
 												%>
 												
 												<div class="date-list" style = "width: 1190px;">
@@ -268,12 +271,15 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 								    
 								    // HTML 속성용 날짜 포맷 (예: 2025.11.30 -> 20251130)
 								    String playDe = selectedDate.replace(".", "").replace("-", "");
-								
+									
 								    // Service 객체 생성 및 데이터 가져오기
 								    // (JSP에서는 SQL이나 DB 연결 정보를 전혀 몰라도 됩니다)
 								    ScreenInfoService sis = ScreenInfoService.getInstance();
 								    Map<String, Map<String, List<Map<String, String>>>> movieScheduleMap = 
 								    		sis.getMovieSchedule(selectedDate);
+								    
+								    SimpleDateFormat screenSdf = new SimpleDateFormat("HH:mm");
+								    
 								%>
 								
 								<div class="schedule-output-area">
@@ -305,7 +311,7 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 								            
 								            // 데이터 방어 코드
 								            if (firstSchedule == null) continue;
-								
+											
 								            String runningTime = firstSchedule.get("RUNNING_TIME");
 								            String movieCode = firstSchedule.get("MOVIE_CODE");
 								            String movieGrade = firstSchedule.get("MOVIE_GRADE"); // 등급 데이터
@@ -364,13 +370,21 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 								                                    // ---------------------------------------------------------
 								                                    int playCount = 1; // 회차 카운트 (DB에 회차 정보가 없다면 임의 증가)
 								                                    for (Map<String, String> schedule : scheduleList) {
+								                                        String screenCode = schedule.get("SCREEN_CODE");  // 시작 시간
 								                                        String screenOpen = schedule.get("SCREEN_OPEN");  // 시작 시간
+								                                        String screenOpenTime = screenOpen.substring(screenOpen.indexOf(" "), screenOpen.lastIndexOf(":")).trim();
 								                                        String remainSeat = schedule.get("REMAIN_SEAT");  // 잔여 좌석
 								                                        
 								                                        // 종료 시간 계산 (시작시간 + 러닝타임) 로직이 필요하다면 여기서 처리하거나
 								                                        // Service에서 계산해서 'SCREEN_END'로 넘겨주는 것이 가장 좋습니다.
 								                                        // 현재는 임시 값으로 처리합니다.
-								                                        String screenEnd = "00:00"; 
+								                                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+								                                        LocalDateTime screenOpenDateTime = LocalDateTime.parse(screenOpen, formatter);
+								                                        long minutesToAdd = Long.parseLong(runningTime);
+								                                        LocalDateTime screenEndDateTime = screenOpenDateTime.plusMinutes(minutesToAdd);
+								                                        String screenEnd = screenEndDateTime.toString();
+								                                        String screenEndTime = screenEnd.substring(screenEnd.indexOf("T") + 1);
+								                                        
 								                                %>
 								                                <td class="" 
 								                                    play-de="<%= playDe %>" 
@@ -378,14 +392,14 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 								                                    rpst-movie-no="<%= movieCode %>">
 								                                    <div class="td-ab">
 								                                        <div class="txt-center">
-								                                            <a href="/booking?date=<%= playDe %>&movie=<%= movieCode %>&time=<%= screenOpen %>" title="영화예매하기">
+								                                            <a href="/booking?screen_code=<%= screenCode %>" title="영화예매하기">
 								                                                <div class="ico-box">
 								                                                    <i class="iconset ico-off"></i>
 								                                                </div>
-								                                                <p class="time"><%= screenOpen %></p>
+								                                                <p class="time"><%= screenOpenTime %></p>
 								                                                <p class="chair"><%= remainSeat %></p>
 								                                                <div class="play-time">
-								                                                    <p><%= screenOpen %>~<%= screenEnd %></p>
+								                                                    <p><%= screenOpenTime %>~<%= screenEndTime %></p>
 								                                                    <p><%= playCount %>회차</p>
 								                                                </div>
 								                                            </a>
@@ -413,7 +427,7 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 								</div>
 								</div>
 							</div>
-							<div class="box-border v1 mt30" style = "border: 0px solid;">
+							<div class="box-border v1 mt30" style = "border: 0px solid; margin-bottom: 30px;">
 								<li>지연입장에 의한 관람불편을 최소화하고자 본 영화는 약 10분 후 시작됩니다.</li>
 								<li>쾌적한 관람 환경을 위해 상영시간 이전에 입장 부탁드립니다.</li>
 							</div>
@@ -422,19 +436,18 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 				</div>
 			</div>
 			<!--// contents -->
-		</div>
-		
 		<div class="quick-area" style="display: none;">
 			<a href="${commonURL}/screenSchedule/screenSchedule.jsp"
 				class="btn-go-top" title="top" style="position: fixed;">top</a>
 		</div>
-		
 		<!-- footer -->
 		<footer id="footer">
 			<c:import url = "${commonURL}/fragments/footer.jsp"/>
 		</footer>
 		<!--// footer -->
+		</div>
+		
+		
 
-	</div>
 </body>
 </html>
