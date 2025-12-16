@@ -113,4 +113,14 @@
       .pw-change-box { max-width: 600px; margin: 50px auto; }
       .input-wrapper { position: relative; }
       .input-field { width: 100%; height: 45px; border: 1px solid #ddd; padding: 0 40px 0 15px; background-color: #f8f8f8; }
+
+      /* Phone Group & Small Button */
+      .phone-group { display: flex; align-items: center; gap: 5px; }
+      .phone-input { width: 80px; height: 35px; border: 1px solid #ddd; padding: 0 10px; text-align: center; }
+      .btn-small { height: 35px; padding: 0 15px; border: 1px solid #ccc; background-color: #ddd; color: #666; font-size: 13px; cursor: pointer; transition: background-color 0.2s; }
+      .btn-small:hover { background-color: #ccc; }
+      
+      /* Withdraw Link Button */
+      .btn-withdraw-link { height: 35px; padding: 0 15px; border: 1px solid #3e2675; background-color: #fff; color: #3e2675; font-size: 13px; cursor: pointer; margin-left: 10px; }
+      .btn-withdraw-link:hover { background-color: #3e2675; color: #fff; }
     </style>

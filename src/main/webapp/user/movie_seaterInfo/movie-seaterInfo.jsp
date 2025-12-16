@@ -434,7 +434,7 @@ pageEncoding="UTF-8"%> <%@ include file="../../fragments/siteProperty.jsp"%>
                 border-radius: 4px;
               "
             >
-              오실시간 길찾기
+              길찾기
             </a>
           </div>
 

@@ -10,12 +10,10 @@
         <title>비밀번호 변경 - 2GV</title>
         <jsp:include page="/fragments/style_css.jsp" />
     
-        <jsp:include page="style.jsp" />
+        <jsp:include page="mypage_withdraw3_style.jsp" />
     <script type="text/javascript">
       window.onload = function() {
         const submitBtn = document.getElementById("btn-submit");
-        const modal = document.getElementById("success-modal");
-        const closeButtons = document.querySelectorAll(".close-modal");
         const togglePwIcons = document.querySelectorAll(".toggle-pw");
 
         // 비밀번호 보기 토글
@@ -34,20 +32,29 @@
           });
         });
 
-        // 변경 버튼 클릭 -> 성공 모달 표시
+        // 변경 버튼 클릭
         if(submitBtn) {
             submitBtn.addEventListener("click", function () {
-              // 실제로는 여기서 유효성 검사 및 서버 전송 로직 필요
-              if(modal) modal.style.display = "flex";
+                const newPass = document.forms["passForm"]["newPass"].value;
+                const confirmPass = document.forms["passForm"]["confirmPass"].value;
+
+                if(!newPass) {
+                    alert("새 비밀번호를 입력해주세요.");
+                    return;
+                }
+                if(newPass.length < 8) { // 간단한 길이 체크
+                    alert("비밀번호는 8자 이상이어야 합니다.");
+                    return;
+                }
+                if(newPass != confirmPass) {
+                    alert("새 비밀번호 확인이 일치하지 않습니다.");
+                    return;
+                }
+
+                // 폼 전송
+                document.passForm.submit();
             });
         }
-
-        // 모달 닫기
-        closeButtons.forEach(function(btn) {
-          btn.addEventListener("click", function () {
-            if(modal) modal.style.display = "none";
-          });
-        });
       };
     </script>
   </head>
@@ -89,12 +96,13 @@
             <main class="main-content">
               <div class="pw-change-box">
                 <h2 class="pw-change-title">비밀번호 변경</h2>
-    
+                <form name="passForm" action="mypage_withdraw3_process.jsp" method="post">
                 <div class="input-group">
                   <label class="input-label">새 비밀번호</label>
                   <div class="input-wrapper">
                     <input
                       type="password"
+                      name="newPass"
                       class="input-field"
                       placeholder="영문, 숫자, 특수기호를 포함한 8글자 이상"
                     />
@@ -107,12 +115,14 @@
                   <div class="input-wrapper">
                     <input
                       type="password"
+                      name="confirmPass"
                       class="input-field"
                       placeholder="영문, 숫자, 특수기호를 포함한 8글자 이상"
                     />
                     <i class="fa-regular fa-eye-slash toggle-pw"></i>
                   </div>
                 </div>
+                </form>
     
                 <div class="btn-submit-wrap">
                   <button class="btn-submit" id="btn-submit">비밀번호 변경</button>

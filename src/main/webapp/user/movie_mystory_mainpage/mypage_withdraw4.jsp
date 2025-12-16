@@ -10,43 +10,29 @@
         <title>회원탈퇴 - 2GV</title>
         <jsp:include page="/fragments/style_css.jsp" />
     
-        <jsp:include page="style.jsp" />
+        <jsp:include page="mypage_withdraw4_style.jsp" />
     <script type="text/javascript">
       window.onload = function() {
         const withdrawBtn = document.getElementById("btn-withdraw");
-        const modal = document.getElementById("withdraw-modal");
-        const closeButtons = document.querySelectorAll(".close-modal");
-        const passwordInput = document.getElementById("user-pw");
+        const cancelBtn = document.querySelector(".btn-cancel");
 
         // 탈퇴 버튼 클릭 시
         if(withdrawBtn) {
             withdrawBtn.addEventListener("click", function () {
-              // 비밀번호 입력 확인 (간단한 유효성 검사)
-              if (!passwordInput.value) {
+              const passInput = document.forms["withdrawForm"]["pass"];
+              if (!passInput.value) {
                 alert("비밀번호를 입력해주세요.");
-                passwordInput.focus();
+                passInput.focus();
                 return;
               }
 
-              /* 
-                [Backend Logic - JSP/Java]
-                // 비밀번호 검증 및 탈퇴 처리 로직
-              */
-
-              // UI 시연용: 바로 모달 표시
-              if(modal) modal.style.display = "flex";
+              if(confirm("정말로 탈퇴하시겠습니까? 탈퇴 시 30일간 재가입이 불가능하며 모든 정보가 삭제됩니다.")) {
+                  document.withdrawForm.submit();
+              }
             });
         }
 
-        // 모달 닫기 버튼들
-        closeButtons.forEach(function(btn) {
-          btn.addEventListener("click", function () {
-            if(modal) modal.style.display = "none";
-          });
-        });
-
         // 취소 버튼 클릭 시
-        const cancelBtn = document.querySelector(".btn-cancel");
         if(cancelBtn) {
             cancelBtn.addEventListener("click", function () {
                 history.back();
@@ -135,8 +121,10 @@
                     4. 회원님의 비밀번호를 입력하시고 [탈퇴] 버튼을 클릭해주세요.
                   </h4>
                   <div class="password-input-box">
+                    <form name="withdrawForm" action="mypage_withdraw4_process.jsp" method="post">
                     <label for="user-pw">비밀번호</label>
-                    <input type="password" id="user-pw" />
+                    <input type="password" name="pass" id="user-pw" />
+                    </form>
                   </div>
                 </div>
     
