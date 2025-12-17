@@ -1,7 +1,11 @@
+<%@page import="movie.MovieDTO"%>
+<%@page import="java.util.List"%>
+<%@page import="movie.MovieService"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Calendar"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ include file="../../fragments/siteProperty.jsp"%>
 <head>
 <!-- 상단 favicon 이미지  -->
@@ -11,20 +15,175 @@
 <link rel="stylesheet" href="${commonURL}/resources/css/megabox.min.css"
 	media="all">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script
+	src="${commonURL}/resources/js/jquery.mCustomScrollbar.concat.min.js"></script>
 <style type="text/css">
-.bokdBtn {
-	width: 230px !important;
-	height: 42px !important;
-	line-height: 42px !important;
-	text-align: center;
-	padding: 0 !important;
+.quick-reserve-area .movie-choice {
+	width: 600px;
 }
 </style>
 <script type="text/javascript">
+var initMovieHtml;
 	$(function() {
-		$(".btn-next").click(function() {
-
+		initMovieHtml = $(".all-list").html()
+		console.log(initMovieHtml);
+		//스크롤바 커스텀
+		$("#movieList").mCustomScrollbar({
+			axis : "y",
+			theme : "light",
 		});
+		
+		//전체 영화 버튼
+		$("#movieAll").click(function() {
+			$(".all-list").html(initMovieHtml);
+		});
+
+		//ALL 버튼
+		$("#movieAgeAll").click(function() {
+			$.ajax({
+				url:"movieAgeAll.jsp",
+				type:"GET",
+				dataType:"JSON",
+				error:function(xhr){
+					alert("개봉작 데이터를 불러올 수 없습니다.");
+					console.log(xhr.statusText + "/" + xhr.status);
+				},
+				success:function(jsonArr){
+					var html = '<ul>';
+
+				    $.each(jsonArr, function (idx, obj) {
+
+				        html += '<li>'
+				            + '    <button type="button" class="btn"'
+				            + '        movie-nm="' + obj.moviename + '"'
+				            + '        movie-no="' + obj.moviecode + '">'
+				            + '        <span class="movie-grade small age-' + obj.moviegrade + '">'
+				            +              obj.moviegrade + '세 이상 관람가'
+				            + '        </span>'
+				            + '        <i class="iconset ico-heart-small"></i>'
+				            + '        <span class="txt">' + obj.moviename + '</span>'
+				            + '    </button>'
+				            + '</li>';
+				    	});
+
+				    	html += '</ul>';
+
+				    	$("#movieList").html(html);
+				}//success
+				
+			});//ajax
+			
+		});//click
+
+		//12세 버튼
+		$("#movieAge12").click(function() {
+			$.ajax({
+				url:"movieAgeTwelve.jsp",
+				type:"GET",
+				dataType:"JSON",
+				error:function(xhr){
+					alert("개봉작 데이터를 불러올 수 없습니다.");
+					console.log(xhr.statusText + "/" + xhr.status);
+				},
+				success:function(jsonArr){
+					var html = '<ul>';
+
+				    $.each(jsonArr, function (idx, obj) {
+
+				        html += '<li>'
+				            + '    <button type="button" class="btn"'
+				            + '        movie-nm="' + obj.moviename + '"'
+				            + '        movie-no="' + obj.moviecode + '">'
+				            + '        <span class="movie-grade small age-' + obj.moviegrade + '">'
+				            +              obj.moviegrade + '세 이상 관람가'
+				            + '        </span>'
+				            + '        <i class="iconset ico-heart-small"></i>'
+				            + '        <span class="txt">' + obj.moviename + '</span>'
+				            + '    </button>'
+				            + '</li>';
+				    	});
+
+				    	html += '</ul>';
+
+				    	$("#movieList").html(html);
+				}//success
+				
+			});//ajax
+		});
+
+		//15세 버튼
+		$("#movieAge15").click(function() {
+			$.ajax({
+				url:"movieAgeFifteen.jsp",
+				type:"GET",
+				dataType:"JSON",
+				error:function(xhr){
+					alert("개봉작 데이터를 불러올 수 없습니다.");
+					console.log(xhr.statusText + "/" + xhr.status);
+				},
+				success:function(jsonArr){
+					var html = '<ul>';
+
+				    $.each(jsonArr, function (idx, obj) {
+
+				        html += '<li>'
+				            + '    <button type="button" class="btn"'
+				            + '        movie-nm="' + obj.moviename + '"'
+				            + '        movie-no="' + obj.moviecode + '">'
+				            + '        <span class="movie-grade small age-' + obj.moviegrade + '">'
+				            +              obj.moviegrade + '세 이상 관람가'
+				            + '        </span>'
+				            + '        <i class="iconset ico-heart-small"></i>'
+				            + '        <span class="txt">' + obj.moviename + '</span>'
+				            + '    </button>'
+				            + '</li>';
+				    	});
+
+				    	html += '</ul>';
+
+
+				    	$("#movieList").html(html);
+				}//success
+				
+			});//ajax
+		});
+
+		//19세 버튼
+		$("#movieAge19").click(function() {
+			$.ajax({
+				url:"movieAgeNineteen.jsp",
+				type:"GET",
+				dataType:"JSON",
+				error:function(xhr){
+					alert("개봉작 데이터를 불러올 수 없습니다.");
+					console.log(xhr.statusText + "/" + xhr.status);
+				},
+				success:function(jsonArr){
+					var html = '<ul>';
+
+				    $.each(jsonArr, function (idx, obj) {
+
+				        html += '<li>'
+				            + '    <button type="button" class="btn"'
+				            + '        movie-nm="' + obj.moviename + '"'
+				            + '        movie-no="' + obj.moviecode + '">'
+				            + '        <span class="movie-grade small age-' + obj.moviegrade + '">'
+				            +              obj.moviegrade + '세 이상 관람가'
+				            + '        </span>'
+				            + '        <i class="iconset ico-heart-small"></i>'
+				            + '        <span class="txt">' + obj.moviename + '</span>'
+				            + '    </button>'
+				            + '</li>';
+				    	});
+
+				    	html += '</ul>';
+
+				    	$("#movieList").html(html);
+				}//success
+				
+			});//ajax
+		});
+
 	});
 </script>
 </head>
@@ -138,27 +297,6 @@
 										} // end for
 										%>
 									</div>
-									
-									<!-- button class="disabled sat" type="button"
-										date-data="2025.12.13" month="11" tabindex="-1">
-
-
-										<span class="ir">2025년 12월</span><em
-											style="pointer-events: none;">13<span
-											style="pointer-events: none;" class="ir">일</span></em><span
-											class="day-kr"
-											style="pointer-events: none; display: inline-block">토</span><span
-											class="day-en" style="pointer-events: none; display: none">Sat</span>
-									</button>
-									<button class="on" type="button" date-data="2025.12.14"
-										month="11">
-										<span class="ir">2025년 12월</span><em
-											style="pointer-events: none;">14<span
-											style="pointer-events: none;" class="ir">일</span></em><span
-											class="day-kr"
-											style="pointer-events: none; display: inline-block">오늘</span><span
-											class="day-en" style="pointer-events: none; display: none">Sun</span>
-									</button> -->
 								</div>
 							</div>
 						</div>
@@ -173,8 +311,7 @@
 						<div class="bg-line">
 							<input type="hidden" id="datePicker" value="2025.12.14"
 								class="hasDatepicker">
-							<!-- <button type="button" id="calendar" onclick="$(&#39;#datePicker&#39;).datepicker(&#39;show&#39;)" class="btn-calendar-large" title="달력보기"> 달력보기</button>
- -->
+							<!-- <button type="button" id="calendar" onclick="$(&#39;#datePicker&#39;).datepicker(&#39;show&#39;)" class="btn-calendar-large" title="달력보기"> 달력보기</button>-->
 						</div>
 						<!--// 달력보기 -->
 					</div>
@@ -190,177 +327,79 @@
 
 						<!-- list-area -->
 						<div class="list-area">
+							<%
+							MovieService ms = MovieService.getInstance();
+							List<MovieDTO> list = ms.showAllMovie();
 
+							request.setAttribute("movies", list);
+							%>
 							<!-- all : 전체 -->
 							<div class="all-list">
 								<button type="button" class="btn-tab on" id="movieAll">전체</button>
+
 								<div class="list">
-									<div class="scroll m-scroll mCustomScrollbar _mCS_1"
-										id="movieList">
-										<div id="mCSB_1"
-											class="mCustomScrollBox mCS-light mCSB_vertical mCSB_inside"
-											style="max-height: none;" tabindex="0">
-											<div id="mCSB_1_container" class="mCSB_container"
-												style="position: relative; top: 0; left: 0;" dir="ltr">
-												<ul>
-													<li><button type="button" class="btn"
-															movie-nm="아바타: 불과 재" movie-no="25094900"
-															img-path="/SharedImg/2025/12/01/E9stZsj4uMvXM0YSK7wIiShsutnOtAI2_150.jpg"
-															movie-popup-at="N" movie-popup-no="0" form-at="N">
-															<span class="movie-grade small age-12">12세이상관람가</span><i
-																class="iconset ico-heart-small">보고싶어 설정안함</i><span
-																class="txt">아바타: 불과 재</span>
-														</button></li>
-													<li><button type="button" class="btn"
-															movie-nm="주토피아 2" movie-no="25089000"
-															img-path="/SharedImg/2025/11/27/YiSbqEf6OvFcDoLoQCipDojOHqMCwKG4_150.jpg"
-															movie-popup-at="N" movie-popup-no="0" form-at="Y">
-															<span class="movie-grade small age-all">전체관람가</span><i
-																class="iconset ico-heart-small">보고싶어 설정안함</i><span
-																class="txt">주토피아 2</span>
-														</button></li>
-													<li><button type="button" class="btn"
-															movie-nm="만약에 우리" movie-no="25096900"
-															img-path="/SharedImg/2025/12/04/W6p1b8p719ZRz5LvVdBwWEOJqQZGYIyH_150.jpg"
-															movie-popup-at="N" movie-popup-no="0" form-at="N">
-															<span class="movie-grade small age-15">15세이상관람가</span><i
-																class="iconset ico-heart-small">보고싶어 설정안함</i><span
-																class="txt">만약에 우리</span>
-														</button></li>
-													<li><button type="button" class="btn" movie-nm="룩백"
-															movie-no="24045300"
-															img-path="/SharedImg/2024/09/05/nBHvmCh9wY9dOc0be7LJor2jDYNoOVqT_150.jpg"
-															movie-popup-at="N" movie-popup-no="0" form-at="Y">
-															<span class="movie-grade small age-all">전체관람가</span><i
-																class="iconset ico-heart-small">보고싶어 설정안함</i><span
-																class="txt">룩백</span>
-														</button></li>
-													<li><button type="button" class="btn"
-															movie-nm="사운드 오브 폴링" movie-no="25092800"
-															img-path="/SharedImg/2025/11/24/XWNcwsPyjtVmFZZWP55lY1I5WKqEllTt_150.jpg"
-															movie-popup-at="N" movie-popup-no="0" form-at="N">
-															<span class="movie-grade small age-15">15세이상관람가</span><i
-																class="iconset ico-heart-small">보고싶어 설정안함</i><span
-																class="txt">사운드 오브 폴링</span>
-														</button></li>
-												</ul>
-											</div>
-											<div id="mCSB_1_scrollbar_vertical"
-												class="mCSB_scrollTools mCSB_1_scrollbar mCS-light mCSB_scrollTools_vertical"
-												style="display: block;">
-												<div class="mCSB_draggerContainer">
-													<div id="mCSB_1_dragger_vertical" class="mCSB_dragger"
-														style="position: absolute; min-height: 30px; display: block; max-height: 310px; top: 0px; height: 51px;">
-														<div class="mCSB_dragger_bar" style="line-height: 30px;"></div>
-													</div>
-													<div class="mCSB_draggerRail"></div>
-												</div>
-											</div>
-										</div>
+									<div id="movieList" class="scroll m-scroll">
+										<ul>
+											<c:forEach var="m" items="${movies}">
+												<li>
+													<button type="button" class="btn" movie-nm="${m.moviename}"
+														movie-no="${m.moviecode}">
+														<span class="movie-grade small age-${m.moviegrade}">
+															${m.moviegrade}세 이상 관람가 </span> <i
+															class="iconset ico-heart-small"></i> <span class="txt">${m.moviename}</span>
+													</button>
+												</li>
+											</c:forEach>
+										</ul>
 									</div>
 								</div>
 							</div>
 							<!--// all : 전체 -->
 
-							<!-- other-list  : 12세 -->
 							<div class="other-list">
-								<button type="button" class="btn-tab" id="movieAgeAll"><span class="movie-grade small age-all"></span></button>
+								<!-- 전체이용가 -->
+								<button type="button" class="btn-tab" id="movieAgeAll">
+									<span class="movie-grade small age-all"></span>
+								</button>
+								<!-- <div class="list">
+									<div id="movieListAgeAll" class="scroll m-scroll">
+										ajax에서 추가할 영역
+									</div>
+								</div> -->
+								<!-- 12세 이용가 -->
+								<button type="button" class="btn-tab" id="movieAge12"
+									style="left: 220px;">
+									<span class="movie-grade small age-12"></span>
+								</button>
 								<div class="list">
-									<div
-										class="scroll m-scroll mCustomScrollbar _mCS_2 mCS_no_scrollbar"
-										id="crtnMovieList">
-										<div id="mCSB_2"
-											class="mCustomScrollBox mCS-light mCSB_vertical mCSB_inside"
-											style="max-height: none;" tabindex="0">
-											<div id="mCSB_2_container"
-												class="mCSB_container mCS_no_scrollbar_y"
-												style="position: relative; top: 0; left: 0;" dir="ltr">
-												<ul>
-													<li><button type="button" class="btn"
-															movie-nm="주토피아 2" movie-no="25089000"
-															img-path="/SharedImg/2025/11/27/YiSbqEf6OvFcDoLoQCipDojOHqMCwKG4_150.jpg"
-															movie-popup-at="N" movie-popup-no="0" form-at="Y">
-															<span class="movie-grade small age-all">전체관람가</span><i
-																class="iconset ico-heart-small">보고싶어 설정안함</i><span
-																class="txt">주토피아 2</span>
-														</button></li>
-												</ul>
-											</div>
-											<div id="mCSB_2_scrollbar_vertical"
-												class="mCSB_scrollTools mCSB_2_scrollbar mCS-light mCSB_scrollTools_vertical">
-												<div class="mCSB_draggerContainer">
-													<div id="mCSB_2_dragger_vertical" class="mCSB_dragger"
-														style="position: absolute; min-height: 30px; display: none; top: 0px;">
-														<div class="mCSB_dragger_bar" style="line-height: 30px;"></div>
-													</div>
-													<div class="mCSB_draggerRail"></div>
-												</div>
-											</div>
-										</div>
+									<div id="movieListAgeTwelve" class="scroll m-scroll">
+										<!-- ajax에서 추가할 영역 -->
+									</div>
+								</div>
+								<!-- 15세 이용가 -->
+								<button type="button" class="btn-tab" id="movieAge15"
+									style="left: 330px;">
+									<span class="movie-grade small age-15"></span>
+								</button>
+								<div class="list">
+									<div id="movieListAgeFifteen" class="scroll m-scroll">
+										<!-- ajax에서 추가할 영역 -->
+									</div>
+								</div>
+								<!-- 19세 이용가 -->
+								<button type="button" class="btn-tab" id="movieAge19"
+									style="left: 440px;">
+									<span class="movie-grade small age-19"></span>
+								</button>
+								<div class="list">
+									<div id="movieListAgeNineteen" class="scroll m-scroll">
+										<!-- ajax에서 추가할 영역 -->
 									</div>
 								</div>
 							</div>
-							
-							<!-- 12세 이하-->
-							<div class="other-lists">
-								<button type="button" class="btn-tab" id="movieAge12"><span class="movie-grade small age-12"></span></button>
-								<div class="list">
-									<div
-										class="scroll m-scroll mCustomScrollbar _mCS_2 mCS_no_scrollbar"
-										id="crtnMovieList">
-										<div id="mCSB_2"
-											class="mCustomScrollBox mCS-light mCSB_vertical mCSB_inside"
-											style="max-height: none;" tabindex="0">
-											<div id="mCSB_2_container"
-												class="mCSB_container mCS_no_scrollbar_y"
-												style="position: relative; top: 0; left: 0;" dir="ltr">
-												<ul>
-													<li><button type="button" class="btn"
-															movie-nm="주토피아 2" movie-no="25089000"
-															img-path="/SharedImg/2025/11/27/YiSbqEf6OvFcDoLoQCipDojOHqMCwKG4_150.jpg"
-															movie-popup-at="N" movie-popup-no="0" form-at="Y">
-															<span class="movie-grade small age-all">전체관람가</span><i
-																class="iconset ico-heart-small">보고싶어 설정안함</i><span
-																class="txt">주토피아 2</span>
-														</button></li>
-												</ul>
-											</div>
-											<div id="mCSB_2_scrollbar_vertical"
-												class="mCSB_scrollTools mCSB_2_scrollbar mCS-light mCSB_scrollTools_vertical">
-												<div class="mCSB_draggerContainer">
-													<div id="mCSB_2_dragger_vertical" class="mCSB_dragger"
-														style="position: absolute; min-height: 30px; display: none; top: 0px;">
-														<div class="mCSB_dragger_bar" style="line-height: 30px;"></div>
-													</div>
-													<div class="mCSB_draggerRail"></div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- 12세 이하-->
+
 						</div>
 						<!--// list-area -->
-
-						<!-- view-area -->
-						<div class="view-area">
-
-							<!-- 영화 선택 하지 않았을 때 -->
-							<div class="choice-all" id="choiceMovieNone">
-								<strong>모든영화</strong> <span>목록에서 영화를 선택하세요.</span>
-							</div>
-
-							<!-- 영화를 한개라도 선택했을 때 -->
-							<div class="choice-list" id="choiceMovieList"
-								style="display: none;">
-								<!-- 비어있는 영역 -->
-								<div class="bg"></div>
-								<div class="bg"></div>
-								<div class="bg"></div>
-							</div>
-						</div>
-						<!--// view-area -->
 					</div>
 					<!--// movie-choice : 영화 선택  -->
 
@@ -379,7 +418,9 @@
 						<!-- hour-schedule : 시간 선택  : 00~30 시-->
 						<div class="hour-schedule">
 							<button type="button" class="btn-prev-time">이전 시간 보기</button>
+							<%
 
+							%>
 							<div class="wrap">
 								<div class="view" style="position: absolute; width: 1015px;">
 									<button type="button" class="hour" disabled="true"
@@ -396,8 +437,7 @@
 										style="opacity: 0.5">05</button>
 									<button type="button" class="hour" disabled="true"
 										style="opacity: 0.5">06</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">07</button>
+									<button type="button" class="hour" style="opacity: 0.5">07</button>
 									<button type="button" class="hour" disabled="true"
 										style="opacity: 0.5">08</button>
 									<button type="button" class="hour" disabled="true"
@@ -416,12 +456,9 @@
 										style="opacity: 0.5">15</button>
 									<button type="button" class="hour" disabled="true"
 										style="opacity: 0.5">16</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">17</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">18</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">19</button>
+									<button type="button" class="hour" style="opacity: 0.5">17</button>
+									<button type="button" class="hour" style="opacity: 0.5">18</button>
+									<button type="button" class="hour" style="opacity: 0.5">19</button>
 									<button type="button" class="hour" disabled="true"
 										style="opacity: 0.5">20</button>
 									<button type="button" class="hour" disabled="true"
