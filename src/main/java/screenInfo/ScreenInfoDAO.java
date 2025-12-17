@@ -63,17 +63,17 @@ public class ScreenInfoDAO {
 				row.put("THEATHER_NAME", rs.getString("THEATHER_NAME"));
 				row.put("SCREEN_OPEN", rs.getString("SCREEN_OPEN"));
 				row.put("TOTAL_SEAT", rs.getString("TOTAL_SEAT"));
-				row.put("REMAIN_SEAT", String.valueOf(rs.getInt("TOTAL_SEAT") - rs.getInt("SEAT_COUNT")) + "석"); // 임시 데이터
+				row.put("REMAIN_SEAT", String.valueOf(rs.getInt("TOTAL_SEAT") - rs.getInt("SEAT_COUNT")) + "석");
 				
 				list.add(row);
-			}
+			} // end while
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			dbCon.dbClose(rs, pstmt, con);
-		}
+		} // end try ~ catch ~ finally
 		return list;
-	}
+	} // selectScreenList
 	
-}
+} // class

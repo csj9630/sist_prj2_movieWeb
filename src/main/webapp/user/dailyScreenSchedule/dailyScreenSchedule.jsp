@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
     });
 });
 </script>
-
+		
 		<!-- header -->
 		<header id="header">
 			<c:import url = "${commonURL}/fragments/header.jsp"/>
@@ -113,10 +113,10 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 					</div>
 				</div>
 			</div>
-
+			
 			<!-- contents -->
 			<div id="contents" class="no-padding">
-
+			
 				<!-- theater-detail-page -->
 				<div class="theater-detail-page" style = "height: 130px;">
 
