@@ -10,7 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 
-<title>상세 전용 홈</title>
+<title>상세 전용 임시홈</title>
 <link rel="shortcut icon"
 	href="http://192.168.10.82/jsp_prj/common/images/favicon.ico">
 
@@ -54,7 +54,7 @@
 			<div class="row featurette">
 				<div class="col-md-7" style="text-align: center;">
 					<!-- 여기서부터 작성 시작-->
-					<h1>클릭하면 영화 상세 페이지로 이동합니다.</h1>
+					<h1>클릭하면 영화 상세 페이지로 이동합니다...</h1>
 					<h2>
 						<a
 							href="${commonURL}/user/movie/detail_process_test.jsp">DB 테스트용</a>
@@ -64,7 +64,7 @@
 					 --%>
 					<%
 					String code = null;
-					int limit = 4; //현 시점 영화 4개까지 준비됨
+					int limit = 50; //현 시점 영화 4개까지 준비됨
 
 					for (int i = 0; i < limit; i++) {
 						code = "mc";

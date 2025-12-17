@@ -1,19 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%@ include file="../../fragments/siteProperty.jsp"%>
 <html lang="en" data-bs-theme="auto">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>로그인</title>
-<link rel="shortcut icon" href="http://localhost/sist_prj2_movieWeb/resources/images/favicon.ico">
-<link rel="stylesheet" href="../../resources/css/megabox.min.css" media="all">
-<script async="" src="../../resources/js/gtm.js.다운로드"></script>
-<script type="text/javascript" async="" src="../../resources/js/js"></script>
-<script async="" src="../../resources/js/js(1)"></script>
-<script src="../../resources/js/megabox.api.min.js"></script>
-<script src="../../resources/js/megabox.common.min.js"></script>
-<script src="../../resources/js/ui.common.js"></script>
-<script src="../../resources/js/front.js"></script>
+<link rel="shortcut icon" href="${commonURL}/resources/images/favicon.ico">
+<link rel="stylesheet" href="${commonURL}/resources/css/megabox.min.css" media="all">
+<script async="" src="${commonURL}/resources/js/gtm.js.다운로드"></script>
+<script type="text/javascript" async="" src="${commonURL}/resources/js/js"></script>
+<script async="" src="${commonURL}/resources/js/js(1)"></script>
+<script src="${commonURL}/resources/js/megabox.api.min.js"></script>
+<script src="${commonURL}/resources/js/megabox.common.min.js"></script>
+<script src="${commonURL}/resources/js/ui.common.js"></script>
+<script src="${commonURL}/resources/js/front.js"></script>
 
 <style>
     /* === [공통 레이아웃] === */
@@ -93,7 +94,7 @@
 <body>
     <div class="body-wrap">
         <header id="header">
-            <jsp:include page="../../fragments/mainHeader.jsp" />
+            <jsp:include page="../../fragments/header.jsp"/>
         </header>
 
         <div class="page-util">
@@ -111,7 +112,7 @@
                 <h1 class="title">로그인</h1>
 
 
-                <form id="loginForm">
+                <form id="loginForm" name="loginForm" method="post" action="memberJoinFrmProcess.jsp">
                     <div class="form-group">
                         <input type="text" id="ibxLoginId" class="form-input" placeholder="아이디" title="아이디를 입력하세요">
                     </div>
@@ -130,7 +131,7 @@
                         <a href="memberJoinFrm.jsp">회원가입</a>
                     </div>
                     <div>
-                    <a href="http://localhost/sist_prj2_movieWeb/user/booking/quickBookingSeat.jsp">임시 예매페이지</a>
+                    <a href="${commonURL}/user/booking/quickBookingSeat.jsp">임시 예매페이지</a>
                     </div>
                 </form>
             </div>

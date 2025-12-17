@@ -13,47 +13,39 @@ import javax.mail.internet.MimeMessage;
 public class SendMail {
 
     final String ENCODING = "UTF-8";
-    final String PORT = "587"; // SSL/TLS 포트
+    final String PORT = "587"; // TLS 포트
     final String SMTPHOST = "smtp.gmail.com";
-    String TO = ""; // 수신자 이메일 주소를 여기에 입력
-    //final String TO = "tkdeod1234@naver.com"; // 수신자 이메일 주소를 여기에 입력
+    String TO = ""; // 수신자 이메일 주소를 임시 저장할 필드
 
     /**
      * Session 셋팅
-     * @param props
-     * @param user_name
-     * @param password (앱 비밀번호)
-     * @return
+     * @param props Properties 객체
+     * @param user_name 발신자 이메일 주소
+     * @param password 앱 비밀번호
+     * @param TO 최종 수신자 이메일 주소 (클래스 내부 필드에 저장됨)
+     * @return 설정된 Session 객체
      */
     public Session setting(Properties props, String user_name, String password, String TO) {
         
         Session session = null;
-        this.TO = TO;
+        this.TO = TO; // 수신자 주소를 필드에 저장
+        
         try {
             // 메일 전송 프로토콜 설정
             props.put("mail.transport.protocol", "smtp");
             
-            // SMTP 호스트 및 포트 설정 (465 = SSL/TLS)
+            // SMTP 호스트 및 포트 설정
             props.put("mail.smtp.host", SMTPHOST);
             props.put("mail.smtp.port", PORT);
             
-            // 인증 및 SSL 설정
-            props.put("mail.smtp.auth", true);
-           // props.put("mail.smtp.ssl.enable", true); // SSL 사용
+            // 인증 및 TLS 설정 (587 포트 사용 표준 설정)
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.ssl.enable", "false"); // TLS이므로 SSL은 비활성화
+            props.put("mail.smtp.starttls.enable", "true"); // TLS 사용
             props.put("mail.smtp.ssl.trust", SMTPHOST);
-            
-            //587포트 사용 추가
-            props.put("mail.smtp.ssl.enable", "false"); // ⭐️ 465 설정이므로 반드시 'false'로
-            props.put("mail.smtp.starttls.enable", "true"); // ⭐️ 587을 사용하려면 이 설정이 필수
             
             // SSL Handshake 오류 방지를 위한 프로토콜 명시
             props.put("mail.smtp.ssl.protocols", "TLSv1.2"); 
-            
-            // 기타 설정 (이미지에 포함된 내용) - 465포트 말고 딴거 사용
-            //props.put("mail.smtp.quit-wait", "false");
-           // props.put("mail.smtp.socketFactory.port", PORT);
-           // props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-           // props.put("mail.smtp.socketFactory.fallback", "false");
             
             // 세션 인스턴스 생성 및 인증 정보 설정
             session = Session.getInstance(props, new Authenticator() {
@@ -63,12 +55,13 @@ public class SendMail {
                 }
             });
             
-            // 디버그 모드 활성화 (선택 사항: 실행 오류 시 상세 로그 확인용)
-             //session.setDebug(true);
+            // 디버그 모드 활성화 (선택 사항: 서버 로그 상세 확인용)
+            // session.setDebug(true);
 
         } catch (Exception e) {
             System.out.println("Session Setting 실패");
             e.printStackTrace();
+            // 에러가 발생하면 session은 null로 반환됨
         }
         
         return session;
@@ -76,23 +69,26 @@ public class SendMail {
 
     /**
      * 메시지 세팅 후 메일 전송
-     * @param session
-     * @param title
-     * @param content
+     * @param session 설정된 Session 객체
+     * @param title 메일 제목
+     * @param content 메일 내용 (인증번호)
+     * @param senderEmail 발신자 이메일 주소
+     * @param senderName 발신자 이름
+     * @return 메일 전송 성공 시 true, 실패 시 false 반환 (⭐️ 수정됨)
      */
-    public void goMail(Session session, String title, String content, String senderEmail, String senderName) {
+    public boolean goMail(Session session, String title, String content, String senderEmail, String senderName) {
         
         if (session == null) {
             System.out.println("메일 전송 실패: Session이 유효하지 않습니다.");
-            return;
+            return false; // 세션 무효 시 실패
         }
 
         Message msg = new MimeMessage(session);
         try {
-            // 발신자 설정 (이름은 ENCODING 적용)
+            // 발신자 설정
             msg.setFrom(new InternetAddress(senderEmail, senderName, ENCODING)); 
             
-            // 수신자 설정 (TO: 클래스 상수)
+            // 수신자 설정 (필드에 저장된 TO 사용)
             msg.addRecipient(Message.RecipientType.TO, new InternetAddress(TO));
             
             // 제목 및 내용 설정
@@ -102,29 +98,11 @@ public class SendMail {
             Transport.send(msg); // 메일 전송
             
             System.out.println("메일 보내기 성공");
+            return true; // ⭐️ 성공 시 true 반환
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("메일 보내기 실패");
+            return false; // ⭐️ 실패 시 false 반환
         }
     }
-
-    // 메일 테스트를 위한 main 메소드 예시
-	/*
-	 * public static void main(String[] args) {
-	 * 
-	 * SendMail mailer = new SendMail(); Properties props = new Properties();
-	 * 
-	 * // ⭐️ 사용자 정보 설정 (반드시 Gmail 앱 비밀번호를 사용하세요) final String MY_EMAIL =
-	 * "tkdeodlee@gmail.com"; final String APP_PASSWORD = "mijm bcea egca nfvv"; //
-	 * 실제 앱 비밀번호 입력
-	 * 
-	 * // 1. Session 설정 Session mailSession = mailer.setting(props, MY_EMAIL,
-	 * APP_PASSWORD);
-	 * 
-	 * // 2. 메일 전송 String title = "Java Mailer 테스트 제목입니다."; String content =
-	 * "<h1 style='color: green;'>JavaMail 전송 성공!</h1><p>이 메일은 SMTP 테스트를 위해 발송되었습니다.</p>"
-	 * ; String senderName = "관리자";
-	 * 
-	 * mailer.goMail(mailSession, title, content, MY_EMAIL, senderName); }
-	 */
 }

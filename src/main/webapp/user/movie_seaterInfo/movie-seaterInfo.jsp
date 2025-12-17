@@ -6,15 +6,7 @@ pageEncoding="UTF-8"%> <%@ include file="../../fragments/siteProperty.jsp"%>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>2GV 극장 정보</title>
-    <link rel="stylesheet" href="${commonURL}/resources/css/megabox.min.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
+    <jsp:include page="../../fragments/style_css.jsp" />
 
     <style>
       /* 초기화 및 기본 스타일 */
@@ -442,7 +434,7 @@ pageEncoding="UTF-8"%> <%@ include file="../../fragments/siteProperty.jsp"%>
                 border-radius: 4px;
               "
             >
-              오실시간 길찾기
+              길찾기
             </a>
           </div>
 

@@ -5,6 +5,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ include file="../../fragments/siteProperty.jsp"%>
 
 <%
@@ -23,7 +24,6 @@ request.setCharacterEncoding("UTF-8");
 <link rel="stylesheet" href="${commonURL}/resources/css/megabox.min.css" />
 <link rel="stylesheet"
 	href="${commonURL}/resources/css/movie_detail.css" />
-<script src="${commonURL}/resources/js/movie_detail.js"></script>
 <link rel="shortcut icon"
 	href="${commonURL}/resources/images/favicon.ico">
 
@@ -38,39 +38,19 @@ request.setCharacterEncoding("UTF-8");
 <!-- jQuery CDN -->
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="${commonURL}/resources/js/movie_detail.js"></script>
+<script src="${commonURL}/resources/js/movie_detail_review.js"></script>
 
 <script type="text/javascript">
 
+//함수 정의는 movie_detail.js에 위치함.
 $(document).ready(function () {
-	introDivider();
+	changeTab();//탭 기능
+	introDivider();//인트로 태그 적용
+	initImageModal();//이미지 확대
 });//document.ready
 
-$(function introDivider() {
-	 let text = $("#movie_intro").html().trim();
 
-	    // 1) HTML 태그 제거 (<br>, <p> 등)
-	    text = text.replace(/<[^>]+>/g, " ");
-
-	    // 2) 줄바꿈을 공백으로 통합
-	    text = text.replace(/\s+/g, " ").trim();
-
-	    // 3) 문장 단위 분리 (. ! ?)
-	    let sentences = text.split(/(?<=[.!?])\s+/);
-
-	    // 4) 공백 문장 제거
-	    sentences = sentences.map(s => s.trim()).filter(s => s.length > 0);
-	    
-	    // 5) 출력 생성
-	    let result = "";
-	    if (sentences.length > 0) {
-	        result += '<h2 class="content-title">'+sentences[0]+'</h2>';
-	    }
-	    for (let i = 1; i < sentences.length; i++) {
-	        result += '<p class="content-text">'+sentences[i]+'</p>';
-	    }
-
-	    $("#movie_intro").html(result);
-})//introDivider
 
 </script>
 </head>
@@ -93,22 +73,28 @@ $(function introDivider() {
 					<div class="stat-item">
 						<span class="stat-icon">⭐</span>
 						<div class="stat-content">
-							<div class="stat-value rating-value">9.5</div>
-							<div class="stat-label">(42.6k)</div>
+							<div class="stat-value rating-value">${scoreAverage}</div>
+							<div class="stat-label">평점</div>
 						</div>
 					</div>
 					<div class="stat-item">
-						<span class="stat-icon">♥</span>
+						<span class="stat-icon">🔵</span>
 						<div class="stat-content">
-							<div class="stat-value heart-value">8</div>
-							<div class="stat-label">관심</div>
+							<div class="stat-value heart-value">
+								<fmt:formatNumber type="number" maxFractionDigits="3"
+									value="${detail.dailyAudience}" />
+							</div>
+							<div class="stat-label">일일 관람객수</div>
 						</div>
 					</div>
 					<div class="stat-item">
 						<span class="stat-icon">👁</span>
 						<div class="stat-content">
-							<div class="stat-value">3,302,939</div>
-							<div class="stat-label">조회수</div>
+							<div class="stat-value">
+								<fmt:formatNumber type="number" maxFractionDigits="3"
+									value="${detail.totalAudience}" />
+							</div>
+							<div class="stat-label">누적 관람객수</div>
 						</div>
 					</div>
 				</div>
@@ -124,7 +110,13 @@ $(function introDivider() {
 				</div>
 				<div class="purchase-box">
 					<div class="purchase-item">
-						<input type="button" value="예매" class="reservation" />
+						<!--**************여기에 빠른 예매 경로 입력*****************  -->
+						<form id="reserve" name="reserve" class="purchase-item" action="">
+						<input type="button" value="예매" class="reservation"
+							onclick="location.href='${commonURL}/user/fast_booking/fastBooking.jsp';" />
+						<input type="hidden" value=" ${detail.code}" alt="영화코드">
+						<!-- 						onclick="location.href='index_temp.jsp';" />
+ -->					</form>
 					</div>
 				</div>
 			</div>
@@ -144,8 +136,10 @@ $(function introDivider() {
 		<div class="tab-contents">
 			<!-- 작품정보 탭 -->
 			<div class="tab-content active" id="info">
-				<div class="content-box" >
-				<div id="movie_intro"><c:out value="${detail.intro}"/></div>
+				<div class="content-box">
+					<div id="movie_intro">
+						<c:out value="${detail.intro}" />
+					</div>
 
 
 					<div class="divider"></div>
@@ -157,6 +151,8 @@ $(function introDivider() {
 							<strong>상영시간</strong>${detail.runningTime}분</p>
 						<p>
 							<strong>등급</strong>${detail.grade}</p>
+						<p>
+							<strong>개봉일</strong>${detail.releaseDate}</p>
 					</div>
 				</div>
 			</div>
@@ -166,16 +162,18 @@ $(function introDivider() {
 				<div class="content-box">
 					<div class="comment-area">
 						<h2 class="content-title" style="margin-bottom: 0">
-							${detail.name}에 대한 15,098개의 이야기가 있어요!</h2>
+							${detail.name}에 대한
+							<%=reviewList.size()%>개의 이야기가 있어요!
+						</h2>
 					</div>
 
 					<!-- 공지 메시지 -->
-					<div class="comment-asdf">
+					<div class="comment-notice">
 						<div class="comment-avatar">M</div>
 						<div style="flex: 1">
-							<div class="comment-input">
-								최근 ${detail.name}에 관한 평점 게시물이 늘고 있습니다. 영화의 어떤 점이 좋았는지 이야기해주세요.<br />
-							</div>
+							<input type="text" class="comment-input"
+								placeholder="최근 ${detail.name}에 관한 평점 게시물이 늘고 있습니다. 영화의 어떤 점이 좋았는지 이야기해주세요.
+							" />
 							<div style="text-align: right">
 								<a href="#" class="comment-button"> ✏️ 관람평쓰기 </a>
 							</div>
@@ -184,35 +182,54 @@ $(function introDivider() {
 
 					<!-- 댓글 목록 (기존 코드 유지) -->
 
-					<%-- 	<c:forEach var="comment" items="${detail.videoLink}" varStatus="status"> --%>
-					<div class="comment-item">
-						<div class="comment-header">
-							<div class="comment-user">
-								<div class="user-avatar">👤</div>
-								<span class="username">ha***o1110</span>
+					<c:choose>
+						<c:when test="${empty reviewList}">
+							<div>
+								<h2 class="content-title">작성된 리뷰가 없습니다. 영화의 어떤 점이 좋았는지 제일
+									먼저 써주세요!</h2>
 							</div>
-							<div class="comment-actions">
-								<button class="comment-like">👍 0</button>
-								<button class="comment-menu">⋮</button>
-							</div>
-						</div>
-						<div class="comment-body">
-							<div class="comment-rating">
-								<span class="rating-label">관람평</span> <span class="rating-score">10</span>
-								<span class="rating-stars">⭐ +4</span>
-							</div>
-							<p class="comment-text">주요등장 캐릭터들이는 너무 매력있!!</p>
-							<span class="comment-time">10 분전</span>
-						</div>
-					</div>
-					<!-- 나머지 댓글들... -->
+						</c:when>
+						<c:otherwise>
+							<c:forEach var="review" items="${reviewList}" varStatus="i">
+								<div class="comment-item">
+									<div class="comment-header">
+										<div class="comment-user">
+											<div class="user-avatar">👤</div>
+											<span class="username">${review.users_id }</span>
+										</div>
+										<%-- <c:if test="${sessionScope.userId == comment.userId}"> --%>
+										<c:if test="${true}">
+										<div class="comment-actions">
+											<!-- <button class="comment-like">👍 0</button> -->
+											<button class="comment-menu">⋮</button>
+											<div id="menu-${comment.commentId}" class="menu-dropdown"
+												style="display: none;">
+												<button onclick="editComment(${comment.commentId})">수정</button>
+												<button onclick="deleteComment(${comment.commentId})">삭제</button>
+											</div>
+										</div>
+										</c:if>
+									</div>
+									<div class="comment-body">
+										<div class="comment-rating">
+											<span class="rating-label">관람평</span> <span
+												class="rating-stars">⭐ +${review.score }</span>
+										</div>
+										<p class="comment-text">${review.content }</p>
+										<span class="comment-time">${review.dateStr }</span>
+									</div>
+								</div>
+								<!-- 나머지 댓글들... -->
+							</c:forEach>
+						</c:otherwise>
+					</c:choose>
 				</div>
 			</div>
 		</div>
 
 		<!-- 예고편/스틸컷 탭 -->
 
-		
+
 		<div class="tab-content" id="episodes">
 			<div class="content-box">
 				<div class="video-section">
@@ -242,7 +259,7 @@ $(function introDivider() {
 								</div>
 							</c:forEach>
 						</div>
-					</div> 
+					</div>
 				</div>
 
 				<!-- 이미지 앨범 -->
@@ -251,13 +268,15 @@ $(function introDivider() {
 					<div class="image-grid">
 						<c:forEach var="img" items="${imgList}" varStatus="status">
 							<div class="image-item">
-								<img src="${commonURL}/${movieImgPath}/${img.movie_code}/${img.img_path}" alt="${detail.name} ${status.count}" />
+								<img
+									src="${commonURL}/${movieImgPath}/${img.movie_code}/${img.img_path}"
+									alt="${detail.name} ${status.count}" />
 							</div>
 						</c:forEach>
 					</div>
 				</div>
 			</div>
-		</div> 
+		</div>
 	</div>
 
 
