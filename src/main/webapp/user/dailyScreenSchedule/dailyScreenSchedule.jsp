@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
     });
 });
 </script>
-
+		
 		<!-- header -->
 		<header id="header">
 			<c:import url = "${commonURL}/fragments/header.jsp"/>
@@ -107,17 +107,16 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 			<div class="page-util">
 				<div class="inner-wrap">
 					<div class="location">
-						<span>Home</span> <a href="https://www.megabox.co.kr/theater/list"
-							title="극장 페이지로 이동">극장</a> <a
-							href="${commonURL}/user/dailyScreenSchedule/dailyScreenSchedule.jsp"
+						<span>Home</span>
+							<a href="${commonURL}/user/dailyScreenSchedule/dailyScreenSchedule.jsp"
 							title="상영시간표 페이지로 이동">상영시간표</a>
 					</div>
 				</div>
 			</div>
-
+			
 			<!-- contents -->
 			<div id="contents" class="no-padding">
-
+			
 				<!-- theater-detail-page -->
 				<div class="theater-detail-page" style = "height: 130px;">
 
@@ -250,8 +249,7 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 							</div>
 							<div class="movie-option mb20">
 								<div class="rateing-lavel">
-									<a href="https://www.megabox.co.kr/theater/time?brchNo=1372"
-										class="" title="관람등급안내">관람등급안내</a>
+									<a href = "#favor_theater_setting" class = "right btn-modal-open" id = "favorBrchReg" w-data = "640" h-data = "470">관람등급안내</a>
 								</div>
 							</div>
 							<div class="reserve theater-list-box">
@@ -355,7 +353,7 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 								                <p class="chair">총 <%= totalSeat %>석</p>
 								            </div>
 								            <div class="theater-time">
-								                <div class="theater-type-area">2D(자막)</div> <div class="theater-time-box">
+								                <div class="theater-time-box">
 								                    <table class="time-list-table">
 								                        <caption>상영시간표</caption>
 								                        <colgroup>
@@ -446,8 +444,81 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 		</footer>
 		<!--// footer -->
 		</div>
-		
-		
-
+		<section id = "favor_theater_setting" class = "modal-layer">
+			<div class = "wrap" style = "width: 640px; height: 500px; margin-left: -320px; margin-top: -235px;">
+				<header class = "layer-header">
+					<h3 class = "tit">관람등급안내</h3>
+				</header>
+				<div class = "layer-con" style = "height: 425px;">
+					<div class = "table-wrap">
+						<table class = "data-table grade-table">
+							<caption>관람 등급을 등급명, 설명 순서로 보여줍니다.</caption>
+							<colgroup>
+								<col style = "width: 30%;"></col>
+							</colgroup>
+							<thead>
+								<tr>
+									<th>등급명</th>
+									<th>설명</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<p class = "movie-grade age-all">전체 관람가</p>
+									</td>
+									<td>
+										모든 연령의 고객이 관람 가능
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<p class = "movie-grade age-12">12세 이상 관람가</p>
+									</td>
+									<td>
+										만 12세 이상(주민등록상 생일 기준) 관람 가능
+										<br>
+										만 12세 미만 고객은 보호자(성인) 동반 시 관람 가능
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<p class = "movie-grade age-15">15세 이상 관람가</p>
+									</td>
+									<td>
+										만 15세 이상(주민등록상 생일 기준) 관람 가능
+										<br>
+										만 15세 미만 고객은 보호자(성인) 동반 시 관람 가능
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<p class = "movie-grade age-15">청소년 관람 불가</p>
+									</td>
+									<td>
+										만 19세 이상 관람 가능
+										<br>
+										- 19세가 되는 해의 1월 1일을 맞이한 경우 관람 가능
+										<br>
+										- 신분증 지참 필수 (티켓 구매, 입장시 확인)
+										<br>
+										만 19세 미만 고객은 보호자(성인) 동반 시에도 관람 불가	
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<p class = "movie-grade age-no">미정</p>
+									</td>
+									<td>
+										등급 미정 영화
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<button type = "button" class = "btn-modal-close">레이어 닫기</button>
+				</div>
+			</div>
+		</section>
 </body>
 </html>
