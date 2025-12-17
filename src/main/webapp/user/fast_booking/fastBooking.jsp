@@ -26,7 +26,6 @@
 var initMovieHtml;
 	$(function() {
 		initMovieHtml = $(".all-list").html()
-		console.log(initMovieHtml);
 		//스크롤바 커스텀
 		$("#movieList").mCustomScrollbar({
 			axis : "y",
@@ -34,12 +33,24 @@ var initMovieHtml;
 		});
 		
 		//전체 영화 버튼
-		$("#movieAll").click(function() {
-			$(".all-list").html(initMovieHtml);
+		$(document).on("click", "#movieAll", function () {
+			$(".btn-tab").removeClass("on");           // 모든 버튼에서 on 제거
+		    $(".all-list").html(initMovieHtml);
+
+		    // 스크롤 다시 적용
+		    $("#movieList").mCustomScrollbar({
+		        axis: "y",
+		        theme: "light"
+		    });
 		});
 
 		//ALL 버튼
 		$("#movieAgeAll").click(function() {
+			$("#movieList").mCustomScrollbar({
+		        axis: "y",
+		        theme: "light"
+		    });
+			
 			$.ajax({
 				url:"movieAgeAll.jsp",
 				type:"GET",
@@ -69,6 +80,9 @@ var initMovieHtml;
 				    	html += '</ul>';
 
 				    	$("#movieList").html(html);
+				    	
+				    	$(".btn-tab").removeClass("on");           // 모든 버튼에서 on 제거
+				        $("#movieAgeAll").addClass("on");          // 현재 버튼에만 on 추가
 				}//success
 				
 			});//ajax
@@ -87,7 +101,7 @@ var initMovieHtml;
 				},
 				success:function(jsonArr){
 					var html = '<ul>';
-
+				
 				    $.each(jsonArr, function (idx, obj) {
 
 				        html += '<li>'
@@ -106,6 +120,14 @@ var initMovieHtml;
 				    	html += '</ul>';
 
 				    	$("#movieList").html(html);
+				    	
+				    	$("#movieList").mCustomScrollbar({
+					        axis: "y",
+					        theme: "light"
+					    });
+						
+				    	$(".btn-tab").removeClass("on");           // 모든 버튼에서 on 제거
+				        $("#movieAge12").addClass("on");          // 현재 버튼에만 on 추가
 				}//success
 				
 			});//ajax
@@ -143,6 +165,9 @@ var initMovieHtml;
 
 
 				    	$("#movieList").html(html);
+				    	
+				    	$(".btn-tab").removeClass("on");           // 모든 버튼에서 on 제거
+				        $("#movieAge15").addClass("on");          // 현재 버튼에만 on 추가
 				}//success
 				
 			});//ajax
@@ -179,6 +204,9 @@ var initMovieHtml;
 				    	html += '</ul>';
 
 				    	$("#movieList").html(html);
+				    	
+				    	$(".btn-tab").removeClass("on");           // 모든 버튼에서 on 제거
+				        $("#movieAge19").addClass("on");          // 현재 버튼에만 on 추가
 				}//success
 				
 			});//ajax
