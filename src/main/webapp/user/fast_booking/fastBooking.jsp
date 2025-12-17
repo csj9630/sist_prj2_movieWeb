@@ -23,19 +23,19 @@
 }
 </style>
 <script type="text/javascript">
+var initMovieHtml;
 	$(function() {
+		initMovieHtml = $(".all-list").html()
+		console.log(initMovieHtml);
 		//스크롤바 커스텀
 		$("#movieList").mCustomScrollbar({
 			axis : "y",
 			theme : "light",
 		});
-
-		$(".list-area .btn-tab").click(function() {
-			var $listArea = $(this).closest(".list-area");
-
-			$listArea.find(".btn-tab").removeClass("on");
-
-			$(this).addClass("on");
+		
+		//전체 영화 버튼
+		$("#movieAll").click(function() {
+			$(".all-list").html(initMovieHtml);
 		});
 
 		//ALL 버튼
@@ -49,17 +49,11 @@
 					console.log(xhr.statusText + "/" + xhr.status);
 				},
 				success:function(jsonArr){
-					var html = ''
-				        + '<div class="all-list">'
-				        + '    <button type="button" class="btn-tab on">전체</button>'
-				        + '    <div class="list">'
-				        + '        <div id="movieList" class="scroll m-scroll">'
-				        + '            <ul>';
+					var html = '<ul>';
 
 				    $.each(jsonArr, function (idx, obj) {
 
-				        html += ''
-				            + '<li>'
+				        html += '<li>'
 				            + '    <button type="button" class="btn"'
 				            + '        movie-nm="' + obj.moviename + '"'
 				            + '        movie-no="' + obj.moviecode + '">'
@@ -72,13 +66,9 @@
 				            + '</li>';
 				    	});
 
-				    	html += ''
-				        	+ '            </ul>'
-				        	+ '        </div>'
-				        	+ '    </div>'
-				        	+ '</div>';
+				    	html += '</ul>';
 
-				    	$("#movieList").parent().html(html);
+				    	$("#movieList").html(html);
 				}//success
 				
 			});//ajax
@@ -96,17 +86,11 @@
 					console.log(xhr.statusText + "/" + xhr.status);
 				},
 				success:function(jsonArr){
-					var html = ''
-				        + '<div class="all-list">'
-				        + '    <button type="button" class="btn-tab on">전체</button>'
-				        + '    <div class="list">'
-				        + '        <div id="movieList" class="scroll m-scroll">'
-				        + '            <ul>';
+					var html = '<ul>';
 
 				    $.each(jsonArr, function (idx, obj) {
 
-				        html += ''
-				            + '<li>'
+				        html += '<li>'
 				            + '    <button type="button" class="btn"'
 				            + '        movie-nm="' + obj.moviename + '"'
 				            + '        movie-no="' + obj.moviecode + '">'
@@ -119,13 +103,9 @@
 				            + '</li>';
 				    	});
 
-				    	html += ''
-				        	+ '            </ul>'
-				        	+ '        </div>'
-				        	+ '    </div>'
-				        	+ '</div>';
+				    	html += '</ul>';
 
-				    	$("#movieList").parent().html(html);
+				    	$("#movieList").html(html);
 				}//success
 				
 			});//ajax
@@ -142,17 +122,11 @@
 					console.log(xhr.statusText + "/" + xhr.status);
 				},
 				success:function(jsonArr){
-					var html = ''
-				        + '<div class="all-list">'
-				        + '    <button type="button" class="btn-tab on">전체</button>'
-				        + '    <div class="list">'
-				        + '        <div id="movieList" class="scroll m-scroll">'
-				        + '            <ul>';
+					var html = '<ul>';
 
 				    $.each(jsonArr, function (idx, obj) {
 
-				        html += ''
-				            + '<li>'
+				        html += '<li>'
 				            + '    <button type="button" class="btn"'
 				            + '        movie-nm="' + obj.moviename + '"'
 				            + '        movie-no="' + obj.moviecode + '">'
@@ -165,13 +139,10 @@
 				            + '</li>';
 				    	});
 
-				    	html += ''
-				        	+ '            </ul>'
-				        	+ '        </div>'
-				        	+ '    </div>'
-				        	+ '</div>';
+				    	html += '</ul>';
 
-				    	$("#movieList").parent().html(html);
+
+				    	$("#movieList").html(html);
 				}//success
 				
 			});//ajax
@@ -188,17 +159,11 @@
 					console.log(xhr.statusText + "/" + xhr.status);
 				},
 				success:function(jsonArr){
-					var html = ''
-				        + '<div class="all-list">'
-				        + '    <button type="button" class="btn-tab on">전체</button>'
-				        + '    <div class="list">'
-				        + '        <div id="movieList" class="scroll m-scroll">'
-				        + '            <ul>';
+					var html = '<ul>';
 
 				    $.each(jsonArr, function (idx, obj) {
 
-				        html += ''
-				            + '<li>'
+				        html += '<li>'
 				            + '    <button type="button" class="btn"'
 				            + '        movie-nm="' + obj.moviename + '"'
 				            + '        movie-no="' + obj.moviecode + '">'
@@ -211,13 +176,9 @@
 				            + '</li>';
 				    	});
 
-				    	html += ''
-				        	+ '            </ul>'
-				        	+ '        </div>'
-				        	+ '    </div>'
-				        	+ '</div>';
+				    	html += '</ul>';
 
-				    	$("#movieList").parent().html(html);
+				    	$("#movieList").html(html);
 				}//success
 				
 			});//ajax
@@ -395,145 +356,48 @@
 							</div>
 							<!--// all : 전체 -->
 
-							<!-- other-list  : 전체이용가 -->
 							<div class="other-list">
-
+								<!-- 전체이용가 -->
 								<button type="button" class="btn-tab" id="movieAgeAll">
 									<span class="movie-grade small age-all"></span>
 								</button>
-								<div class="list">
-									<div id="movieList" class="scroll m-scroll">
-										<!-- ajax에서 추가할 영역 -->
+								<!-- <div class="list">
+									<div id="movieListAgeAll" class="scroll m-scroll">
+										ajax에서 추가할 영역
 									</div>
-								</div>
-
+								</div> -->
+								<!-- 12세 이용가 -->
 								<button type="button" class="btn-tab" id="movieAge12"
 									style="left: 220px;">
 									<span class="movie-grade small age-12"></span>
 								</button>
 								<div class="list">
-									<div id="movieList" class="scroll m-scroll">
+									<div id="movieListAgeTwelve" class="scroll m-scroll">
 										<!-- ajax에서 추가할 영역 -->
 									</div>
 								</div>
-								
+								<!-- 15세 이용가 -->
 								<button type="button" class="btn-tab" id="movieAge15"
 									style="left: 330px;">
 									<span class="movie-grade small age-15"></span>
 								</button>
 								<div class="list">
-									<div
-										class="scroll m-scroll mCustomScrollbar _mCS_2 mCS_no_scrollbar"
-										id="crtnMovieList age-12">
-										<div id="mCSB_2"
-											class="mCustomScrollBox mCS-light mCSB_vertical mCSB_inside"
-											style="max-height: none;" tabindex="0">
-											<div id="mCSB_2_container"
-												class="mCSB_container mCS_no_scrollbar_y"
-												style="position: relative; top: 0; left: 0;" dir="ltr">
-												<ul>
-													<li><button type="button" class="btn"
-															movie-nm="주토피아 2" movie-no="25089000"
-															img-path="/SharedImg/2025/11/27/YiSbqEf6OvFcDoLoQCipDojOHqMCwKG4_150.jpg"
-															movie-popup-at="N" movie-popup-no="0" form-at="Y">
-															<span class="movie-grade small age-all">전체관람가</span><i
-																class="iconset ico-heart-small">보고싶어 설정안함</i><span
-																class="txt">주토피아 2</span>
-														</button></li>
-												</ul>
-											</div>
-											<div id="mCSB_2_scrollbar_vertical"
-												class="mCSB_scrollTools mCSB_2_scrollbar mCS-light mCSB_scrollTools_vertical">
-												<div class="mCSB_draggerContainer">
-													<div id="mCSB_2_dragger_vertical" class="mCSB_dragger"
-														style="position: absolute; min-height: 30px; display: none; top: 0px;">
-														<div class="mCSB_dragger_bar" style="line-height: 30px;"></div>
-													</div>
-													<div class="mCSB_draggerRail"></div>
-												</div>
-											</div>
-										</div>
+									<div id="movieListAgeFifteen" class="scroll m-scroll">
+										<!-- ajax에서 추가할 영역 -->
 									</div>
 								</div>
+								<!-- 19세 이용가 -->
 								<button type="button" class="btn-tab" id="movieAge19"
 									style="left: 440px;">
 									<span class="movie-grade small age-19"></span>
 								</button>
 								<div class="list">
-									<div
-										class="scroll m-scroll mCustomScrollbar _mCS_2 mCS_no_scrollbar"
-										id="crtnMovieList age-12">
-										<div id="mCSB_2"
-											class="mCustomScrollBox mCS-light mCSB_vertical mCSB_inside"
-											style="max-height: none;" tabindex="0">
-											<div id="mCSB_2_container"
-												class="mCSB_container mCS_no_scrollbar_y"
-												style="position: relative; top: 0; left: 0;" dir="ltr">
-												<ul>
-													<li><button type="button" class="btn"
-															movie-nm="주토피아 2" movie-no="25089000"
-															img-path="/SharedImg/2025/11/27/YiSbqEf6OvFcDoLoQCipDojOHqMCwKG4_150.jpg"
-															movie-popup-at="N" movie-popup-no="0" form-at="Y">
-															<span class="movie-grade small age-all">전체관람가</span><i
-																class="iconset ico-heart-small">보고싶어 설정안함</i><span
-																class="txt">주토피아 2</span>
-														</button></li>
-												</ul>
-											</div>
-											<div id="mCSB_2_scrollbar_vertical"
-												class="mCSB_scrollTools mCSB_2_scrollbar mCS-light mCSB_scrollTools_vertical">
-												<div class="mCSB_draggerContainer">
-													<div id="mCSB_2_dragger_vertical" class="mCSB_dragger"
-														style="position: absolute; min-height: 30px; display: none; top: 0px;">
-														<div class="mCSB_dragger_bar" style="line-height: 30px;"></div>
-													</div>
-													<div class="mCSB_draggerRail"></div>
-												</div>
-											</div>
-										</div>
+									<div id="movieListAgeNineteen" class="scroll m-scroll">
+										<!-- ajax에서 추가할 영역 -->
 									</div>
 								</div>
 							</div>
 
-							<!-- 12세 이하-->
-							<!-- <div class="other-list">
-								<button type="button" class="btn-tab" id="movieAge12"><span class="movie-grade small age-12"></span></button>
-								<div class="list">
-									<div
-										class="scroll m-scroll mCustomScrollbar _mCS_2 mCS_no_scrollbar"
-										id="crtnMovieList age-12">
-										<div id="mCSB_2"
-											class="mCustomScrollBox mCS-light mCSB_vertical mCSB_inside"
-											style="max-height: none;" tabindex="0">
-											<div id="mCSB_2_container"
-												class="mCSB_container mCS_no_scrollbar_y"
-												style="position: relative; top: 0; left: 0;" dir="ltr">
-												<ul>
-													<li><button type="button" class="btn"
-															movie-nm="주토피아 2" movie-no="25089000"
-															img-path="/SharedImg/2025/11/27/YiSbqEf6OvFcDoLoQCipDojOHqMCwKG4_150.jpg"
-															movie-popup-at="N" movie-popup-no="0" form-at="Y">
-															<span class="movie-grade small age-all">전체관람가</span><i
-																class="iconset ico-heart-small">보고싶어 설정안함</i><span
-																class="txt">주토피아 2</span>
-														</button></li>
-												</ul>
-											</div>
-											<div id="mCSB_2_scrollbar_vertical"
-												class="mCSB_scrollTools mCSB_2_scrollbar mCS-light mCSB_scrollTools_vertical">
-												<div class="mCSB_draggerContainer">
-													<div id="mCSB_2_dragger_vertical" class="mCSB_dragger"
-														style="position: absolute; min-height: 30px; display: none; top: 0px;">
-														<div class="mCSB_dragger_bar" style="line-height: 30px;"></div>
-													</div>
-													<div class="mCSB_draggerRail"></div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div> -->
-							<!-- 12세 이하-->
 						</div>
 						<!--// list-area -->
 					</div>

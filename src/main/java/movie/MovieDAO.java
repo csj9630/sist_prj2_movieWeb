@@ -87,8 +87,14 @@ public class MovieDAO {
 			con=dbCon.getConn();
 			StringBuilder selectAll=new StringBuilder();
 			selectAll
-			.append("	select movie_code, main_image, REGEXP_SUBSTR(movie_grade, '^(전체|12|15|청소년)') AS movie_grade, movie_name, release_date 	")
-			.append("	from movie	");
+			.append(" SELECT movie_code, main_image, ")
+			.append("        CASE REGEXP_SUBSTR(movie_grade, '^(전체|12|15|청소년)') ")
+			.append("            WHEN '전체' THEN 'all' ")
+			.append("            WHEN '청소년' THEN '19' ")
+			.append("            ELSE REGEXP_SUBSTR(movie_grade, '^(전체|12|15|청소년)') ")
+			.append("        END AS movie_grade, ")
+			.append("        movie_name, release_date ")
+			.append(" FROM movie ");
 			
 			pstmt=con.prepareStatement(selectAll.toString());
 			
@@ -125,9 +131,15 @@ public class MovieDAO {
 			con=dbCon.getConn();
 			StringBuilder selectAll=new StringBuilder();
 			selectAll
-			.append("	select movie_code, main_image, REGEXP_SUBSTR(movie_grade, '^(전체|12|15|청소년)') AS movie_grade, movie_name, release_date 	")
-			.append("	from movie	")
-			.append("	where movie_grade='전체 이용가'	");
+			.append(" SELECT movie_code, main_image, ")
+			.append("        CASE REGEXP_SUBSTR(movie_grade, '^(전체|12|15|청소년)') ")
+			.append("            WHEN '전체' THEN 'all' ")
+			.append("            WHEN '청소년' THEN '19' ")
+			.append("            ELSE REGEXP_SUBSTR(movie_grade, '^(전체|12|15|청소년)') ")
+			.append("        END AS movie_grade, ")
+			.append("        movie_name, release_date ")
+			.append(" FROM movie ")
+			.append(" WHERE movie_grade = '전체 이용가' ");
 			
 			pstmt=con.prepareStatement(selectAll.toString());
 			
@@ -242,9 +254,15 @@ public class MovieDAO {
 			con=dbCon.getConn();
 			StringBuilder selectAll=new StringBuilder();
 			selectAll
-			.append("	select movie_code, main_image, REGEXP_SUBSTR(movie_grade, '^(전체|12|15|청소년)') AS movie_grade, movie_name, release_date 	")
-			.append("	from movie	")
-			.append("	where movie_grade='청소년 관람불가'	");
+			.append(" SELECT movie_code, main_image, ")
+			.append("        CASE REGEXP_SUBSTR(movie_grade, '^(전체|12|15|청소년)') ")
+			.append("            WHEN '전체' THEN 'all' ")
+			.append("            WHEN '청소년' THEN '19' ")
+			.append("            ELSE REGEXP_SUBSTR(movie_grade, '^(전체|12|15|청소년)') ")
+			.append("        END AS movie_grade, ")
+			.append("        movie_name, release_date ")
+			.append(" FROM movie ")
+			.append(" WHERE movie_grade = '청소년 관람불가' ");
 			
 			pstmt=con.prepareStatement(selectAll.toString());
 			
