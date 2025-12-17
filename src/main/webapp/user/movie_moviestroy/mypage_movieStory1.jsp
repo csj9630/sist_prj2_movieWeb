@@ -92,8 +92,8 @@ pageEncoding="UTF-8"%>
     System.out.println("[DEBUG] mypage_movieStory1.jsp - jsonResult: " + jsonResult);
 %>
     <script type="text/javascript">
-    // 1. 설정 (전역 변수)
-    var movieData = ${jsonResult};
+    /* 1. 설정 (전역 변수) */
+    var movieData = ${jsonResult};  
     var contextPath = "${pageContext.request.contextPath}";
     var startYear = 2018;
     var currentYear = 2025;
@@ -275,7 +275,7 @@ pageEncoding="UTF-8"%>
             <span class="breadcrumb-separator">></span>
           </li>
           <li>
-            <a href="#">나의 메가박스</a>
+            <a href="#">나의 2GV</a>
             <span class="breadcrumb-separator">></span>
           </li>
           <li><span class="current">나의 무비스토리</span></li>
@@ -287,8 +287,8 @@ pageEncoding="UTF-8"%>
     <div class="container">
       <div class="page-wrap">
         <!-- 사이드바 (sideFrame.jsp 적용) -->
-        <% request.setAttribute("activeMenu", "movie-story"); %> <%@ include
-        file="../../fragments/sideFrame.jsp" %>
+        <% request.setAttribute("activeMenu", "movie-story"); %> 
+        <%@ include file="../../fragments/sideFrame.jsp" %>
 
         <!-- 메인 컨텐츠 -->
         <main class="main-content">
@@ -337,10 +337,7 @@ pageEncoding="UTF-8"%>
             <div class="empty-state">개인정보 수정 페이지입니다.</div>
           </div>
 
-          <div id="genre-content" class="menu-content">
-            <h1 class="page-title">선호장르 수정</h1>
-            <div class="empty-state">선호장르 수정 페이지입니다.</div>
-          </div>
+          
         </main>
       </div>
     </div>

@@ -252,7 +252,6 @@ pageEncoding="UTF-8"%>
     <div class="menu-group">
       <div class="menu-group-title">회원정보</div>
       <div class="menu-item <%= "profile".equals(activeMenu) ? "active" : "" %>" onclick="location.href='../movie_mystory_mainpage/mypage_withdraw1.jsp'">개인정보 수정</div>
-      <div class="menu-item <%= "genre".equals(activeMenu) ? "active" : "" %>" onclick="location.href='#'">선호장르 수정</div>
     </div>
   </div>
 </aside>
