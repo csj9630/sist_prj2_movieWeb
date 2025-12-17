@@ -439,13 +439,13 @@ var initMovieHtml;
 						</div>
 
 						<!-- hour-schedule : 시간 선택  : 00~30 시-->
-						<div class="hour-schedule">
+						<div class="hour-schedule" style="display:none;" >
 							<button type="button" class="btn-prev-time">이전 시간 보기</button>
 							<%
 
 							%>
 							<div class="wrap">
-								<div class="view" style="position: absolute; width: 1015px;">
+							<!--  <div class="view" style="position: absolute; width: 1015px;">
 									<button type="button" class="hour" disabled="true"
 										style="opacity: 0.5">00</button>
 									<button type="button" class="hour" disabled="true"
@@ -500,9 +500,12 @@ var initMovieHtml;
 										style="opacity: 0.5">27</button>
 									<button type="button" class="hour" disabled="true"
 										style="opacity: 0.5">28</button>
-
-								</div>
+ -->
+								</div> 
+							
 							</div>
+					
+						
 
 							<button type="button" class="btn-next-time">다음 시간 보기</button>
 						</div>
@@ -510,20 +513,57 @@ var initMovieHtml;
 
 						<!-- movie-schedule-area : 시간표 출력 영역-->
 						<div class="movie-schedule-area">
+						<!--*********************여기다가 시간표 추가***********************************  -->
+
+									
+			
+							
 
 							<!-- 영화, 영화관 선택 안했을때 -->
 							<!---->
-							<div class="no-result" id="playScheduleNonList">
+<!-- 							<div class="no-result" id="playScheduleNonList">
 								<i class="iconset ico-movie-time"></i>
 
 								<p class="txt">
 									영화와 극장을 선택하시면<br> 상영시간표를 비교하여 볼 수 있습니다.
 								</p>
-							</div>
+							</div> -->
 
 
 							<!-- 영화, 영화관 선택 했을때 -->
 							<div class="result">
+											<table class="table">
+							<tr>
+							<Td>1</Td>
+							<Td>2</Td>
+							<Td>3</Td>
+							</tr>
+							<tr>
+							<Td>1</Td>
+							<Td>2</Td>
+							<Td>3</Td>
+							</tr>
+							<tr>
+							<Td>1</Td>
+							<Td>2</Td>
+							<Td>3</Td>
+							</tr>
+							<tr>
+							<Td>1</Td>
+							<Td>2</Td>
+							<Td>3</Td>
+							</tr>
+							<tr>
+							<Td>1</Td>
+							<Td>2</Td>
+							<Td>3</Td>
+							</tr>
+							<tr>
+							<Td>1</Td>
+							<Td>2</Td>
+							<Td>3</Td>
+							</tr>
+								</table>
 								<div
 									class="scroll m-scroll mCustomScrollbar _mCS_4 mCS_no_scrollbar"
 									id="playScheduleList" style="display: none;">
