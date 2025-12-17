@@ -11,58 +11,49 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 public class DbConn {
-	
-	private static DbConn dbCon;
-	
+	private static DbConn dbcon;
 	private String jndiName;
-	
-
 	private DbConn() {
 		
-	} // DbConn
+	}
 	
-	/**
-	 * 객체를 얻을 떄 JNDI 생성
-	 * @return dbCon
-	*/
-	public static DbConn getInstance(String jndiName) {
-		if(dbCon == null) {
-			dbCon = new DbConn();
-			dbCon.jndiName = jndiName;
+	
+	public static DbConn getInstance( String jndiName) {
+		if (dbcon == null) {// 객체가 생성되어 있지 않을 때만
+			dbcon = new DbConn();// 새로 객체를 생성하라.
+			dbcon.jndiName= jndiName;
 		} // end if
-		return dbCon;
-	} // getInstance
+		return dbcon;
+	}// getInstance
 	
-	/**
-	 * DBCP에서 Connection 얻기
-	 * @return
-	 * @throws SQLException 
-	*/
-	public Connection getConn() throws SQLException {
+	public Connection getConn() throws SQLException{
 		Connection con = null;
-		// 1. JNDI 사용 객체 생성
+		
 		try {
-		Context ctx = new InitialContext();
-		// 2. DBCP에 DataSource 얻기
-		DataSource ds = (DataSource)(ctx.lookup("java:comp/env/"+jndiName));
-		con = ds.getConnection();
-		// 3. DataSource 
-		} catch(NamingException ne) {
+			//1.JNDI 사용객체 생성
+			Context ctx = new InitialContext();
+			
+			//2.DBCP에 DataSource 얻기
+			DataSource ds = (DataSource)ctx.lookup("java:comp/env/"+jndiName);
+			
+			//3.DataSource에서 connection 얻기
+			con = ds.getConnection();
+		
+		}catch(NamingException ne) {
 			ne.printStackTrace();
-		} // end try ~ catch
+		}
 		
 		return con;
-	} // getConn
+	}//
 	
-	public void dbClose(ResultSet rs, Statement stmt, Connection con) throws SQLException {
+	public void dbClose(ResultSet rs,Statement stmt, Connection con ) throws SQLException {
 		try {
-		if(rs != null) {rs.close();} // end if
-		if(stmt != null) {stmt.close();} // end if
-		} finally {
-		if(con != null) {con.close();} // end if
-		} // end try ~ finally
-		
-	} // dbClose
+			if(rs != null) {rs.close();}
+			if(stmt != null) {stmt.close();}	
+		}finally { //다른 게 다 예외 나와도 커넥션 만큼은 반드시 끊는다.
+			if(con != null) {con.close();}
+		}//end finally
+	}//dbclose
 	
-} // class
-
+	
+}//class

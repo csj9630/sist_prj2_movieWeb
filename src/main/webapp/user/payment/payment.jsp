@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="../../fragments/siteProperty.jsp"%>
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="auto">
 <head>
   <meta charset="utf-8" />
   <title>결제하기</title>
-  <link rel="shortcut icon" href="http://localhost/sist_prj2_movieWeb/resources/images/favicon.ico">
+  <link rel="shortcut icon" href="${commonURL}/resources/images/favicon.ico">
   <!-- 토스페이먼츠 결제창 SDK 추가 -->
   <script src="https://js.tosspayments.com/v1/payment"></script>
 </head>
@@ -26,7 +27,7 @@
         orderName: "테스트 결제", // 구매상품
         customerName: "김토스", // 구매자 이름
         //successUrl: "https://www.naver.com", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
-        successUrl: "http://localhost/sist_prj2_movieWeb/user/main/index.jsp", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
+        successUrl: "http://localhost/second_project_movie_reservation/index/index.jsp", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
         failUrl: "https://www.naver.com", // 결제 실패 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
       })
       // ------결제창을 띄울 수 없는 에러 처리 ------
