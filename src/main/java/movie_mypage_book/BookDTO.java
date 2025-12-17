@@ -11,6 +11,7 @@ public class BookDTO {
 	// Join fields
 	private String movie_name;
 	private String main_image;
+	private String movie_code;  // 영화 코드 (포스터 경로 및 상세페이지 링크용)
 	private String theater_name;
 	private String screen_date; // Keeping as String for now as per ScreenInfoDTO, check DB type later if needed
 	private int screen_price;
@@ -80,6 +81,14 @@ public class BookDTO {
 
 	public void setMain_image(String main_image) {
 		this.main_image = main_image;
+	}
+
+	public String getMovie_code() {
+		return movie_code;
+	}
+
+	public void setMovie_code(String movie_code) {
+		this.movie_code = movie_code;
 	}
 
 	public String getTheater_name() {

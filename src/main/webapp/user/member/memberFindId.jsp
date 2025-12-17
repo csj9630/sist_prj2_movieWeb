@@ -302,7 +302,7 @@ body {
 			<%
 			boolean formSubmitted = (request.getParameter("users_name") != null);
 			String scriptToExecute = ""; // 실행할 JavaScript 코드를 담을 변수
-
+			
 			if (formSubmitted) {
 				userDTO uDTO = new userDTO();
 				uDTO.setUsers_name(request.getParameter("users_name"));
