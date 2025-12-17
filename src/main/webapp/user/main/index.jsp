@@ -12,7 +12,7 @@
 	content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <link rel="shortcut icon" href="${commonURL}/images/favicon.ico">
 
-<title>2GV 메인화면</title>
+<title>2GV 메인화면.</title>
 <link rel="stylesheet" href="${commonURL}/resources/css/megabox.min.css"
 	media="all">
 <script>
