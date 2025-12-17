@@ -121,11 +121,6 @@ var initMovieHtml;
 
 				    	$("#movieList").html(html);
 				    	
-				    	$("#movieList").mCustomScrollbar({
-					        axis: "y",
-					        theme: "light"
-					    });
-						
 				    	$(".btn-tab").removeClass("on");           // 모든 버튼에서 on 제거
 				        $("#movieAge12").addClass("on");          // 현재 버튼에만 on 추가
 				}//success
