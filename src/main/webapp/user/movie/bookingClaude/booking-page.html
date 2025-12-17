@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>빠른예매 - 메가박스</title>
+    <link rel="stylesheet" href="booking-style.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+    <div class="booking-container">
+        <h1 class="page-title">빠른예매</h1>
+        
+        <!-- 날짜 선택 영역 -->
+        <div class="date-section">
+            <button class="btn-nav btn-prev" id="prevDate">
+                <span>&lt;</span>
+            </button>
+            
+            <div class="date-wrapper">
+                <div class="date-list" id="dateList">
+                    <!-- JavaScript로 동적 생성 -->
+                </div>
+            </div>
+            
+            <button class="btn-nav btn-next" id="nextDate">
+                <span>&gt;</span>
+            </button>
+            
+            <button class="btn-calendar">
+                <span>📅</span>
+            </button>
+        </div>
+        
+        <!-- 영화 + 시간표 영역 -->
+        <div class="content-section">
+            <!-- 왼쪽: 영화 선택 영역 -->
+            <div class="movie-section">
+                <div class="section-header">
+                    <h2>영화</h2>
+                    <div class="movie-filter">
+                        <button class="filter-btn active" data-grade="all">
+                            <span class="grade-badge all">전체</span>
+                        </button>
+                        <button class="filter-btn" data-grade="12">
+                            <span class="grade-badge age-12">12</span>
+                        </button>
+                        <button class="filter-btn" data-grade="15">
+                            <span class="grade-badge age-15">15</span>
+                        </button>
+                        <button class="filter-btn" data-grade="19">
+                            <span class="grade-badge age-19">19</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="movie-list" id="movieList">
+                    <!-- JavaScript로 동적 생성 -->
+                </div>
+            </div>
+            
+            <!-- 오른쪽: 시간표 영역 -->
+            <div class="schedule-section">
+                <div class="section-header">
+                    <h2>시간</h2>
+                    <div class="time-legend">
+                        <span class="legend-item">
+                            <i class="icon morning">조</i> 조조
+                        </span>
+                        <span class="legend-item">
+                            <i class="icon brunch">브</i> 브런치
+                        </span>
+                        <span class="legend-item">
+                            <i class="icon night">심</i> 심야
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- 시간대 필터 -->
+                <div class="time-filter">
+                    <button class="btn-time-nav" id="prevTime">&lt;</button>
+                    <div class="time-slots-wrapper">
+                        <div class="time-slots" id="timeSlots">
+                            <button class="time-slot" data-hour="06">06</button>
+                            <button class="time-slot" data-hour="07">07</button>
+                            <button class="time-slot" data-hour="08">08</button>
+                            <button class="time-slot" data-hour="09">09</button>
+                            <button class="time-slot" data-hour="10">10</button>
+                            <button class="time-slot" data-hour="11">11</button>
+                            <button class="time-slot" data-hour="12">12</button>
+                            <button class="time-slot" data-hour="13">13</button>
+                            <button class="time-slot" data-hour="14">14</button>
+                            <button class="time-slot" data-hour="15">15</button>
+                            <button class="time-slot" data-hour="16">16</button>
+                            <button class="time-slot" data-hour="17">17</button>
+                            <button class="time-slot" data-hour="18">18</button>
+                            <button class="time-slot" data-hour="19">19</button>
+                            <button class="time-slot" data-hour="20">20</button>
+                            <button class="time-slot" data-hour="21">21</button>
+                            <button class="time-slot" data-hour="22">22</button>
+                            <button class="time-slot" data-hour="23">23</button>
+                        </div>
+                    </div>
+                    <button class="btn-time-nav" id="nextTime">&gt;</button>
+                </div>
+                
+                <!-- 상영 시간표 리스트 -->
+                <div class="schedule-list" id="scheduleList">
+                    <div class="no-selection">
+                        <div class="no-selection-icon">🎬</div>
+                        <p>날짜와 영화를 선택하시면<br>상영시간표를 확인하실 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="booking-script.js"></script>
+</body>
+</html>

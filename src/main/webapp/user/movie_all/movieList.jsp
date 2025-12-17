@@ -77,7 +77,7 @@
 				},
 				success:function(jsonArr){
 				  	//데이터가 없으면 더보기 버튼 숨기기, 현재 구조에서는 마지막 배열 데이터 길이와 size가 같으면 더보기 버튼 한번 더 눌러야 되는 문제
-				    if(jsonArr.length<size) {
+				  	if(jsonArr.length<size) {
 				    	$("#btnAddMovie").hide();
 				    }
 					/* ajax 요청이 성공해서 넘어올 데이터 */

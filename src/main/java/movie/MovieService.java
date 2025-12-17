@@ -43,6 +43,7 @@ public class MovieService {
 		return cnt;
 	}
 	
+	//전체 영화 리스트(페이지 네이션 없는)
 	public List<MovieDTO> showAllMovie() {
 		List<MovieDTO> allMovieList=null;
 		MovieDAO mDAO=MovieDAO.getInstance();
@@ -55,6 +56,62 @@ public class MovieService {
 		
 		return allMovieList;
 	}//showAllMovie
+	
+	//전체 이용가 영화 리스트(페이지 네이션 없는)
+	public List<MovieDTO> showAgeAllMovie() {
+		List<MovieDTO> ageAllMovieList=null;
+		MovieDAO mDAO=MovieDAO.getInstance();
+		
+		try {
+			ageAllMovieList=mDAO.selectAgeAllMovie();
+		} catch(SQLException se) {
+			se.printStackTrace();
+		}//end catch
+		
+		return ageAllMovieList;
+	}//showAgeAllMovie
+	
+	//12세 이용가 영화 리스트(페이지 네이션 없는)
+	public List<MovieDTO> showAgeTwelveMovie() {
+		List<MovieDTO> ageTwelveMovieList=null;
+		MovieDAO mDAO=MovieDAO.getInstance();
+		
+		try {
+			ageTwelveMovieList=mDAO.selectAgeTwelveMovie();
+		} catch(SQLException se) {
+			se.printStackTrace();
+		}//end catch
+		
+		return ageTwelveMovieList;
+	}//showAgeTwelveMovie
+	
+	//15세 이용가 영화 리스트(페이지 네이션 없는)
+	public List<MovieDTO> showAgeFifteenMovie() {
+		List<MovieDTO> ageFifteenMovieList=null;
+		MovieDAO mDAO=MovieDAO.getInstance();
+		
+		try {
+			ageFifteenMovieList=mDAO.selectAgeFifteenMovie();
+		} catch(SQLException se) {
+			se.printStackTrace();
+		}//end catch
+		
+		return ageFifteenMovieList;
+	}//showAgeFifteenMovie
+	
+	//19세 이용가 영화 리스트(페이지 네이션 없는)
+	public List<MovieDTO> showAgeNineteenMovie() {
+		List<MovieDTO> ageNineteenMovieList=null;
+		MovieDAO mDAO=MovieDAO.getInstance();
+		
+		try {
+			ageNineteenMovieList=mDAO.selectAgeNineteenMovie();
+		} catch(SQLException se) {
+			se.printStackTrace();
+		}//end catch
+		
+		return ageNineteenMovieList;
+	}//showAgeAllMovie
 	
 	//페이지 네이션된 박스오피스 리스트 출력
 	public List<MovieDTO> showPageMovie(int currentPage, int size) {
