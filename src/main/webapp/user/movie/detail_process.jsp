@@ -30,7 +30,7 @@ ReviewService rs = ReviewService.getInstance();
 List<ReviewDTO> reviewList = rs.searchReviewList(movieCode);
 
 //int reviewCount = reviewList.size();
-//test
+//te
 //영화 평점
 double scoreAverage = rs.getScoreAverage(reviewList);
 
