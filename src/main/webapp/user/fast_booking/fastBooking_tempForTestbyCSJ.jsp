@@ -33,6 +33,8 @@
 .quick-reserve-area .movie-choice {
 	width: 600px;
 }
+
+/* 시간표에 스크롤바 추가 */
 .schedule-table-wrapper {
     max-height: 100%;
     max-width: 100%;
