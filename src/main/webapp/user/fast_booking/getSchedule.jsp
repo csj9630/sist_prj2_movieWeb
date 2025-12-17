@@ -10,16 +10,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-
 //파라미터 저장.
 String date = request.getParameter("date");
 String movieNo = request.getParameter("movieNo");
 
 //파라미터가 없으면 빈 배열 반환
 if (date == null || movieNo == null || date.trim().isEmpty() || movieNo.trim().isEmpty()) {
- out.print("[]");
- return;
-}
+	out.print("[]");
+	return;
+}//end if
 
 //DB 호출
 ScreenBookService sbs = ScreenBookService.getInstance();
@@ -30,12 +29,13 @@ JSONArray jsonArr = new JSONArray();
 JSONObject jsonObj = null;
 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 
+try {
 
-if (sbList == null || sbList.isEmpty()) {
-	//조회 데이터가 없으면 빈 JSON 배열 반환.
-	out.print("[]");
-	return;
-} else {
+	if (sbList == null || sbList.isEmpty()) {
+		//조회 데이터가 없으면 빈 JSON 배열 반환.
+		out.print("[]");
+		return;
+	} //end if
 
 	for (ScreenBookDTO dto : sbList) {
 		jsonObj = new JSONObject();
@@ -51,7 +51,7 @@ if (sbList == null || sbList.isEmpty()) {
 		jsonObj.put("screen_open", sdf.format(dto.getScreenOpen()));
 		jsonObj.put("screen_end", sdf.format(dto.getScreenEnd()));
 		jsonObj.put("running_time", dto.getRunningTime());
-		
+
 		// 3. 좌석 계산 로직
 		jsonObj.put("total_seat", dto.getTotalSeat());
 		jsonObj.put("seat_count", dto.getSeatCount());
@@ -60,9 +60,15 @@ if (sbList == null || sbList.isEmpty()) {
 		// 4. Array에 추가
 		jsonArr.add(jsonObj);
 	} //end for
-		System.out.println(sbList.toString());
+	System.out.println(sbList.toString());
 	out.print(jsonArr.toJSONString());
-} //end else
+			
+			
+} catch (Exception e) {
+	e.printStackTrace();
+	System.err.println("getSchedule.jsp에서 에러발생 Error: " + e.getMessage());
+	out.print("[]");
+}
 %>
 
 
