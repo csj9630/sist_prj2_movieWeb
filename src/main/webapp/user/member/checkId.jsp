@@ -3,6 +3,19 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ include file="../../fragments/siteProperty.jsp"%>
+<%
+    // 세션에 userId가 있다면 이미 로그인된 상태
+    if (session.getAttribute("userId") != null) {
+%>
+    <script type="text/javascript">
+        alert("이미 로그인된 상태입니다.");
+        // 메인 페이지로 이동
+        location.href = "${commonURL}/user/main/index.jsp";
+    </script>
+<%
+        return; // 아래쪽의 로그인 폼(HTML)이 그려지지 않도록 즉시 종료
+    }
+%>
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="auto">
 <head>

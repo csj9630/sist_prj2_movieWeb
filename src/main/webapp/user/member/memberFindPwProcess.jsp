@@ -1,3 +1,4 @@
+<%@page import="SiteProperty.SitePropertyVO"%>
 <%@page import="org.json.simple.JSONObject"%>
 <%@page import="member.userDTO"%>
 <%@page import="member.UserInfoService"%>
@@ -8,7 +9,8 @@
 //POST방식 한글 처리
 request.setCharacterEncoding("UTF-8");
 
-String key="a123456789012345";//키는 반드시 16글자
+SitePropertyVO sv = new SitePropertyVO();
+String key=sv.getKey();//키는 반드시 16글자
 userDTO uDTO = new userDTO();
 JSONObject jsonObj = new JSONObject();
 //입력받은 데이터를 변수에 할당
