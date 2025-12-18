@@ -31,7 +31,7 @@ if( uDTO != null) {//로그인 성공
 	//세션에 값을 할당.
 	session.setAttribute("userId", uDTO.getUsers_id());
 	session.setAttribute("userName", uDTO.getUsers_name());
-	jsonObj.put("msg","로그인에 성공하셨습니다. 메인페이지로 넘어갑니다.");
+	jsonObj.put("msg","로그인에 성공하셨습니다. 원래 페이지로 넘어갑니다.");
 	jsonObj.put("status","success");
 
 } else { // uDTO가 null인 경우 처리 추가
