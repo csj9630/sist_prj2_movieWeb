@@ -167,7 +167,7 @@ function resultLogin() {
             }
         }, // success 끝
         error: function(xhr) {
-            alert("비정상적인 접근이 감지되었습니다.");
+            alert("비정상적인 접근이 감지되었습니다.(데이터베이스 등의 문제)");
             console.log(xhr.status);
         }
     }); // ajax 끝
@@ -204,7 +204,7 @@ function resultLogin() {
                     <div class="form-group">
                         <input type="password" name="users_pass" id="users_pass" class="form-input" placeholder="비밀번호" title="비밀번호를 입력하세요" value="123123123a">
                     </div>
-					<input type="button" id="btnLogin" class="btn-submit" value="로그인11">
+					<input type="button" id="btnLogin" class="btn-submit" value="로그인">
                     <!-- <button type="button" id="btnLogin" class="btn-submit">로그인</button> -->
 
                     <div class="link-container">
