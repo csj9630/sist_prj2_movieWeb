@@ -1,6 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ include file="../../fragments/siteProperty.jsp"%>
+<%
+    // 세션에 userId가 있다면 이미 로그인된 상태
+    if (session.getAttribute("userId") != null) {
+%>
+    <script type="text/javascript">
+        alert("이미 로그인된 상태입니다.");
+        // 메인 페이지로 이동
+        location.href = "${commonURL}/user/main/index.jsp";
+    </script>
+<%
+        return; // 아래쪽의 로그인 폼(HTML)이 그려지지 않도록 즉시 종료
+    }
+%>
 <html lang="en" data-bs-theme="auto">
 <head>
 <meta charset="UTF-8">
@@ -386,7 +399,21 @@ $(function(){
         }
     });
 	
-	
+	$(".password-icon").click(function() {
+        // 클릭한 아이콘의 부모(password-group) 안에서 input 요소를 찾음
+        const $passwordInput = $(this).siblings(".form-input");
+        const $iconContainer = $(this);
+
+        // 현재 input의 type이 password이면 text로, 아니면 password로 변경
+        if ($passwordInput.attr("type") === "password") {
+            $passwordInput.attr("type", "text");
+            $iconContainer.addClass("view-password"); // 아이콘 변경을 위한 클래스 추가
+        } else {
+            $passwordInput.attr("type", "password");
+            $iconContainer.removeClass("view-password");
+        }
+        
+    });
 });//ready
 //비밀번호 유효성 검사
 function passCondition(password) {
@@ -503,7 +530,7 @@ function isPhoneNumber(phone) {
                     <label class="form-label">Email</label>
                     <input type="text" class="form-input" name="mail" id="mail" placeholder="example" style="width:50%;" value="leetest">@
                     <select name="domain" id="domain" class="form-input" style="width:45%;">
-			<option value="google.com">google.com</option>
+			<option value="gmail.com">gmail.com</option>
 			<option value="naver.com">naver.com</option>
 			<option value="daum.net">daum.net</option>
 			<option value="hotmail.com">hotmail.com</option>
