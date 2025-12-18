@@ -135,7 +135,7 @@ $("#users_pass").keydown(function(e) {
 
 
  //로그인 버튼 클릭시 ajax로 값 비교 후 결과 알려주기
-function resultLogin() {
+/* function resultLogin() {
     var param = {
         users_id: $("#users_id").val(),
         users_pass: $("#users_pass").val()
@@ -171,7 +171,49 @@ function resultLogin() {
             console.log(xhr.status);
         }
     }); // ajax 끝
-}
+} */
+
+function resultLogin() {
+    var param = {
+        users_id: $("#users_id").val(),
+        users_pass: $("#users_pass").val()
+    };
+
+    $.ajax({
+        url: 'memberLoginProcess.jsp',
+        type: 'POST',
+        data: param,
+        dataType: "JSON",
+        success: function(response) {
+            $("#loginModal").addClass("show");
+            $("#textModal").text(response.msg);
+
+            $("#modalConfirm, #modalClose").off('click');
+
+            if (response.status === 'success') {
+                $("#modalConfirm, #modalClose").on('click', function() {
+                    $("#loginModal").removeClass("show");
+
+                    var prevPage = document.referrer;
+
+                    // 현재 페이지 파일명이 memberLogin.jsp인지 확인 필요
+                    if (prevPage && prevPage.indexOf("memberLogin.jsp") === -1) {
+                        location.href = prevPage;
+                    } else {
+                        location.href = "${commonURL}/user/main/index.jsp";
+                    }
+                });
+            } else {
+                $("#modalConfirm, #modalClose").on('click', function() {
+                    $("#loginModal").removeClass("show");
+                });
+            }
+        },
+        error: function(xhr) {
+            alert("비정상적인 접근이 감지되었습니다.");
+        }
+    }); // 이 부분이 빠져있었습니다.
+} // 이 부분도 빠져있었습니다
 </script>
 </head>
 
