@@ -1,21 +1,30 @@
+<%@page import="SiteProperty.SitePropertyVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ include file="../../fragments/siteProperty.jsp"%>
+<%
+    // 세션에 userId가 있다면 이미 로그인된 상태
+    if (session.getAttribute("userId") != null) {
+%>
+    <script type="text/javascript">
+        alert("이미 로그인된 상태입니다.");
+        // 메인 페이지로 이동
+        location.href = "${commonURL}/user/main/index.jsp";
+    </script>
+<%
+        return; // 아래쪽의 로그인 폼(HTML)이 그려지지 않도록 즉시 종료
+    }
+%>
 <html lang="en" data-bs-theme="auto">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>로그인</title>
-<link rel="shortcut icon" href="${commonURL}/resources/images/favicon.ico">
-<link rel="stylesheet" href="${commonURL}/resources/css/megabox.min.css" media="all">
-<script async="" src="${commonURL}/resources/js/gtm.js.다운로드"></script>
-<script type="text/javascript" async="" src="${commonURL}/resources/js/js"></script>
-<script async="" src="${commonURL}/resources/js/js(1)"></script>
-<script src="${commonURL}/resources/js/megabox.api.min.js"></script>
-<script src="${commonURL}/resources/js/megabox.common.min.js"></script>
-<script src="${commonURL}/resources/js/ui.common.js"></script>
-<script src="${commonURL}/resources/js/front.js"></script>
-
+<link rel="shortcut icon"
+	href="${commonURL}/resources/images/favicon.ico">
+<link rel="stylesheet" href="${commonURL}/resources/css/megabox.min.css"
+	media="all">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
     /* === [공통 레이아웃] === */
     body {
@@ -89,6 +98,81 @@
     .modal-footer { padding-bottom: 20px; text-align: center; }
     .modal-confirm-btn { background-color: #55359E; color: white; border: none; padding: 8px 25px; border-radius: 4px; cursor: pointer; font-weight: 600; }
 </style>
+<script type="text/javascript">
+$(function() {
+	
+	/* /* modal창 닫기 */
+	$("#modalClose").click(function() {
+		$("#loginModal").removeClass("show");
+	});//click
+
+	/* modal창 닫기 */
+	$("#modalConfirm").click(function() {
+		$("#loginModal").removeClass("show");
+	})//click */
+	
+	
+	$("#btnLogin").click(function(){
+			if($("#users_id").val() == ""){
+				alert("아이디는 필수 입력!");
+				return;
+			}//end if
+			if($("#users_pass").val() == ""){
+				alert("비밀번호는 필수 입력!");
+				return;
+			}//end if
+			resultLogin();
+			/* $("#loginForm").submit(); */
+			/*  $("#loginModal").addClass("show"); // 모달 표시 (현재 페이지 유지) */
+		});
+//비밀번호 입력창에서 엔터 키 이벤트 추가
+$("#users_pass").keydown(function(e) {
+    if (e.keyCode == 13) {
+        $("#btnLogin").click();
+    }
+});
+});//ready
+
+
+ //로그인 버튼 클릭시 ajax로 값 비교 후 결과 알려주기
+function resultLogin() {
+    var param = {
+        users_id: $("#users_id").val(),
+        users_pass: $("#users_pass").val()
+    };
+
+    $.ajax({
+        url: 'memberLoginProcess.jsp',
+        type: 'POST',
+        data: param,
+        dataType: "JSON",
+        success: function(response) {
+            $("#loginModal").addClass("show");
+            $("#textModal").text(response.msg);
+
+            // 기존 이벤트를 제거하여 중복 실행 방지
+            $("#modalConfirm, #modalClose").off('click');
+
+            if (response.status === 'success') {
+                $("#modalConfirm, #modalClose").on('click', function() {
+                    $("#loginModal").removeClass("show");
+                    // 에러 원인 수정: 함수형태()가 아닌 대입형태= 사용
+                    window.location.href = "${commonURL}/user/main/index.jsp";
+                });
+            } else {
+                // 실패 시 모달만 닫도록 설정
+                $("#modalConfirm, #modalClose").on('click', function() {
+                    $("#loginModal").removeClass("show");
+                });
+            }
+        }, // success 끝
+        error: function(xhr) {
+            alert("비정상적인 접근이 감지되었습니다.");
+            console.log(xhr.status);
+        }
+    }); // ajax 끝
+}
+</script>
 </head>
 
 <body>
@@ -112,16 +196,16 @@
                 <h1 class="title">로그인</h1>
 
 
-                <form id="loginForm" name="loginForm" method="post" action="memberJoinFrmProcess.jsp">
+                <form id="loginForm" name="loginForm" method="post" action="memberLoginProcess.jsp">
                     <div class="form-group">
-                        <input type="text" id="ibxLoginId" class="form-input" placeholder="아이디" title="아이디를 입력하세요">
+                        <input type="text" name="users_id" id="users_id" class="form-input" placeholder="아이디" title="아이디를 입력하세요" value="lee">
                     </div>
 
                     <div class="form-group">
-                        <input type="password" id="ibxLoginPwd" class="form-input" placeholder="비밀번호" title="비밀번호를 입력하세요">
+                        <input type="password" name="users_pass" id="users_pass" class="form-input" placeholder="비밀번호" title="비밀번호를 입력하세요" value="123123123a">
                     </div>
-
-                    <button type="button" id="btnLogin" class="btn-submit">로그인</button>
+					<input type="button" id="btnLogin" class="btn-submit" value="로그인11">
+                    <!-- <button type="button" id="btnLogin" class="btn-submit">로그인</button> -->
 
                     <div class="link-container">
                         <a href="memberFindId.jsp">ID 찾기</a>
@@ -141,13 +225,13 @@
             <div class="modal-window">
                 <div class="modal-header">
                     <span>알림</span>
-                    <button class="modal-close-btn" onclick="closeModal()">✕</button>
+                    <button class="modal-close-btn" id="modalClose">✕</button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="textModal">
                     로그인 되었습니다.
                 </div>
                 <div class="modal-footer">
-                    <button class="modal-confirm-btn" onclick="closeModal()">확인</button>
+                    <button class="modal-confirm-btn" id="modalConfirm">확인</button>
                 </div>
             </div>
         </div>
@@ -159,43 +243,5 @@
     
     <form id="mainForm"></form>
 
-    <script>
-        // === 로그인 로직 및 모달 제어 ===
-        const btnLogin = document.getElementById('btnLogin');
-        const modal = document.getElementById('loginModal');
-        const idInput = document.getElementById('ibxLoginId');
-        const pwInput = document.getElementById('ibxLoginPwd');
-
-        // 로그인 버튼 클릭 이벤트
-        btnLogin.addEventListener('click', function() {
-            const idValue = idInput.value.trim();
-            const pwValue = pwInput.value.trim();
-
-            // 1. 아이디가 비어있는 경우
-            if (idValue === "") {
-                alert("아이디를 입력해주세요.");
-                idInput.focus();
-                return;
-            }
-
-            // 2. 비밀번호가 비어있는 경우
-            if (pwValue === "") {
-                alert("비밀번호를 입력해주세요.");
-                pwInput.focus();
-                return;
-            }
-
-            // 3. 둘 다 값이 있으면 -> 로그인 성공 모달 띄우기
-            // (실제 프로젝트에서는 여기서 서버로 form submit을 해야 합니다)
-            modal.classList.add('show');
-        });
-
-        // 모달 닫기 함수
-        function closeModal() {
-            modal.classList.remove('show');
-            // 로그인 성공 후 메인페이지로 이동하려면 아래 주석 해제
-            // location.href = 'main.jsp'; 
-        }
-    </script>
 </body>
 </html>
