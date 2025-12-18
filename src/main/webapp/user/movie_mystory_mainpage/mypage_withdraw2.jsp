@@ -34,6 +34,10 @@
     <jsp:include page="/fragments/style_css.jsp" />
     <!-- jQuery 라이브러리 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Firebase SDK (Phone Auth용) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
     <jsp:include page="mypage_withdraw2_style.jsp" />
     
@@ -294,11 +298,10 @@
                     <input type="text" name="phone2" id="phone2" class="phone-input" value="<%= phone2 %>" maxlength="4" />
                     <span>-</span>
                     <input type="text" name="phone3" id="phone3" class="phone-input" value="<%= phone3 %>" maxlength="4" />
-                    <button type="button" class="btn-auth" id="btn-phone-auth">인증요청</button>
                     <span class="auth-status" id="phone-auth-status"></span>
                   </div>
                   <!-- reCAPTCHA 컨테이너 (Firebase 필수) -->
-                  <div id="recaptcha-container"></div>
+                  <div id="recaptcha-container" style="margin-top: 10px;"></div>
                   <!-- 인증 완료 여부 hidden 필드 -->
                   <input type="hidden" name="phoneVerified" id="phoneVerified" value="false" />
                 </td>
@@ -351,15 +354,16 @@
       </div>
     </div>
 
-    <!-- 이메일 인증 모달 -->
+    <!-- 이메일 인증 모달 (인증 완료 전까지 닫기 불가) -->
     <div class="auth-modal-overlay" id="email-auth-modal">
       <div class="auth-modal-box">
         <div class="auth-modal-header">
           <span>이메일 인증</span>
-          <button class="auth-modal-close" id="close-email-modal">&times;</button>
+          <!-- X 버튼 제거: 인증 완료 전까지 모달을 닫을 수 없음 -->
         </div>
         <div class="auth-modal-body">
           <p>이메일로 발송된 5자리 인증코드를 입력해주세요.</p>
+          <p style="color: #dc3545; font-size: 12px; margin-bottom: 15px;">※ 인증이 완료되어야 창이 닫힙니다.</p>
           <div class="auth-code-container">
             <input type="text" class="auth-code-box" maxlength="1" id="emailCode1">
             <input type="text" class="auth-code-box" maxlength="1" id="emailCode2">
@@ -372,7 +376,6 @@
         </div>
       </div>
     </div>
-
     <!-- 이메일 인증 AJAX 스크립트 -->
     <script type="text/javascript">
     $(document).ready(function() {
@@ -517,13 +520,13 @@
         });
         
         // ============================================
-        // 4. 모달 닫기 버튼
+        // 4. 모달 닫기 방지 (인증 완료 전까지)
         // ============================================
-        $("#close-email-modal").click(function() {
-            $("#email-auth-modal").removeClass("show");
-            // 입력칸 초기화
-            $(".auth-code-box").val("");
-            $("#verify-result").html("").removeClass("success fail");
+        // X 버튼이 제거되어 더 이상 사용하지 않음
+        // 오버레이 클릭으로도 닫히지 않도록 이벤트 중단
+        $("#email-auth-modal").click(function(e) {
+            // 모달 박스 외부(오버레이) 클릭 시에도 닫히지 않음
+            e.stopPropagation();
         });
         
         // ============================================
@@ -549,7 +552,6 @@
         });
     });
     </script>
-
     <!-- 푸터 -->
     <div id="footer"><%@ include file="../../fragments/footer.jsp" %></div>
   </body>
