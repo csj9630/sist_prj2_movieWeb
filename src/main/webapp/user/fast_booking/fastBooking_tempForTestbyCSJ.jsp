@@ -70,9 +70,15 @@ var selectedMovieName = null;
 
 var initMovieHtml = null;
 
+
+//------------▶️▶️▶️▶️▶️▶️ 날짜 선택 + 영화 선택 => 시간표 출력 ----------------------------
 $(function() {
     initMovieHtml = $(".all-list").html();
+    
+    //현재 날짜 버튼 on인 곳의 날짜 정보를 저장함.
+    selectedDate = $(".date-list .on ").attr("date-data");
 
+    
     // 날짜 클릭
     $(document).on("click", ".date-list button", function() {
         // 이미 선택된 날짜를 다시 클릭한 경우
@@ -282,7 +288,7 @@ function displaySchedule(data) {
     });
 }//displaySchedule
 		
-//-------------------------------------------------------
+//-------------------------날짜 선택 + 영화 선택 => 시간표 출력 ◀️◀️◀️◀️◀️◀️◀️◀️◀️◀️◀️◀️◀️◀️◀️----------------------------
 
 
 	$(function() {
@@ -537,6 +543,7 @@ function displaySchedule(data) {
 											// 날짜 포맷팅 (yyyy.MM.dd)
 											String dateData = String.format("%04d.%02d.%02d", year, month + 1, day);
 
+											
 											// CSS 클래스 계산 (토요일, 일요일, 그리고 선택된 날짜 'on')
 											String btnClass = "";
 											if (dayOfWeek == Calendar.SATURDAY)
