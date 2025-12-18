@@ -11,7 +11,7 @@
         location.href = "${commonURL}/user/main/index.jsp";
     </script>
 <%
-        return; // 아래쪽의 로그인 폼(HTML)이 그려지지 않도록 즉시 종료
+        return; // 아래쪽의 로그인 폼(HTML)이 그려지지 않도록 즉시 종료.
     }
 %>
 <html lang="en" data-bs-theme="auto">
