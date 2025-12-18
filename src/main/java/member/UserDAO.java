@@ -1,12 +1,12 @@
-	package member;
+package member;
 	
-	import java.sql.Connection;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
-	import java.sql.ResultSet;
-	import java.sql.SQLException;
-	
-	import DBConnection.DbConn;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import DBConnection.DbConn;
 	
 	
 	/*+selectOneUser(String) : UserDTO // 사용자 한명 검색 
@@ -221,6 +221,11 @@ import java.sql.PreparedStatement;
 				}//end finally
 				return result;
 			}//updateBoardCnt
+		
+		
+		
+		
+		
 		
 		
 		
