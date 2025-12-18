@@ -85,7 +85,7 @@ $(function() {
         if ($(this).hasClass("on")) {
             $(this).removeClass("on");
             selectedDate = null;
-            console.log("날짜 선택 해제");
+            //console.log("날짜 선택 해제");
         } else {
             // 새로운 날짜 선택
             $(".date-list button").removeClass("on");
@@ -105,7 +105,7 @@ $(function() {
             $(this).removeClass("on");
             selectedMovieNo = null;
             selectedMovieName = null;
-            console.log("영화 선택 해제");
+            //console.log("영화 선택 해제");
         } else {
             // 새로운 영화 선택
             $("#movieList .btn").removeClass("on");
@@ -155,8 +155,8 @@ $(function() {
 // 날짜와 영화가 모두 선택되었을 때 시간표 조회
 function loadSchedule() {
     if (selectedDate && selectedMovieNo) {
-        console.log("시간표 조회 시작");
-        console.log("날짜:", selectedDate, "영화:", selectedMovieNo);
+       //console.log("시간표 조회 시작");
+       //console.log("날짜:", selectedDate, "영화:", selectedMovieNo);
         
         // 로딩 표시
         $('.result').html('<div class="no-result"><p class="txt">시간표를 불러오는 중...</p></div>');
@@ -170,7 +170,7 @@ function loadSchedule() {
             },
             dataType: "json",
             success: function(data) {
-                console.log("✅ 시간표 데이터:", data);
+                //console.log("✅ 시간표 데이터:", data);
                 displaySchedule(data);
             },
             error: function(xhr, status, error) {
@@ -180,7 +180,7 @@ function loadSchedule() {
             }
         });
     } else {
-        console.log("날짜 또는 영화가 선택되지 않았습니다.");
+        //console.log("날짜 또는 영화가 선택되지 않았습니다.");
         
         // 선택 안내 메시지
         if (!selectedDate && !selectedMovieNo) {
@@ -281,7 +281,9 @@ function displaySchedule(data) {
             date: selectedDate
         };
         
+        
         console.log('선택된 스케줄:', scheduleData);
+        
         
         // 예매 페이지로 이동
         //goReservation(scheduleData);
