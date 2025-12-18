@@ -14,8 +14,8 @@
 
 
 <%
-String movieCode = request.getParameter("name");
-String movieImgPath = "resources/images/movieImg";
+String movieCode = request.getParameter("code");
+//String movieImgPath = "resources/images/movieImg";
 
 DetailService ds = DetailService.getInstance();
 DetailDTO dtDTO = ds.searchMovieDetail(movieCode);
@@ -35,7 +35,7 @@ List<ReviewDTO> reviewList = rs.searchReviewList(movieCode);
 double scoreAverage = rs.getScoreAverage(reviewList);
 
 //double scoreAverage = 0;
-pageContext.setAttribute("movieImgPath",movieImgPath );
+//pageContext.setAttribute("movieImgPath",movieImgPath );
 pageContext.setAttribute("detail", dtDTO);
 pageContext.setAttribute("imgList", imgList);
 pageContext.setAttribute("trailerList", trailerList);

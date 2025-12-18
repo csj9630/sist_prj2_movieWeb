@@ -7,23 +7,428 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ include file="../../fragments/siteProperty.jsp"%>
+
 <head>
 <!-- 상단 favicon 이미지  -->
 <link rel="shortcut icon"
 	href="${commonURL}/resources/images/favicon.ico">
+	
+<!--//------ bootstrap CDN -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<!-- ----------bootstrap CDN---// -->	
+	
+	
 <!-- 전체적인 css -->
 <link rel="stylesheet" href="${commonURL}/resources/css/megabox.min.css"
 	media="all">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script
 	src="${commonURL}/resources/js/jquery.mCustomScrollbar.concat.min.js"></script>
+	
+
 <style type="text/css">
 .quick-reserve-area .movie-choice {
 	width: 600px;
 }
+
+
+.schedule-row {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+
+
+
+/* 매진된 행 */
+.schedule-row.full {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+
+/********* 영화 시간표 테이블 스타일********** */
+.schedule-table-wrapper {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+	width:100%;
+	
+	/* 시간표에 스크롤바 추가 */
+	max-height: 100%;
+	max-width: 100%;
+	overflow-y: auto;
+}
+
+.schedule-table {
+    margin-bottom: 0;
+    table-layout: fixed;
+}
+
+.schedule-thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.schedule-thead th {
+    font-weight: 600;
+    border: none;
+    padding: 16px 12px;
+    font-size: 14px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* 각 컬럼 너비 설정 */
+.time-col {
+    width: 10%;
+}
+
+.movie-col {
+    width: 35%;  /* 영화명 컬럼 넓게 */
+}
+
+.theater-col {
+    width: 15%;
+}
+
+.seat-col {
+    width: 13%;
+}
+
+.schedule-tbody .schedule-row {
+    transition: all 0.3s ease;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.schedule-tbody .schedule-row:hover {
+    background-color: #f8f9ff;
+    transform: translateX(4px);
+    box-shadow: 0 2px 4px rgba(102, 126, 234, 0.1);
+    cursor: pointer;
+}
+
+.schedule-tbody td {
+    padding: 14px 12px;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* 시작시간 강조 */
+.start-time {
+    font-weight: 700;
+    color: #667eea;
+    font-size: 16px;
+}
+
+/* 종료시간 */
+.end-time {
+    color: #666;
+    font-size: 13px;
+}
+
+/* 영화명 강조 */
+.movie-name {
+    font-weight: 600;
+    color: #333;
+    text-align: left;
+    padding-left: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 상영관 */
+.theater-name {
+    color: #555;
+    font-weight: 500;
+}
+
+/* 남은 좌석 */
+.remaining-seats {
+    font-weight: 700;
+    font-size: 15px;
+    color: #28a745;
+}
+
+/* 전체 좌석 */
+.total-seats {
+    color: #999;
+    font-size: 13px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .schedule-thead th,
+    .schedule-tbody td {
+        padding: 10px 8px;
+        font-size: 12px;
+    }
+    
+    .start-time {
+        font-size: 14px;
+    }
+    
+    .movie-name {
+        padding-left: 12px;
+    }
+    
+    .movie-col {
+        width: 30%;
+    }
+}
+
+
 </style>
 <script type="text/javascript">
-var initMovieHtml;
+
+//----전역 변수 선언
+// 현재 선택된 날짜를 저장할 변수
+var selectedDate = null;
+
+// 현재 선택된 영화를 저장할 변수
+var selectedMovieNo = null;
+var selectedMovieName = null;
+
+var initMovieHtml = null;
+
+
+//------------▶️▶️▶️▶️▶️▶️ 날짜 선택 + 영화 선택 => 시간표 출력 ----------------------------
+$(function() {
+    initMovieHtml = $(".all-list").html();
+    
+    //현재 날짜 버튼 on인 곳의 날짜 정보를 저장함.
+    selectedDate = $(".date-list .on ").attr("date-data");
+
+    
+    // 날짜 클릭
+    $(document).on("click", ".date-list button", function() {
+        // 이미 선택된 날짜를 다시 클릭한 경우
+        if ($(this).hasClass("on")) {
+            $(this).removeClass("on");
+            selectedDate = null;
+            //console.log("날짜 선택 해제");
+        } else {
+            // 새로운 날짜 선택
+            $(".date-list button").removeClass("on");
+            $(this).addClass("on");
+            selectedDate = $(this).attr("date-data");
+            console.log("선택된 날짜:", selectedDate);
+        }
+
+        // 시간표 조회 호출
+        loadSchedule();
+    });
+
+    // 영화 클릭
+    $(document).on("click", "#movieList .btn", function() {
+        // 이미 선택된 영화를 다시 클릭한 경우
+        if ($(this).hasClass("on")) {
+            $(this).removeClass("on");
+            selectedMovieNo = null;
+            selectedMovieName = null;
+            //console.log("영화 선택 해제");
+        } else {
+            // 새로운 영화 선택
+            $("#movieList .btn").removeClass("on");
+            $(this).addClass("on");
+            selectedMovieNo = $(this).attr("movie-no");
+            selectedMovieName = $(this).attr("movie-nm");
+            console.log("선택된 영화:", selectedMovieName);
+        }
+
+        // 시간표 조회 호출
+        loadSchedule();
+    });
+
+    // 전체 영화 버튼
+    $(document).on("click", "#movieAll", function () {
+        $(".btn-tab").removeClass("on");
+        $(".all-list").html(initMovieHtml);
+        
+        // 영화 선택 초기화
+        selectedMovieNo = null;
+        selectedMovieName = null;
+        $("#movieList .btn").removeClass("on");
+        
+        // 시간표 영역 초기화
+        $('.result').html('<div class="no-result"><p class="txt">영화를 선택하시면 상영시간표를 확인할 수 있습니다.</p></div>');
+
+        // 스크롤 다시 적용
+        $("#movieList").mCustomScrollbar({
+            axis: "y",
+            theme: "light"
+        });
+    });
+
+    // 연령별 필터 버튼들 (ALL, 12, 15, 19)
+    $("#movieAgeAll, #movieAge12, #movieAge15, #movieAge19").click(function() {
+        // 영화 선택 초기화
+        selectedMovieNo = null;
+        selectedMovieName = null;
+        
+        // 시간표 영역 초기화
+        $('.result').html('<div class="no-result"><p class="txt">영화를 선택하시면 상영시간표를 확인할 수 있습니다.</p></div>');
+    });
+
+});//$(function()
+
+
+// 날짜와 영화가 모두 선택되었을 때 시간표 조회
+function loadSchedule() {
+    if (selectedDate && selectedMovieNo) {
+       //console.log("시간표 조회 시작");
+       //console.log("날짜:", selectedDate, "영화:", selectedMovieNo);
+        
+        // 로딩 표시
+        $('.result').html('<div class="no-result"><p class="txt">시간표를 불러오는 중...</p></div>');
+
+        $.ajax({
+            url: "getSchedule.jsp",
+            type: "GET",
+            data: {
+                date: selectedDate,
+                movieNo: selectedMovieNo
+            },
+            dataType: "json",
+            success: function(data) {
+                //console.log("✅ 시간표 데이터:", data);
+                displaySchedule(data);
+            },
+            error: function(xhr, status, error) {
+                console.error("❌ 에러 발생:", error);
+                console.error("Response:", xhr.responseText);
+                $('.result').html('<div class="no-result"><p class="txt">시간표를 불러올 수 없습니다.</p></div>');
+            }
+        });
+    } else {
+        //console.log("날짜 또는 영화가 선택되지 않았습니다.");
+        
+        // 선택 안내 메시지
+        if (!selectedDate && !selectedMovieNo) {
+            $('.result').html('<div class="no-result"><p class="txt">날짜와 영화를 선택하시면<br>상영시간표를 비교하여 볼 수 있습니다.</p></div>');
+        } else if (!selectedDate) {
+            $('.result').html('<div class="no-result"><p class="txt">날짜를 선택해주세요.</p></div>');
+        } else if (!selectedMovieNo) {
+            $('.result').html('<div class="no-result"><p class="txt">영화를 선택해주세요.</p></div>');
+        }
+    }
+}//loadSchedule
+
+
+function displaySchedule(data) {
+	var displayHTML = '';
+
+	// 데이터가 없을 때
+	if(!data || data.length === 0) {
+	    displayHTML = '<div class="no-result">';
+	    displayHTML += '  <i class="iconset ico-movie-time"></i>';
+	    displayHTML += '  <p class="txt">해당 날짜에 상영 일정이 없습니다.</p>';
+	    displayHTML += '</div>';
+	    $('.result').html(displayHTML);
+	    return;
+	}
+
+	// 테이블 시작
+	displayHTML += '<div class="schedule-table-wrapper">';
+	displayHTML += '<table class="table table-hover schedule-table">';
+	displayHTML += '  <thead class="schedule-thead">';
+	displayHTML += '    <tr>';
+	displayHTML += '      <th class="time-col">시작시간</th>';
+	displayHTML += '      <th class="time-col">종료시간</th>';
+	displayHTML += '      <th class="movie-col">영화명</th>';
+	displayHTML += '      <th class="theater-col">상영관</th>';
+	displayHTML += '      <th class="seat-col">남은 좌석</th>';
+	displayHTML += '      <th class="seat-col">전체 좌석</th>';
+	displayHTML += '    </tr>';
+	displayHTML += '  </thead>';
+	displayHTML += '  <tbody class="schedule-tbody">';
+
+	// 데이터 반복
+	$.each(data, function(index, item) {
+	    var isFull = item.rem_seat === 0;
+	    var rowClass = 'schedule-row';
+
+	    if (isFull) {
+	        rowClass += ' full';
+	    }
+
+	    // tr에 data 속성 추가
+	    displayHTML += '    <tr class="' + rowClass + '" ';
+	    displayHTML += '        data-screen-code="' + item.screen_code + '" ';
+	    displayHTML += '        data-movie-code="' + item.movie_code + '" ';
+	    displayHTML += '        data-movie-name="' + item.movie_name + '" ';
+	    displayHTML += '        data-theater-name="' + item.theather_name + '" ';
+	    displayHTML += '        data-screen-open="' + item.screen_open + '" ';
+	    displayHTML += '        data-screen-end="' + item.screen_end + '" ';
+	    displayHTML += '        data-rem-seat="' + item.rem_seat + '" ';
+	    displayHTML += '        data-total-seat="' + item.total_seat + '" ';
+	    displayHTML += '        data-is-full="' + isFull + '">';
+
+	    displayHTML += '      <td class="start-time">' + item.screen_open + '</td>';
+	    displayHTML += '      <td class="end-time">' + item.screen_end + '</td>';
+	    displayHTML += '      <td class="movie-name">' + item.movie_name + '</td>';
+	    displayHTML += '      <td class="theater-name">' + item.theather_name + '</td>';
+	    displayHTML += '      <td class="remaining-seats">' + item.rem_seat + '</td>';
+	    displayHTML += '      <td class="total-seats">' + item.total_seat + '</td>';
+
+	    displayHTML += '    </tr>';
+	});
+
+	displayHTML += '  </tbody>';
+	displayHTML += '</table>';
+	displayHTML += '</div>';
+
+	$('.result').html(displayHTML);
+    
+    // tr 클릭 이벤트 추가
+    $('.schedule-row').on('click', function() {
+        var isFull = $(this).data('is-full');
+        
+        if (isFull === true || isFull === 'true') {
+            alert('매진된 상영시간입니다.');
+            return;
+        }
+        
+        // 클릭한 행의 데이터 가져오기
+        var scheduleData = {
+            screenCode: $(this).data('screen-code'),
+            movieCode: $(this).data('movie-code'),
+            movieName: $(this).data('movie-name'),
+            theaterName: $(this).data('theater-name'),
+            screenOpen: $(this).data('screen-open'),
+            screenEnd: $(this).data('screen-end'),
+            remSeat: $(this).data('rem-seat'),
+            totalSeat: $(this).data('total-seat'),
+            date: selectedDate
+        };
+        
+        
+        console.log('선택된 스케줄:', scheduleData);
+        
+        var userId = "${sessionScope.userId}";
+
+        if (userId === "" || userId === "null") {
+            alert("로그인 후 이용해주시기 바랍니다.");
+            return;
+            //location.href = "${commonURL}/user/member/memberLogin.jsp";
+        }
+        // 예매 페이지로 이동
+        //goReservation(scheduleData);
+        //임시로 영화 상세로 이동.
+		location.href='${commonURL}/user/movie/detail.jsp?name='+scheduleData.movieCode;
+    });
+}//displaySchedule
+		
+//-------------------------날짜 선택 + 영화 선택 => 시간표 출력 ◀️◀️◀️◀️◀️◀️◀️◀️◀️◀️◀️◀️◀️◀️◀️----------------------------
+
+
 	$(function() {
 		initMovieHtml = $(".all-list").html()
 		//스크롤바 커스텀
@@ -276,6 +681,7 @@ var initMovieHtml;
 											// 날짜 포맷팅 (yyyy.MM.dd)
 											String dateData = String.format("%04d.%02d.%02d", year, month + 1, day);
 
+											
 											// CSS 클래스 계산 (토요일, 일요일, 그리고 선택된 날짜 'on')
 											String btnClass = "";
 											if (dayOfWeek == Calendar.SATURDAY)
@@ -303,7 +709,7 @@ var initMovieHtml;
 
 										<button class="<%=btnClass%>" type="button"
 											date-data="<%=dateData%>" month="<%=month%>"
-											onclick="changeDate('<%=dateData%>')">
+											<%-- onclick="changeDate('<%=dateData%>')" --%>>
 
 											<span class="ir"><%=year%>년 <%=month + 1%>월</span> <em
 												style="pointer-events: none;"> <%=day%> <span
@@ -342,14 +748,14 @@ var initMovieHtml;
 				<!--// time-schedule -->
 
 				<!-- quick-reserve-area -->
-				<div class="quick-reserve-area">
+				<div class="quick-reserve-area "  >
 
 					<!-- movie-choice : 영화 선택  -->
-					<div class="movie-choice">
+					<div class="movie-choice" style="width:30%;"  >
 						<p class="tit">영화</p>
 
 						<!-- list-area -->
-						<div class="list-area">
+						<div class="list-area"  >
 							<%
 							MovieService ms = MovieService.getInstance();
 							List<MovieDTO> list = ms.showAllMovie();
@@ -358,14 +764,14 @@ var initMovieHtml;
 							%>
 							<!-- all : 전체 -->
 							<div class="all-list">
-								<button type="button" class="btn-tab on" id="movieAll">전체</button>
+								<button type="button" class="btn-tab on" style="width:100%; id="movieAll">전체</button>
 
 								<div class="list">
 									<div id="movieList" class="scroll m-scroll">
 										<ul>
 											<c:forEach var="m" items="${movies}">
 												<li>
-													<button type="button" class="btn" movie-nm="${m.moviename}"
+													<button type="button"  class="btn" movie-nm="${m.moviename}"
 														movie-no="${m.moviecode}">
 														<span class="movie-grade small age-${m.moviegrade}">
 															${m.moviegrade}세 이상 관람가 </span> <i
@@ -378,144 +784,70 @@ var initMovieHtml;
 								</div>
 							</div>
 							<!--// all : 전체 -->
-
+<!-- 
 							<div class="other-list">
-								<!-- 전체이용가 -->
+								전체이용가
 								<button type="button" class="btn-tab" id="movieAgeAll">
 									<span class="movie-grade small age-all"></span>
 								</button>
-								<!-- <div class="list">
+								<div class="list">
 									<div id="movieListAgeAll" class="scroll m-scroll">
 										ajax에서 추가할 영역
 									</div>
-								</div> -->
-								<!-- 12세 이용가 -->
+								</div>
+								12세 이용가
 								<button type="button" class="btn-tab" id="movieAge12"
 									style="left: 220px;">
 									<span class="movie-grade small age-12"></span>
 								</button>
 								<div class="list">
 									<div id="movieListAgeTwelve" class="scroll m-scroll">
-										<!-- ajax에서 추가할 영역 -->
+										ajax에서 추가할 영역
 									</div>
 								</div>
-								<!-- 15세 이용가 -->
+								15세 이용가
 								<button type="button" class="btn-tab" id="movieAge15"
 									style="left: 330px;">
 									<span class="movie-grade small age-15"></span>
 								</button>
 								<div class="list">
 									<div id="movieListAgeFifteen" class="scroll m-scroll">
-										<!-- ajax에서 추가할 영역 -->
+										ajax에서 추가할 영역
 									</div>
 								</div>
-								<!-- 19세 이용가 -->
+								19세 이용가
 								<button type="button" class="btn-tab" id="movieAge19"
 									style="left: 440px;">
 									<span class="movie-grade small age-19"></span>
 								</button>
 								<div class="list">
 									<div id="movieListAgeNineteen" class="scroll m-scroll">
-										<!-- ajax에서 추가할 영역 -->
+										ajax에서 추가할 영역
 									</div>
 								</div>
 							</div>
-
+ -->
 						</div>
 						<!--// list-area -->
 					</div>
 					<!--// movie-choice : 영화 선택  -->
 
 					<!-- time-choice : 상영시간표 선택 -->
-					<div class="time-choice">
+					<div class="time-choice" style="width:70%;">
 						<div class="tit-area">
 							<p class="tit">시간</p>
 
-							<div class="right legend">
+						<!-- 	<div class="right legend">
 								<i class="iconset ico-sun" title="조조"></i> 조조 <i
 									class="iconset ico-brunch" title="브런치"></i> 브런치 <i
 									class="iconset ico-moon" title="심야"></i> 심야
-							</div>
+							</div> -->
 						</div>
 
-						<!-- hour-schedule : 시간 선택  : 00~30 시-->
-						<div class="hour-schedule" style="display:none;" >
-							<button type="button" class="btn-prev-time">이전 시간 보기</button>
-							<%
-
-							%>
-							<div class="wrap">
-							<!--  <div class="view" style="position: absolute; width: 1015px;">
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">00</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">01</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">02</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">03</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">04</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">05</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">06</button>
-									<button type="button" class="hour" style="opacity: 0.5">07</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">08</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">09</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">10</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">11</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">12</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">13</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">14</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">15</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">16</button>
-									<button type="button" class="hour" style="opacity: 0.5">17</button>
-									<button type="button" class="hour" style="opacity: 0.5">18</button>
-									<button type="button" class="hour" style="opacity: 0.5">19</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">20</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">21</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">22</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">23</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">24</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">25</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">26</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">27</button>
-									<button type="button" class="hour" disabled="true"
-										style="opacity: 0.5">28</button>
- -->
-								</div> 
-							
-							</div>
-					
-						
-
-							<button type="button" class="btn-next-time">다음 시간 보기</button>
-						</div>
-						<!--// hour-schedule : 시간 선택  : 00~30 시-->
-
-						<!-- movie-schedule-area : 시간표 출력 영역-->
-						<div class="movie-schedule-area">
+					<div class="movie-schedule-area"  >
 						<!--*********************여기다가 시간표 추가***********************************  -->
 
-									
+						
 			
 							
 
@@ -531,40 +863,9 @@ var initMovieHtml;
 
 
 							<!-- 영화, 영화관 선택 했을때 -->
-							<div class="result">
-											<table class="table">
-							<tr>
-							<Td>1</Td>
-							<Td>2</Td>
-							<Td>3</Td>
-							</tr>
-							<tr>
-							<Td>1</Td>
-							<Td>2</Td>
-							<Td>3</Td>
-							</tr>
-							<tr>
-							<Td>1</Td>
-							<Td>2</Td>
-							<Td>3</Td>
-							</tr>
-							<tr>
-							<Td>1</Td>
-							<Td>2</Td>
-							<Td>3</Td>
-							</tr>
-							<tr>
-							<Td>1</Td>
-							<Td>2</Td>
-							<Td>3</Td>
-							</tr>
-							<tr>
-							<Td>1</Td>
-							<Td>2</Td>
-							<Td>3</Td>
-							</tr>
-								</table>
-								<div
+							<div class="result" >
+						
+								<!-- <div
 									class="scroll m-scroll mCustomScrollbar _mCS_4 mCS_no_scrollbar"
 									id="playScheduleList" style="display: none;">
 									<div id="mCSB_4"
@@ -584,7 +885,7 @@ var initMovieHtml;
 											</div>
 										</div>
 									</div>
-								</div>
+								</div> -->
 
 							</div>
 						</div>

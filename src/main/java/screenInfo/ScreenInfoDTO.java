@@ -11,6 +11,7 @@ public class ScreenInfoDTO {
 	public ScreenInfoDTO() {
 		
 	} // ScreenInfoDTO
+
 	public ScreenInfoDTO(String screen_code, String screen_date, String screen_delete, String screen_showing,
 			String theather_num, String movie_code, Date screen_open, Date screen_end, int screen_price) {
 		this.screen_code = screen_code;
