@@ -15,11 +15,6 @@
         return; // 혹은 에러 JSON 반환
     }
 %>
-
-<%--  <%	
-}//end if 
-%> --%>
-<%--로그인에 필요한 아이디와 비밀번호 파라메터 받기 --%>
 <jsp:useBean id="lDTO" class="member.LoginDTO" scope="page"/>
 <jsp:setProperty name="lDTO" property="*"/>
 
@@ -36,7 +31,6 @@ if( uDTO != null) {//로그인 성공
 	//세션에 값을 할당.
 	session.setAttribute("userId", uDTO.getUsers_id());
 	session.setAttribute("userName", uDTO.getUsers_name());
-	
 	jsonObj.put("msg","로그인에 성공하셨습니다. 메인페이지로 넘어갑니다.");
 	jsonObj.put("status","success");
 
