@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import movie.MovieDTO;
+
 public class ScreenInfoDAO {
 	
 	private static ScreenInfoDAO siDAO;
@@ -75,5 +77,48 @@ public class ScreenInfoDAO {
 		} // end try ~ catch ~ finally
 		return list;
 	} // selectScreenList
-	
+	// 날짜와 영화 코드를 받아 상영 스케줄 리스트를 반환
+		public List<ScreenInfoDTO> selectScheduleList(String date, String movieCode) throws SQLException {
+			List<ScreenInfoDTO> list = new ArrayList<ScreenInfoDTO>();
+			
+			DbConn dbCon = DbConn.getInstance("jdbc/dbcp");
+			
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			try {
+				con = dbCon.getConn();
+				
+				StringBuilder selectSchedule=new StringBuilder();
+				selectSchedule
+				.append("	select s.screen_open, s.screen_end, m.movie_name	")
+				.append("	from movie m	")
+				.append("	inner join screen_info s	")
+				.append("	on m.movie_code = s.movie_code	")
+				.append("	where screen_date=? and m.movie_code = ?	");
+				
+				pstmt = con.prepareStatement(selectSchedule.toString());
+				pstmt.setString(1, date); 
+				pstmt.setString(2, movieCode); 
+				rs = pstmt.executeQuery();
+				
+				ScreenInfoDTO sDTO=null;
+				MovieDTO mDTO=null;
+				
+				while (rs.next()) {
+					sDTO=new ScreenInfoDTO();
+					mDTO=new MovieDTO();
+					
+					sDTO.setScreen_open(rs.getTimestamp("screen_open"));
+					sDTO.setScreen_end(rs.getTimestamp("screen_end"));
+					mDTO.setMoviename(rs.getString("movie_name"));
+					sDTO.setmDTO(mDTO);
+					
+					list.add(sDTO);
+				}
+			} finally {
+				dbCon.dbClose(rs, pstmt, con);
+			}
+			return list;
+		}
 } // class

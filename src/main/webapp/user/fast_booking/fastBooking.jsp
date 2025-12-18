@@ -23,191 +23,240 @@
 }
 </style>
 <script type="text/javascript">
-var initMovieHtml;
-	$(function() {
-		initMovieHtml = $(".all-list").html()
-		//스크롤바 커스텀
-		$("#movieList").mCustomScrollbar({
-			axis : "y",
-			theme : "light",
-		});
-		
-		//전체 영화 버튼
-		$(document).on("click", "#movieAll", function () {
-			$(".btn-tab").removeClass("on");           // 모든 버튼에서 on 제거
-		    $(".all-list").html(initMovieHtml);
-
-		    // 스크롤 다시 적용
-		    $("#movieList").mCustomScrollbar({
-		        axis: "y",
-		        theme: "light"
-		    });
-		});
-
-		//ALL 버튼
-		$("#movieAgeAll").click(function() {
-			$("#movieList").mCustomScrollbar({
-		        axis: "y",
-		        theme: "light"
-		    });
-			
-			$.ajax({
-				url:"movieAgeAll.jsp",
-				type:"GET",
-				dataType:"JSON",
-				error:function(xhr){
-					alert("개봉작 데이터를 불러올 수 없습니다.");
-					console.log(xhr.statusText + "/" + xhr.status);
-				},
-				success:function(jsonArr){
-					var html = '<ul>';
-
-				    $.each(jsonArr, function (idx, obj) {
-
-				        html += '<li>'
-				            + '    <button type="button" class="btn"'
-				            + '        movie-nm="' + obj.moviename + '"'
-				            + '        movie-no="' + obj.moviecode + '">'
-				            + '        <span class="movie-grade small age-' + obj.moviegrade + '">'
-				            +              obj.moviegrade + '세 이상 관람가'
-				            + '        </span>'
-				            + '        <i class="iconset ico-heart-small"></i>'
-				            + '        <span class="txt">' + obj.moviename + '</span>'
-				            + '    </button>'
-				            + '</li>';
-				    	});
-
-				    	html += '</ul>';
-
-				    	$("#movieList").html(html);
-				    	
-				    	$(".btn-tab").removeClass("on");           // 모든 버튼에서 on 제거
-				        $("#movieAgeAll").addClass("on");          // 현재 버튼에만 on 추가
-				}//success
-				
-			});//ajax
-			
-		});//click
-
-		//12세 버튼
-		$("#movieAge12").click(function() {
-			$.ajax({
-				url:"movieAgeTwelve.jsp",
-				type:"GET",
-				dataType:"JSON",
-				error:function(xhr){
-					alert("개봉작 데이터를 불러올 수 없습니다.");
-					console.log(xhr.statusText + "/" + xhr.status);
-				},
-				success:function(jsonArr){
-					var html = '<ul>';
-				
-				    $.each(jsonArr, function (idx, obj) {
-
-				        html += '<li>'
-				            + '    <button type="button" class="btn"'
-				            + '        movie-nm="' + obj.moviename + '"'
-				            + '        movie-no="' + obj.moviecode + '">'
-				            + '        <span class="movie-grade small age-' + obj.moviegrade + '">'
-				            +              obj.moviegrade + '세 이상 관람가'
-				            + '        </span>'
-				            + '        <i class="iconset ico-heart-small"></i>'
-				            + '        <span class="txt">' + obj.moviename + '</span>'
-				            + '    </button>'
-				            + '</li>';
-				    	});
-
-				    	html += '</ul>';
-
-				    	$("#movieList").html(html);
-				    	
-				    	$(".btn-tab").removeClass("on");           // 모든 버튼에서 on 제거
-				        $("#movieAge12").addClass("on");          // 현재 버튼에만 on 추가
-				}//success
-				
-			});//ajax
-		});
-
-		//15세 버튼
-		$("#movieAge15").click(function() {
-			$.ajax({
-				url:"movieAgeFifteen.jsp",
-				type:"GET",
-				dataType:"JSON",
-				error:function(xhr){
-					alert("개봉작 데이터를 불러올 수 없습니다.");
-					console.log(xhr.statusText + "/" + xhr.status);
-				},
-				success:function(jsonArr){
-					var html = '<ul>';
-
-				    $.each(jsonArr, function (idx, obj) {
-
-				        html += '<li>'
-				            + '    <button type="button" class="btn"'
-				            + '        movie-nm="' + obj.moviename + '"'
-				            + '        movie-no="' + obj.moviecode + '">'
-				            + '        <span class="movie-grade small age-' + obj.moviegrade + '">'
-				            +              obj.moviegrade + '세 이상 관람가'
-				            + '        </span>'
-				            + '        <i class="iconset ico-heart-small"></i>'
-				            + '        <span class="txt">' + obj.moviename + '</span>'
-				            + '    </button>'
-				            + '</li>';
-				    	});
-
-				    	html += '</ul>';
-
-
-				    	$("#movieList").html(html);
-				    	
-				    	$(".btn-tab").removeClass("on");           // 모든 버튼에서 on 제거
-				        $("#movieAge15").addClass("on");          // 현재 버튼에만 on 추가
-				}//success
-				
-			});//ajax
-		});
-
-		//19세 버튼
-		$("#movieAge19").click(function() {
-			$.ajax({
-				url:"movieAgeNineteen.jsp",
-				type:"GET",
-				dataType:"JSON",
-				error:function(xhr){
-					alert("개봉작 데이터를 불러올 수 없습니다.");
-					console.log(xhr.statusText + "/" + xhr.status);
-				},
-				success:function(jsonArr){
-					var html = '<ul>';
-
-				    $.each(jsonArr, function (idx, obj) {
-
-				        html += '<li>'
-				            + '    <button type="button" class="btn"'
-				            + '        movie-nm="' + obj.moviename + '"'
-				            + '        movie-no="' + obj.moviecode + '">'
-				            + '        <span class="movie-grade small age-' + obj.moviegrade + '">'
-				            +              obj.moviegrade + '세 이상 관람가'
-				            + '        </span>'
-				            + '        <i class="iconset ico-heart-small"></i>'
-				            + '        <span class="txt">' + obj.moviename + '</span>'
-				            + '    </button>'
-				            + '</li>';
-				    	});
-
-				    	html += '</ul>';
-
-				    	$("#movieList").html(html);
-				    	
-				    	$(".btn-tab").removeClass("on");           // 모든 버튼에서 on 제거
-				        $("#movieAge19").addClass("on");          // 현재 버튼에만 on 추가
-				}//success
-				
-			});//ajax
-		});
-
+var initMovieHtml; // 초기에 뜨는 영화 리스트 저장할 변수
+var bookingState= { date: null, movieCode: null } 
+$(function() {
+	initMovieHtml = $(".all-list").html()
+	//스크롤바 커스텀
+	$("#movieList").mCustomScrollbar({
+		axis : "y",
+		theme : "light",
 	});
+	
+	//전체 영화 버튼
+	$(document).on("click", "#movieAll", function () {
+		$(".btn-tab").removeClass("on");           // 모든 버튼에서 on 제거
+	    $(".all-list").html(initMovieHtml);
+
+	    // 스크롤 다시 적용
+	    $("#movieList").mCustomScrollbar({
+	        axis: "y",
+	        theme: "light"
+	    });
+	});
+
+	//ALL 버튼
+	$("#movieAgeAll").click(function() {
+		$("#movieList").mCustomScrollbar({
+	        axis: "y",
+	        theme: "light"
+	    });
+		
+		$.ajax({
+			url:"movieAgeAll.jsp",
+			type:"GET",
+			dataType:"JSON",
+			error:function(xhr){
+				alert("개봉작 데이터를 불러올 수 없습니다.");
+				console.log(xhr.statusText + "/" + xhr.status);
+			},
+			success:function(jsonArr){
+				var html = '<ul>';
+
+			    $.each(jsonArr, function (idx, obj) {
+
+			        html += '<li>'
+			            + '    <button type="button" class="btn"'
+			            + '        movie-nm="' + obj.moviename + '"'
+			            + '        movie-no="' + obj.moviecode + '">'
+			            + '        <span class="movie-grade small age-' + obj.moviegrade + '">'
+			            +              obj.moviegrade + '세 이상 관람가'
+			            + '        </span>'
+			            + '        <i class="iconset ico-heart-small"></i>'
+			            + '        <span class="txt">' + obj.moviename + '</span>'
+			            + '    </button>'
+			            + '</li>';
+			    	});
+
+			    	html += '</ul>';
+
+			    	$("#movieList").html(html);
+			    	
+			    	$(".btn-tab").removeClass("on");           // 모든 버튼에서 on 제거
+			        $("#movieAgeAll").addClass("on");          // 현재 버튼에만 on 추가
+			}//success
+			
+		});//ajax
+		
+	});//click
+
+	//12세 버튼
+	$("#movieAge12").click(function() {
+		$.ajax({
+			url:"movieAgeTwelve.jsp",
+			type:"GET",
+			dataType:"JSON",
+			error:function(xhr){
+				alert("개봉작 데이터를 불러올 수 없습니다.");
+				console.log(xhr.statusText + "/" + xhr.status);
+			},
+			success:function(jsonArr){
+				var html = '<ul>';
+			
+			    $.each(jsonArr, function (idx, obj) {
+
+			        html += '<li>'
+			            + '    <button type="button" class="btn"'
+			            + '        movie-nm="' + obj.moviename + '"'
+			            + '        movie-no="' + obj.moviecode + '">'
+			            + '        <span class="movie-grade small age-' + obj.moviegrade + '">'
+			            +              obj.moviegrade + '세 이상 관람가'
+			            + '        </span>'
+			            + '        <i class="iconset ico-heart-small"></i>'
+			            + '        <span class="txt">' + obj.moviename + '</span>'
+			            + '    </button>'
+			            + '</li>';
+			    	});
+
+			    	html += '</ul>';
+
+			    	$("#movieList").html(html);
+			    	
+			    	$(".btn-tab").removeClass("on");           // 모든 버튼에서 on 제거
+			        $("#movieAge12").addClass("on");          // 현재 버튼에만 on 추가
+			}//success
+			
+		});//ajax
+	});
+
+	//15세 버튼
+	$("#movieAge15").click(function() {
+		$.ajax({
+			url:"movieAgeFifteen.jsp",
+			type:"GET",
+			dataType:"JSON",
+			error:function(xhr){
+				alert("개봉작 데이터를 불러올 수 없습니다.");
+				console.log(xhr.statusText + "/" + xhr.status);
+			},
+			success:function(jsonArr){
+				var html = '<ul>';
+
+			    $.each(jsonArr, function (idx, obj) {
+
+			        html += '<li>'
+			            + '    <button type="button" class="btn"'
+			            + '        movie-nm="' + obj.moviename + '"'
+			            + '        movie-no="' + obj.moviecode + '">'
+			            + '        <span class="movie-grade small age-' + obj.moviegrade + '">'
+			            +              obj.moviegrade + '세 이상 관람가'
+			            + '        </span>'
+			            + '        <i class="iconset ico-heart-small"></i>'
+			            + '        <span class="txt">' + obj.moviename + '</span>'
+			            + '    </button>'
+			            + '</li>';
+			    	});
+
+			    	html += '</ul>';
+
+
+			    	$("#movieList").html(html);
+			    	
+			    	$(".btn-tab").removeClass("on");           // 모든 버튼에서 on 제거
+			        $("#movieAge15").addClass("on");          // 현재 버튼에만 on 추가
+			}//success
+			
+		});//ajax
+	});
+
+	//19세 버튼
+	$("#movieAge19").click(function() {
+		$.ajax({
+			url:"movieAgeNineteen.jsp",
+			type:"GET",
+			dataType:"JSON",
+			error:function(xhr){
+				alert("개봉작 데이터를 불러올 수 없습니다.");
+				console.log(xhr.statusText + "/" + xhr.status);
+			},
+			success:function(jsonArr){
+				var html = '<ul>';
+
+			    $.each(jsonArr, function (idx, obj) {
+
+			        html += '<li>'
+			            + '    <button type="button" class="btn"'
+			            + '        movie-nm="' + obj.moviename + '"'
+			            + '        movie-no="' + obj.moviecode + '">'
+			            + '        <span class="movie-grade small age-' + obj.moviegrade + '">'
+			            +              obj.moviegrade + '세 이상 관람가'
+			            + '        </span>'
+			            + '        <i class="iconset ico-heart-small"></i>'
+			            + '        <span class="txt">' + obj.moviename + '</span>'
+			            + '    </button>'
+			            + '</li>';
+			    	});
+
+			    	html += '</ul>';
+
+			    	$("#movieList").html(html);
+			    	
+			    	$(".btn-tab").removeClass("on");           // 모든 버튼에서 on 제거
+			        $("#movieAge19").addClass("on");          // 현재 버튼에만 on 추가
+			}//success
+		});//ajax
+	});//click
+	
+	//영화 리스트를 클릭하면 실행되는 함수
+	$(document).on("click", "#movieList .btn",function(){
+		$("#movieList .btn").removeClass("on");
+		$(this).addClass("on");
+		
+		//js 객체 bookingState에 영화 코드 저장 
+		bookingState.movieCode=$(this).attr("movie-no");
+		tryLoadSchedule();
+	})
+	
+});//function
+
+//날짜 리스트를 선택하면 실행되는 함수
+function changeDate(dateStr){
+	$(".date-list button").removeClass("on");
+	$(".date-list button[date-data='" + dateStr + "']").addClass("on");
+	
+	//js 객체 bookingState에 날짜 저장
+	bookingState.date=dateStr;
+};
+
+//날짜가 선택되고 영화가 선택되는지 유효성 검증
+function tryLoadSchedule(){
+	if(!bookingState.date || !bookingState.movieCode) {
+		alert("날짜를 누르고 영화를 선택해주세요");
+		return;
+	} else{
+		loadSchedule();
+	}
+}//tryLoadSchedule
+
+//해당하는 날짜와 영화가 있으면 상영스케쥴 표시
+function loadSchedule(){
+	$.ajax({
+		url:"schedule.jsp",
+		type:"GET",
+		dataType:"JSON",
+		data:bookingState,
+		error: function(xhr){
+			alert(xhr.status);
+		},
+		success: function(jsonArr){
+			$.each(jsonArr, function(idx, obj){
+				//임시로 no-result 부분에 데이터 추가 원래는 데이터 있으면 result가 화면에 올라오게 해야됨
+				$(".no-result").html("<input type='button'>"+ obj.screen_open);
+		    });
+		}//success
+	})//ajax
+}//loadSchedule
+
 </script>
 </head>
 <body>
