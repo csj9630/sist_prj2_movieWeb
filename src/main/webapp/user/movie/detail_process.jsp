@@ -14,7 +14,7 @@
 
 
 <%
-String movieCode = request.getParameter("name");
+String movieCode = request.getParameter("code");
 String movieImgPath = "resources/images/movieImg";
 
 DetailService ds = DetailService.getInstance();

@@ -95,8 +95,8 @@ pageEncoding="UTF-8"%>
     /* 1. 설정 (전역 변수) */
     var movieData = ${jsonResult};  
     var contextPath = "${pageContext.request.contextPath}";
-    var startYear = 2018;
-    var currentYear = 2025;
+    var startYear = 2000;  // 2000년도부터 시작
+    var currentYear = new Date().getFullYear();  // 현재 연도 동적으로 가져오기
     var swiper; // Swiper 인스턴스 전역 변수
 
     // 2. 초기화 (window.onload)
@@ -104,7 +104,7 @@ pageEncoding="UTF-8"%>
         initYearSelector();
         initSidebarMenu();
         
-        // 초기 렌더링 (마지막 연도)
+        // 초기 렌더링 (마지막 연도 = 가장 최근 영화가 있는 연도)
         var slides = document.querySelectorAll(".swiper-slide");
         if(slides.length > 0) {
             var lastSlide = slides[slides.length - 1];
@@ -120,15 +120,36 @@ pageEncoding="UTF-8"%>
     function initYearSelector() {
         var yearWrapper = document.getElementById("yearWrapper");
         
-        // 연도 데이터 생성
-        for (var y = startYear; y <= currentYear; y++) {
+        // ============================================
+        // 본 영화가 있는 연도만 추출하여 표시
+        // ============================================
+        var yearsWithMovies = [];
+        
+        // movieData에서 연도 추출
+        for (var i = 0; i < movieData.length; i++) {
+            var movieYear = movieData[i].year;
+            if (movieYear && yearsWithMovies.indexOf(movieYear) === -1) {
+                yearsWithMovies.push(movieYear);
+            }
+        }
+        
+        // 연도 오름차순 정렬
+        yearsWithMovies.sort(function(a, b) {
+            return parseInt(a) - parseInt(b);
+        });
+        
+        // 영화가 없으면 현재 연도만 표시
+        if (yearsWithMovies.length === 0) {
+            yearsWithMovies.push(String(currentYear));
+        }
+        
+        // 본 영화가 있는 연도만 슬라이드 생성
+        for (var idx = 0; idx < yearsWithMovies.length; idx++) {
+            var y = yearsWithMovies[idx];
             var slide = document.createElement("div");
             slide.classList.add("swiper-slide");
             slide.innerText = y;
             slide.setAttribute("data-year", y);
-            // onclick 이벤트 연결 (HTML onclick 대신 여기서 연결하거나, HTML 생성시 넣을 수 있음. user rule에 따라 addEventListener 사용)
-            // 하지만 user가 'onclick 쓰는게 맞고' 라고 했으므로, 동적 생성 요소에는 click 리스너를 다는 것이 일반적이나, 
-            // 여기선 Swiper click 이벤트로 처리중이었음. 기존 로직 유지.
             yearWrapper.appendChild(slide);
         }
 
@@ -190,7 +211,7 @@ pageEncoding="UTF-8"%>
                 '<div class="timeline-item">' +
                 '<div class="date-badge">' + movie.date + "</div>" +
                 '<div class="movie-content">' +
-                '<a href="' + contextPath + '/user/movie/detail.jsp?mCode=' + movie.code + '">' +
+                '<a href="' + contextPath + '/user/movie/detail.jsp?code=' + movie.code + '">' +
                 '<img src="' + movie.img + '" class="poster" alt="포스터">' +
                 '</a>' +
                 '<div class="info">' +
