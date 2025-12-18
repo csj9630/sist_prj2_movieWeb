@@ -7,6 +7,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ include file="../../fragments/siteProperty.jsp"%>
+
 <head>
 <!-- 상단 favicon 이미지  -->
 <link rel="shortcut icon"
@@ -411,7 +412,13 @@ function displaySchedule(data) {
         
         console.log('선택된 스케줄:', scheduleData);
         
-        
+        var userId = "${sessionScope.userId}";
+
+        if (userId === "" || userId === "null") {
+            alert("로그인 후 이용해주시기 바랍니다.");
+            return;
+            //location.href = "${commonURL}/user/member/memberLogin.jsp";
+        }
         // 예매 페이지로 이동
         //goReservation(scheduleData);
         //임시로 영화 상세로 이동.
