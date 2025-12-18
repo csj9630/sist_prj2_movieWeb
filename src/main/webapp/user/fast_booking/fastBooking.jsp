@@ -183,7 +183,23 @@
     }
 }
 
+/* 날짜 다음 버튼 */
+.btn-next {
+    overflow-x: auto;
+    white-space: nowrap;
+}
 
+.date-list {
+    display: flex;
+    flex-wrap: nowrap;       /* 🔥 줄바꿈 금지 */
+    white-space: nowrap;
+}
+
+.date-list button {
+    flex: 0 0 75px;            /* 🔥 버튼 폭 고정 */
+    width: 75px;
+    text-align: center;
+}
 </style>
 <script type="text/javascript">
 
@@ -320,6 +336,17 @@ function loadSchedule() {
     }
 }//loadSchedule
 
+function movePrev(){
+	$(".date-list").stop().animate({
+        scrollLeft: "-=75"
+    }, 75);
+}
+
+function moveNext(){
+    $(".date-list").stop().animate({
+        scrollLeft: "+=75"
+    }, 75);
+}
 
 function displaySchedule(data) {
 	var displayHTML = '';
@@ -629,8 +656,7 @@ function displaySchedule(data) {
 					<div class="wrap">
 
 						<!-- 이전날짜 -->
-						<button type="button" title="이전 날짜 보기" class="btn-pre"
-							disabled="true">
+						<button type="button" title="이전 날짜 보기" class="btn-pre" onclick="movePrev()">
 							<i class="iconset ico-cld-pre"></i> <em>이전</em>
 						</button>
 						<!--// 이전날짜 -->
@@ -644,7 +670,7 @@ function displaySchedule(data) {
 
 							<div class="date-area" id="formDeList">
 								<div class="wrap"
-									style="position: relative; width: 2100px; border: none; left: -70px;">
+									style="position: relative; width: 2100px; border: none;">
 									<%
 									// 1. 날짜 설정 초기화
 									Calendar cal = Calendar.getInstance(); // 반복문용 (계속 변함)
@@ -668,7 +694,7 @@ function displaySchedule(data) {
 										for (int i = 0; i < 17; i++) {
 											int year = cal.get(Calendar.YEAR);
 											int month = cal.get(Calendar.MONTH); // 0~11
-											int day = cal.get(Calendar.DATE) - 1;
+											int day = cal.get(Calendar.DATE);
 											int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK); // 1(일) ~ 7(토)
 
 											// 날짜 포맷팅 (yyyy.MM.dd)
@@ -694,14 +720,14 @@ function displaySchedule(data) {
 											long diffSec = (cal.getTimeInMillis() - todayCal.getTimeInMillis()) / 1000;
 											long diffDays = diffSec / (24 * 60 * 60); // 일수 차이 계산
 
-											if (diffDays == 1)
+											if (diffDays == 0)
 												dayText = "오늘";
-											else if (diffDays == 2)
+											else if (diffDays == 1)
 												dayText = "내일";
 										%>
 
 										<button class="<%=btnClass%>" type="button"
-											date-data="<%=dateData%>" month="<%=month%>"
+											date-data="<%=dateData%>" month="<%=month+1%>"
 											<%-- onclick="changeDate('<%=dateData%>')" --%>>
 
 											<span class="ir"><%=year%>년 <%=month + 1%>월</span> <em
@@ -724,17 +750,17 @@ function displaySchedule(data) {
 						</div>
 
 						<!-- 다음날짜 -->
-						<button type="button" title="다음 날짜 보기" class="btn-next">
+						<button type="button" title="다음 날짜 보기" class="btn-next" onclick="moveNext()">
 							<i class="iconset ico-cld-next"></i> <em>다음</em>
 						</button>
 						<!--// 다음날짜 -->
 
 						<!-- 달력보기 -->
-						<div class="bg-line">
+						<!-- <div class="bg-line">
 							<input type="hidden" id="datePicker" value="2025.12.14"
 								class="hasDatepicker">
-							<!-- <button type="button" id="calendar" onclick="$(&#39;#datePicker&#39;).datepicker(&#39;show&#39;)" class="btn-calendar-large" title="달력보기"> 달력보기</button>-->
-						</div>
+							<button type="button" id="calendar" onclick="$(&#39;#datePicker&#39;).datepicker(&#39;show&#39;)" class="btn-calendar-large" title="달력보기"> 달력보기</button>
+						</div> -->
 						<!--// 달력보기 -->
 					</div>
 				</div>
