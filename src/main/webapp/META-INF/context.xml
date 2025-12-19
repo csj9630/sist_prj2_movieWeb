@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    DBCP (Database Connection Pool) 설정 파일
+    
+    이 파일은 Tomcat 서버에서 데이터베이스 커넥션 풀을 구성합니다.
+    애플리케이션 코드에서 JNDI 이름 "jdbc/dbcp"를 통해 DataSource를 조회하여 사용합니다.
+    
+    주요 설정값:
+    - maxTotal: 최대 연결 수
+    - maxIdle: 유휴 상태로 유지할 최대 연결 수
+    - maxWaitMillis: 연결을 대기하는 최대 시간 (밀리초)
+    - username/password: 데이터베이스 접속 정보 (환경에 맞게 수정 필요)
+    - url: 데이터베이스 접속 URL (환경에 맞게 수정 필요)
+-->
+<Context>
+    <!-- 
+        Oracle Database DBCP 설정
+        실제 배포 시 아래 항목들을 환경에 맞게 수정해야 합니다:
+        - username: 데이터베이스 사용자명
+        - password: 데이터베이스 비밀번호
+        - url: 데이터베이스 접속 URL (호스트, 포트, SID/ServiceName)
+        - driverClassName: JDBC 드라이버 클래스 (Oracle인 경우 oracle.jdbc.OracleDriver)
+    -->
+    <Resource 
+        name="jdbc/dbcp"
+        auth="Container"
+        type="javax.sql.DataSource"
+        driverClassName="oracle.jdbc.OracleDriver"
+        url="jdbc:oracle:thin:@localhost:1521:xe"
+        username="your_username"
+        password="your_password"
+        maxTotal="20"
+        maxIdle="10"
+        maxWaitMillis="10000"
+        removeAbandonedOnBorrow="true"
+        removeAbandonedTimeout="60"
+        logAbandoned="true"
+        testOnBorrow="true"
+        validationQuery="SELECT 1 FROM DUAL"
+    />
+</Context>
