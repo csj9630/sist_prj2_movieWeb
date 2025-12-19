@@ -496,7 +496,16 @@
         </div>
     </div>
 
+	<%
+	request.setCharacterEncoding("UTF-8");
 	
+	String movieCode=request.getParameter("movieCode");
+	String movieName=request.getParameter("movieName");
+	String screenCode=request.getParameter("screenCode");
+	String theaterName=request.getParameter("theaterName");
+	String screenOpen=request.getParameter("screenOpen");
+	String screenEnd=request.getParameter("screenEnd");
+	%>
 	<div class="booking-container">
 
 		<div class="main-content">
