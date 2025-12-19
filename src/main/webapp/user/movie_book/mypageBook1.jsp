@@ -427,7 +427,7 @@ if (bookList == null) {
     <!-- Script moved to head -->
     <!-- 푸터 -->
     <div id="footer">
-    <%@ include file="../../fragments/footer.jsp" %>
+    <jsp:include page="../../fragments/footer.jsp"/>
     </div>
   </body>
 </html>

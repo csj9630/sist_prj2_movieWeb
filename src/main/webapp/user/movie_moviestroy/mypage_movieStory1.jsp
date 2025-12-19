@@ -364,7 +364,7 @@ pageEncoding="UTF-8"%>
     </div>
 
     <!-- 푸터 -->
-    <div id="footer"><%@ include file="../../fragments/footer.jsp" %></div>
+    <div id="footer"><jsp:include page="../../fragments/footer.jsp"/></div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

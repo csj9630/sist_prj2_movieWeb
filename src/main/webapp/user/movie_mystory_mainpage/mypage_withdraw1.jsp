@@ -140,6 +140,6 @@
     </div>
 
     <!-- 푸터 -->
-    <div id="footer"><%@ include file="../../fragments/footer.jsp" %></div>
+    <div id="footer"><jsp:include page="../../fragments/footer.jsp"/></div>
   </body>
 </html>
