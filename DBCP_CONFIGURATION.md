@@ -19,9 +19,9 @@ DBCP를 사용하면 데이터베이스 연결을 재사용하여 성능을 향�
 
 ### DbConn 클래스를 통한 연결
 프로젝트에는 3개의 DbConn 클래스가 있습니다:
-1. `DBConnection.DbConn` - 범용 DB 연결 클래스
-2. `moviestory.util.DbConn` - 영화 스토리 기능용 (주석 포함)
-3. `screenInfo.DbConn` - 상영 정보 기능용
+1. `DBConnection.DbConn` - 범용 DB 연결 클래스 (src/main/java/DBConnection/DbConn.java)
+2. `moviestory.util.DbConn` - 영화 스토리 기능용 (주석 포함, src/main/java/moviestory/util/DbConn.java)
+3. `screenInfo.DbConn` - 상영 정보 기능용 (src/main/java/screenInfo/DbConn.java)
 
 모든 DbConn 클래스는 동일한 방식으로 작동:
 ```java
@@ -65,10 +65,10 @@ db.dbClose(rs, pstmt, con);
     name="jdbc/dbcp"
     auth="Container"
     type="javax.sql.DataSource"
-    driverClassName="oracle.jdbc.OracleDriver"
+    driverClassName="oracle.jdbc.driver.OracleDriver"
     url="jdbc:oracle:thin:@localhost:1521:xe"
-    username="your_username"        <!-- 실제 DB 사용자명으로 변경 -->
-    password="your_password"        <!-- 실제 DB 비밀번호로 변경 -->
+    username="your_username"        <!-- ⚠️ 실제 DB 사용자명으로 반드시 변경 -->
+    password="your_password"        <!-- ⚠️ 실제 DB 비밀번호로 반드시 변경 -->
     maxTotal="20"                   <!-- 최대 연결 수 -->
     maxIdle="10"                    <!-- 유휴 연결 수 -->
     maxWaitMillis="10000"           <!-- 연결 대기 시간 (ms) -->
@@ -125,13 +125,28 @@ Tomcat에는 기본적으로 DBCP 구현이 포함되어 있지만, 추가 기�
 
 ## 보안 고려사항
 
+⚠️ **매우 중요**: 데이터베이스 접속 정보는 민감한 보안 정보입니다!
+
 1. **비밀번호 보호**: context.xml의 비밀번호는 평문으로 저장되므로 주의
-   - 프로덕션 환경에서는 암호화된 비밀번호 사용 권장
-   - 환경 변수나 외부 설정 파일 사용 고려
+   - ❌ 절대로 기본값(your_username, your_password)으로 배포하지 마세요
+   - ✅ 프로덕션 환경에서는 암호화된 비밀번호 사용 권장
+   - ✅ 환경 변수나 외부 설정 파일(JNDI) 사용 고려
+   - ✅ Tomcat의 Resource 암호화 기능 활용
 
 2. **접근 권한**: context.xml 파일의 접근 권한 제한
+   ```bash
+   chmod 600 src/main/webapp/META-INF/context.xml
+   ```
 
 3. **.gitignore 설정**: 실제 DB 정보가 포함된 파일은 버전 관리에서 제외
+   - context.xml을 .gitignore에 추가하고 context.xml.template 사용 권장
+   - 또는 실제 정보가 담긴 context.xml은 서버에만 배치
+
+4. **배포 체크리스트**:
+   - [ ] username이 실제 값으로 변경되었는가?
+   - [ ] password가 실제 값으로 변경되었는가?
+   - [ ] url이 프로덕션 서버 정보로 설정되었는가?
+   - [ ] 실제 비밀번호가 Git에 커밋되지 않았는가?
 
 ## 모니터링
 
