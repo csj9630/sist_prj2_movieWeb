@@ -11,7 +11,7 @@
 	<title>
 		회사 개요 &gt; 2GV 소개 | 회사소개
 	</title>
-	<link rel="shortcut icon" href="http://localhost/sist_prj2_movieWeb/resources/images/favicon.ico">
+	<link rel="shortcut icon" href="${commonURL}/resources/images/favicon.ico">
 	<meta name="keyword" content="투지브이,2gv,영화,영화관,극장,티켓,박스오피스,상영예정작,예매,오페라,싱어롱,큐레이션,필름소사이어티,클래식소사이어티,이벤트,Movie,theater,Cinema,film,Megabox" />
 	<meta name="description" content="삶의 의미와 즐거움을 소통하는 공간, 함께 더 행복한 가치있는 콘텐츠를 추구하는 만남고 소통의 즐거움이 가득한 공간 투지브이 입니다." />
 	<meta property="og:site_name" content="투지브이" />
@@ -21,7 +21,7 @@
 	<meta property="og:site_name" content="투지브이 회사소개"/>
 	<meta property="fb:app_id" content="356285641381572"/>
      	
-			<link rel="stylesheet" href="http://localhost/sist_prj2_movieWeb/resources/css/megabox.min.css" media="all" />
+			<link rel="stylesheet" href="${commonURL}/resources/css/megabox.min.css" media="all" />
 	
 		<!-- Global site tag (gtag.js) - Google Analytics -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-5JL3VPLV2E"></script>
@@ -29,16 +29,16 @@
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKZN3J8B1J"></script>
 		<script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-LKZN3J8B1J');</script>
 	
-	<script src="http://localhost/sist_prj2_movieWeb/resources/js/jquery-1.12.4.js"></script>
-	<script src="http://localhost/sist_prj2_movieWeb/resources/js/jquery-ui.1.12.1.js"></script>
-	<script src="http://localhost/sist_prj2_movieWeb/resources/js/gsaps.js"></script>
-	<script src="http://localhost/sist_prj2_movieWeb/resources/js/bootstrap-custom.js"></script>
-	<script src="http://localhost/sist_prj2_movieWeb/resources/js/bootstrap-select.js"></script>
+	<script src="${commonURL}/resources/js/jquery-1.12.4.js"></script>
+	<script src="${commonURL}/resources/js/jquery-ui.1.12.1.js"></script>
+	<script src="${commonURL}/resources/js/gsaps.js"></script>
+	<script src="${commonURL}/resources/js/bootstrap-custom.js"></script>
+	<script src="${commonURL}/resources/js/bootstrap-select.js"></script>
 
-	<script src="http://localhost/sist_prj2_movieWeb/resources/js/commons.js"></script>
-	<script src="http://localhost/sist_prj2_movieWeb/resources/js/mega.prototype.js"></script>
-	<script src="http://localhost/sist_prj2_movieWeb/resources/js/megaboxCom.js"></script>
-	<script src="http://localhost/sist_prj2_movieWeb/resources/js/front.js"></script>
+	<script src="${commonURL}/resources/js/commons.js"></script>
+	<script src="${commonURL}/resources/js/mega.prototype.js"></script>
+	<script src="${commonURL}/resources/js/megaboxCom.js"></script>
+	<script src="${commonURL}/resources/js/front.js"></script>
 	
 	<style type = "text/css">
 	.layer-sitemap .wrap .list .tit-depth{display: grid;}
@@ -84,8 +84,7 @@
 	<header id="header" class="com">
 		<div class="bg-mask">
 			<div style = "background-color: #FFFFFF; font-size: 15px;">
-			
-			<c:import url = "http://localhost/sist_prj2_movieWeb/fragments/header.jsp"/>
+            <jsp:include page="../../fragments/header.jsp"/>
 			</div>
 			<div class="mid-tab">
 				<div class="inner-wrap">
@@ -162,7 +161,7 @@
 						VALUABLE INFLUENCE<br />
 						가치있는 영향력
 					</div>
-					<img src="http://localhost/sist_prj2_movieWeb/resources/images/img-valuable2.png" alt="MEANINGFUL CULTURAL EXPERIENCE, CREATE A PLATFORM (SPACE/TIME), INPIRATION FOR A HAPPY LIFE" />
+					<img src="${commonURL}/resources/images/img-valuable2.png" alt="MEANINGFUL CULTURAL EXPERIENCE, CREATE A PLATFORM (SPACE/TIME), INPIRATION FOR A HAPPY LIFE" />
 				</div>
 			</div>
 			<!--// 미션 -->
@@ -213,7 +212,7 @@
 				<h2 class="tit mb10">브랜드 슬로건 (Brand Slogan)</h2>
 
 				<div class="slogan mb80">
-					<img src="http://localhost/sist_prj2_movieWeb/resources/images/img-lifetheater-tm2.png" alt="LIFE THEATER TM" />
+					<img src="${commonURL}/resources/images/img-lifetheater-tm2.png" alt="LIFE THEATER TM" />
 					<P class="font-green">MEET PLAY SHARE, 2GV</P>
 					<P class="mt30">새로운 이야기를 만나고, 함께 어울려 놀고, 즐거운 경험을 공유하는 공간</P>
 				</div>
@@ -239,12 +238,12 @@
 				</p>
 				<p class="s-tit font-green">기본형</p>
 				<div class="mb30">
-					<img src="http://localhost/sist_prj2_movieWeb/resources/images/bi-normal.png" alt="2GV" />
+					<img src="${commonURL}/resources/images/bi-normal.png" alt="2GV" />
 				</div>
 
 				<p class="s-tit font-green">슬로건 조합형</p>
 				<div>
-					<img src="http://localhost/sist_prj2_movieWeb/resources/images/bi-slogan2.png" alt="2GV LIFE THEATER" />
+					<img src="${commonURL}/resources/images/bi-slogan2.png" alt="2GV LIFE THEATER" />
 				</div>
 				<!--// BI -->
 				<!-- 회사개요 -->
@@ -602,7 +601,7 @@
 
 	<!-- footer -->
 	<footer id="footer">
-<c:import url = "http://localhost/sist_prj2_movieWeb/fragments/footer.jsp"/>
+	<jsp:include page="../../fragments/footer.jsp"/>
 	</footer>
 	<!--// footer -->
 </div>
