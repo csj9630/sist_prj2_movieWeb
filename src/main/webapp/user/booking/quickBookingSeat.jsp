@@ -1,3 +1,4 @@
+<%@page import="seat.booking.SeatBookService"%>
 <%@page import="movie.MovieDTO"%>
 <%@page import="java.util.List"%>
 <%@page import="movie.MovieService"%>
