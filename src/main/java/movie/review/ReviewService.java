@@ -45,7 +45,7 @@ public class ReviewService {
 	/**
 	 * 영화 리뷰 리스트로 영화 하나의 평점을 구한다.
 	 * 리뷰가 없으면 0을 얼리 리턴한다.
-	 * 지금 평점이 100점 만점이므로 10으로 나눈다.
+	 * 평점을 소수점 2자리에서 반올림해서1자리만나오게 하기.
 	 * @param list 리뷰리스트
 	 * @return
 	 */
@@ -60,7 +60,7 @@ public class ReviewService {
 		if (scoreAverage == 0) {
 			return 0;
 		}
-		scoreAverage = scoreAverage / list.size() / 10;
+		scoreAverage = Math.ceil(scoreAverage / list.size() *1000) / 1000.0;
 		return scoreAverage;
 	}// getScoreAverage
 
