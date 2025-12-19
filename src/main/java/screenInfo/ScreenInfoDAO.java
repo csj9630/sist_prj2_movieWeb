@@ -46,7 +46,7 @@ public class ScreenInfoDAO {
 					"from	screen_info s " +
 					"join	movie m on s.movie_code = m.movie_code " +
 					"join	theather_info t on s.theather_num = t.theather_num " +
-					"where	s.screen_date = to_date(?, 'yyyy-mm-dd') " +
+					"where	s.screen_date = to_date(?, 'yyyy-mm-dd') and s.screen_showing = 'Y'" +
 					"order by	m.movie_name asc, t.theather_name asc";
 			
 			pstmt = con.prepareStatement(sql);

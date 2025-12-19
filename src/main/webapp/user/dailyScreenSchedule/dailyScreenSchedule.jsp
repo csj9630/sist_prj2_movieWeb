@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 		
 		<!-- header -->
 		<header id="header">
-			<c:import url = "${commonURL}/fragments/header.jsp"/>
+			<jsp:include page="../../fragments/header.jsp"/>
 		</header>
 		<!--// header -->
 
@@ -440,7 +440,7 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 		</div>
 		<!-- footer -->
 		<footer id="footer">
-			<c:import url = "${commonURL}/fragments/footer.jsp"/>
+			<jsp:include page="../../fragments/footer.jsp"/>
 		</footer>
 		<!--// footer -->
 		</div>

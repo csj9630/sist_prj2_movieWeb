@@ -17,5 +17,11 @@
 -->
     
 <% 
+String movieImgPath = "resources/images/movieImg";
+
+
 application.setAttribute("commonURL","http://localhost/sist_prj2_movieWeb");
+application.setAttribute("movieImgPath",movieImgPath );    
+
+
 %>
