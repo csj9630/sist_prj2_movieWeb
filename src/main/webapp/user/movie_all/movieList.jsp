@@ -25,118 +25,124 @@
 	text-align: center;
 	padding: 0 !important;
 }
+
+#movieList.searching li:nth-child(4n) ~ li {
+    margin-top: 0 !important;
+}
 </style>
 
 <script type="text/javascript">
-	$(function() {
-		/* 검색창 기능 
-		현재 관람평도 class명이 tit라서 관람평이라고 검색해도 모든 영화 출력되는 문제 발생
-		 */
-		$("#btnSearch").click(searchMovie);
-		$("#ibxMovieNmSearch").keyup(searchMovie);
+$(function() {
+	/* 검색창 기능 
+	현재 관람평도 class명이 tit라서 관람평이라고 검색해도 모든 영화 출력되는 문제 발생
+	 */
+	//$("#btnSearch").click(searchMovie);
+	$("#ibxMovieNmSearch").keyup(searchMovie);
 
-		/* 개봉작만 버튼 클릭 시  */
-		$(".btnOnAir").click();
+	/* 개봉작만 버튼 클릭 시  */
+	$(".btnOnAir").click();
 
-		/* 더보기 버튼 기능 ajax 방식으로 추가 예정 */
-		$("#btnAddMovie").click(function() {
-			//가져올 데이터가 더 있으면
-			//boolean flag=false;
-			//if()
-			//여기 아래에서 부터 데이터 있는지 확인하고 있으면 flag를 true로
-			filterRelease();
-		})
+	/* 더보기 버튼 기능 ajax 방식으로 추가 예정 */
+	$("#btnAddMovie").click(function() {
+		filterRelease();
+	})
 
-		function searchMovie() {
-			var keyword = $("#ibxMovieNmSearch").val().toLowerCase().trim();
-
-			$("#movieList li").each(function() {
-				var title = $(this).find(".tit").text().toLowerCase();
-				if (title.includes(keyword)) {
-					$(this).show();
-				} else {
-					$(this).hide();
-				}
-			});
-		}
-
-		var startRank=5; //더보기 버튼을 눌렀을 때 순위를 위해서 전역변수로 선언
+	function searchMovie() {
+		var keyword = $("#ibxMovieNmSearch").val().toLowerCase().trim();
 		
-		function filterRelease() {
-			var currentPage = parseInt($("#currentPage").val()); //현재 페이지
-			var size = $("#recordCountPerPage").val(); //한 화면에 보여줄 개수 4
-			var param = {currentPage:currentPage, size:size};
-			var nextPage = currentPage+1;
-			
-			$.ajax({
-				url:"releaseMovieList.jsp",
-				type:"GET",
-				data:param,
-				dataType:"JSON",
-				error:function(xhr){
-					alert("개봉작 데이터를 불러올 수 없습니다.");
-					console.log(xhr.statusText + "/" + xhr.status);
-				},
-				success:function(jsonArr){
-				  	//데이터가 없으면 더보기 버튼 숨기기, 현재 구조에서는 마지막 배열 데이터 길이와 size가 같으면 더보기 버튼 한번 더 눌러야 되는 문제
-				  	if(jsonArr.length<size) {
-				    	$("#btnAddMovie").hide();
-				    }
-					/* ajax 요청이 성공해서 넘어올 데이터 */
-					$.each(jsonArr, (idx, obj) => {
-						var rank=idx+startRank;
-						var appendMovie = 
-					        "<li tabindex='0' class='no-img'>" +
+		if (keyword.length > 0) {
+	        $("#movieList").addClass("searching");
+	    } else {
+	        $("#movieList").removeClass("searching");
+	    }
+		
+		$("#movieList li").each(function() {
+			var title = $(this).find(".tit").text().toLowerCase();
+			if (title.includes(keyword)) {
+				$(this).show();
+			} else {
+				$(this).hide();
+			}
+		});
+	}
 
-					            "<div class='movie-list-info'>" +
-					                "<a href='${commonURL}/user/movie/detail.jsp?name=" + obj.moviecode +
-					                    "' class='wrap movieBtn' data-no='" + obj.moviecode + "' title='" + obj.moviename + " 상세보기'>" +
+	var startRank=5; //더보기 버튼을 눌렀을 때 순위를 위해서 전역변수로 선언
+	
+	function filterRelease() {
+		var currentPage = parseInt($("#currentPage").val()); //현재 페이지
+		var size = $("#recordCountPerPage").val(); //한 화면에 보여줄 개수 4
+		var param = {currentPage:currentPage, size:size};
+		var nextPage = currentPage+1;
+		
+		$.ajax({
+			url:"releaseMovieList.jsp",
+			type:"GET",
+			data:param,
+			dataType:"JSON",
+			error:function(xhr){
+				alert("개봉작 데이터를 불러올 수 없습니다.");
+				console.log(xhr.statusText + "/" + xhr.status);
+			},
+			success:function(jsonArr){
+			  	//데이터가 없으면 더보기 버튼 숨기기, 현재 구조에서는 마지막 배열 데이터 길이와 size가 같으면 더보기 버튼 한번 더 눌러야 되는 문제
+			  	if(jsonArr.length<size) {
+			    	$("#btnAddMovie").hide();
+			    }
+				/* ajax 요청이 성공해서 넘어올 데이터 */
+				$.each(jsonArr, (idx, obj) => {
+					var rank=idx+startRank;
+					var appendMovie = 
+				        "<li tabindex='0' class='no-img'>" +
 
-					                    "<p class='rank'>" +
-					                        rank + "<span class='ir'>위</span>" +
-					                    "</p>" +
-					                    "<img src='${commonURL}/${movieImgPath}/"+ obj.moviecode +"/"+obj.mainimage +
-					                         "' alt='" + obj.moviename + "' " +
-					                         "class='poster lozad' " +
-					                         "onerror='noImg(this)'>" +
-					                "</a>" +
-					            "</div>" +
+				            "<div class='movie-list-info'>" +
+				                "<a href='${commonURL}/user/movie/detail.jsp?code=" + obj.moviecode +
+				                    "' class='wrap movieBtn' data-no='" + obj.moviecode + "' title='" + obj.moviename + " 상세보기'>" +
 
-					            "<div class='tit-area'>" +
-					                "<p class='movie-grade age-all'></p>" +
-					                "<p title='" + obj.moviename + "' class='tit'>" + obj.moviename + "</p>" +
-					            "</div>" +
+				                    "<p class='rank'>" +
+				                        rank + "<span class='ir'>위</span>" +
+				                    "</p>" +
+				                    "<img src='${commonURL}/${movieImgPath}/"+ obj.moviecode +"/"+obj.mainimage +
+				                         "' alt='" + obj.moviename + "' " +
+				                         "class='poster lozad' " +
+				                         "onerror='noImg(this)'>" +
+				                "</a>" +
+				            "</div>" +
 
-					            "<div class='rate-date'>" +
-					                "<span class='rate'>예매율 " + (obj.rate || 0) + "%</span>" +
-					                "<span class='date'>개봉일 " + obj.releasedate + "</span>" +
-					            "</div>" +
+				            "<div class='tit-area'>" +
+				            	"<p class='movie-grade age-" + obj.moviegrade + "'></p>" +
+				                "<p title='" + obj.moviename + "' class='tit'>" + obj.moviename + "</p>" +
+				            "</div>" +
 
-					            "<div class='btn-util'>" +
-					                "<p class='txt movieStat1' style='display:none'>상영예정</p>" +
-					                "<p class='txt movieStat2' style='display:none'>11월 개봉예정</p>" +
-					                "<p class='txt movieStat5' style='display:none'>개봉예정</p>" +
-					                "<p class='txt movieStat6' style='display:none'>상영종료</p>" +
+				            "<div class='rate-date'>" +
+				                "<span class='rate'>예매율 " + (obj.rate || 0) + "%</span>" +
+				                "<span class='date'>개봉일 " + obj.releasedate + "</span>" +
+				            "</div>" +
 
-					                "<div class='case col-2 movieStat3'>" +
-					                    "<a href='${commonURL}/user/fast_booking/fastBooking.jsp' " +
-					                        "class='button purple bokdBtn' data-no='" + obj.moviecode + "' title='영화 예매하기'>예매</a>" +
-					                "</div>" +
+				            "<div class='btn-util'>" +
+				                "<p class='txt movieStat1' style='display:none'>상영예정</p>" +
+				                "<p class='txt movieStat2' style='display:none'>11월 개봉예정</p>" +
+				                "<p class='txt movieStat5' style='display:none'>개봉예정</p>" +
+				                "<p class='txt movieStat6' style='display:none'>상영종료</p>" +
 
-					                "<div class='case movieStat4' style='display:none'>" +
-					                    "<a href='#' class='button purple bokdBtn'>예매</a>" +
-					                "</div>" +
-					            "</div>" +
+				                "<div class='case col-2 movieStat3'>" +
+				                    "<a href='${commonURL}/user/fast_booking/fastBooking.jsp' " +
+				                        "class='button purple bokdBtn' data-no='" + obj.moviecode + "' title='영화 예매하기'>예매</a>" +
+				                "</div>" +
 
-					        "</li>";
-					   		$("#movieList").append(appendMovie);
-							$("#currentPage").val(nextPage);
-					});//each
-					startRank += jsonArr.length;
-				}//success
-			});//filterRelease
-		}
-	});
+				                "<div class='case movieStat4' style='display:none'>" +
+				                    "<a href='#' class='button purple bokdBtn'>예매</a>" +
+				                "</div>" +
+				            "</div>" +
+
+				        "</li>";
+				   		$("#movieList").append(appendMovie);
+						$("#currentPage").val(nextPage);
+				});//each
+				startRank += jsonArr.length;
+			}//success
+		});//filterRelease
+	}
+});
 </script>
 </head>
 
