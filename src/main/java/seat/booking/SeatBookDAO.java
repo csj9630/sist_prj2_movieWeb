@@ -25,7 +25,7 @@ public class SeatBookDAO {
 	}//getInstance
 	
 	//빠른 예매 페이지에서 페이지 로딩시 좌석 그리기
-	public List<SeatBookDTO> selectAllSeatBook(String id) throws SQLException {
+	public List<SeatBookDTO> selectAllSeatBook(String screen_code) throws SQLException {
 		List<SeatBookDTO> list = new ArrayList<SeatBookDTO>();
 
 		DbConn dbCon = DbConn.getInstance("jdbc/dbcp");
@@ -40,35 +40,31 @@ public class SeatBookDAO {
 			// 3. Connection 얻기
 			con = dbCon.getConn();
 			// 4. 쿼리문생성객체 얻기
-			StringBuilder selectRestaurant = new StringBuilder();
-			selectRestaurant.append(" select rest_num, rest_name, menu, lat, lng, input_date ")
-					.append(" from restaurant ").append(" where id=? ");
-			pstmt = con.prepareStatement(selectRestaurant.toString());
+			StringBuilder selectSeatBook = new StringBuilder();
+			selectSeatBook
+			.append("select seat_code")
+			.append("from seat_book")
+			.append("where screen_code = ?");
+			pstmt = con.prepareStatement(selectSeatBook.toString());
 			// 5. 바인드변수 값 설정
 			int pstmtIdx = 0;
-			pstmt.setString(1, id);
+			pstmt.setString(1, screen_code);
 
 			// 6. 조회결과 얻기
-			RestaurantDTO rDTO = null;
+			SeatBookDTO sDTO = null;
 
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
-				rDTO = new RestaurantDTO();
-				rDTO.setRest_num(rs.getInt("rest_num"));
-				rDTO.setRest_name(rs.getString("rest_name"));
-				rDTO.setMenu(rs.getString("menu"));
-				rDTO.setLat(rs.getDouble("lat"));
-				rDTO.setLng(rs.getDouble("lng"));
-				rDTO.setInput_date(rs.getDate("input_date"));
-				list.add(rDTO);
+				sDTO = new SeatBookDTO();
+				sDTO.setSeat_code(rs.getString("seat_code"));
+				list.add(sDTO);
 			} // end while
 		} finally {
 			// 7. 연결 끊기
 			dbCon.dbClose(rs, pstmt, con);
 		} // end finally
 		return list;
-
 	}// selectAllRestaurant
 	
 	

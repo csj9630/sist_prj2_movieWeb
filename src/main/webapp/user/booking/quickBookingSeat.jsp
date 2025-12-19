@@ -1,6 +1,12 @@
+<%@page import="seat.booking.SeatBookService"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%
+SeatBookService sbs = SeatBookService.getInstance();
+String screen_code="scc001";
+sbs.searchRestaurant(screen_code);
+%>
 <%@ include file="../../fragments/siteProperty.jsp"%>
 <html lang="en" data-bs-theme="auto">
 <head>
@@ -17,6 +23,16 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="${commonURL}/resources/js/jquery-1.12.4.js"></script>
+<script src="${commonURL}/resources/js/jquery-ui.1.12.1.js"></script>
+<script src="${commonURL}/resources/js/gsaps.js"></script>
+<script src="${commonURL}/resources/js/bootstrap-custom.js"></script>
+<script src="${commonURL}/resources/js/bootstrap-select.js"></script>
+
+<script src="${commonURL}/resources/js/commons.js"></script>
+<script src="${commonURL}/resources/js/mega.prototype.js"></script>
+<script src="${commonURL}/resources/js/megaboxCom.js"></script>
 <script src="${commonURL}/resources/js/front.js"></script>
 <style>
 /* 기존 스타일 유지 */
