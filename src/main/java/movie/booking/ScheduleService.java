@@ -6,17 +6,17 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ScreenBookService {
+public class ScheduleService {
 	
-	private static ScreenBookService sis;
+	private static ScheduleService sis;
 	
-	private ScreenBookService() {
+	private ScheduleService() {
 		
 	} // ScreenInfoService
 	
-	public static ScreenBookService getInstance() {
+	public static ScheduleService getInstance() {
 		if(sis == null) {
-			sis = new ScreenBookService();
+			sis = new ScheduleService();
 		} // end if
 		return sis;
 	} // getInstance
@@ -30,12 +30,12 @@ public class ScreenBookService {
 	 * @param selectedMovieCode 영화 코드
 	 * @return
 	 */
-	public List<ScreenBookDTO> getMovieSchedule(String selectedDate, String selectedMovieCode) {
+	public List<ScheduleDTO> getMovieSchedule(String selectedDate, String selectedMovieCode) {
 		
-		List<ScreenBookDTO> list = null;
+		List<ScheduleDTO> list = null;
 		
 		
-		ScreenBookDAO siDAO = ScreenBookDAO.getInstance();
+		ScheduleDAO siDAO = ScheduleDAO.getInstance();
 		String sqlDate = selectedDate.replace('.', '-');
 		
 		// 2. DAO를 통해 원본 데이터 가져오기

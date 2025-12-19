@@ -18,7 +18,7 @@ public class MovieService {
 		return ms;
 	}//getInstance
 	
-	// 박스오피스 초기 화면 영화 개수
+	// 박스오피스 영화 개수
 	public int totalBoxOffice() {
 		int cnt=0;
 		MovieDAO mDAO=MovieDAO.getInstance();
@@ -127,6 +127,20 @@ public class MovieService {
 		return pageMovieList;
 	}//showPageMovie
 	
+	//페이지 네이션된 박스오피스 리스트 출력
+	public String showMainImage(String movie_code) {
+		String img=null;
+		
+		MovieDAO mDAO=MovieDAO.getInstance();
+		try {
+			img=mDAO.selectMovieByCode(movie_code);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return img;
+	}//showPageMovie
+	
 	//페이지 네이션된 상영예정작 리스트 출력
 	public List<MovieDTO> showUpCommingMovie(int currentPage, int size) {
 		List<MovieDTO> pageMovieList=null;
@@ -140,4 +154,5 @@ public class MovieService {
 		
 		return pageMovieList;
 	}//showPageMovie
+	
 }

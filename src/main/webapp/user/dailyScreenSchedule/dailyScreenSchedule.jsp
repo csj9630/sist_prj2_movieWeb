@@ -38,47 +38,7 @@
 
 <script type="text/javascript">
 
-function checkLogin() {
-	
-	if(${sessionScope.userId == null}) {
-		alert("예매하기 위해서는 로그인이 필요합니다.");
-		location.href = "${commonURL}/user/member/memberLogin.jsp";
-	} // end if
-	/*
-	<c:if test = "${sessionScope.userId != null}">
-	*/
-	return;
-	/* 
-	</c:if>
-	*/
-} // checkLogin
 </script>
-<style type = "text/css">
-.year-month-label {
-    position: absolute;    /* 버튼 기준으로 위치 잡기 */
-    top: -25px;           /* 버튼 위쪽으로 25px 올림 (높이에 맞춰 조절하세요) */
-    left: 50%;            /* 버튼의 가로 중앙 */
-    transform: translateX(-50%); /* 정확한 중앙 정렬 */
-    
-    background-color: #fff; /* 배경 흰색 */
-    border: 1px solid #ddd; /* 테두리 회색 */
-    border-radius: 12px;    /* 둥근 모서리 (타원형) */
-    padding: 2px 8px;       /* 내부 여백 */
-    
-    font-size: 11px;        /* 글자 크기 */
-    color: #666;            /* 글자 색상 */
-    font-family: 'Roboto', sans-serif; /* 폰트 (필요시 변경) */
-    white-space: nowrap;    /* 줄바꿈 방지 */
-    z-index: 10;            /* 다른 요소보다 위에 표시 */
-    pointer-events: none;   /* 라벨이 클릭을 방해하지 않도록 설정 */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* 살짝 그림자 (선택사항) */
-}
-
-/* (주의) 기존 button 스타일에 overflow: hidden이 있다면 visible로 바꿔야 라벨이 보입니다 */
-.date-list {
-    overflow: visible !important;
-}
-</style>
 
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src= 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-WG5DNB7D');</script>
@@ -112,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
     
     // 1. 선택자 변경: .date-area 안에 있는 버튼만 가져옵니다.
     const dateButtons = document.querySelectorAll('.date-area button');
-	
+
     dateButtons.forEach(button => {
         button.addEventListener('click', function() {
             
@@ -136,6 +96,7 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
     });
 });
 </script>
+		
 		<!-- header -->
 		<header id="header">
 			<jsp:include page="../../fragments/header.jsp"/>
@@ -190,13 +151,11 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 										<i class="iconset ico-cld-pre"></i> <em>이전</em>
 									</button>
 									<div class="date-list" style = "width: 1040px;">
-										<!-- 
 										<div class="year-area">
 											<div class="year" style="left: 30px; z-index: 1; opacity: 1;">2025.11</div>
 											<div class="year"
 												style="left: 100px; z-index: 1; opacity: 1;">2025.12</div>
 										</div>
-										-->
 										<div class="date-area">
 											<div class="wrap" style="position: relative; width: 2100px; border: none; left: -70px;">
 												<%
@@ -209,95 +168,67 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 												    SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
 												    
 												    if (selectedDate == null || selectedDate.equals("")) {
-												        selectedDate = sdf.format(	todayCal.getTime());
+												        selectedDate = sdf.format(todayCal.getTime());
 												    }
 													
 												    // 요일 한글 배열
-												    String[] dayNames = {"", "일", "월", "화", "수", "목", "금", "토"};
-												    String[] dayNamesEn = {"", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+												    String[] dayNames = {"", "토", "일", "월", "화", "수", "목", "금"};
+												    String[] dayNamesEn = {"", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"};
 												    
-												 	// -----------------------------------------------------------
-												    // [설정] 버튼 하나의 너비 + 여백 (CSS와 맞춰야 합니다!)
-												    // 예: 버튼 width 60px + margin-right 0px = 60
-												    // 메가박스 등은 보통 70px~80px 정도 잡힙니다. 개발자도구로 확인 필요.
-												    int btnWidth = 70; 
-												    int initLeft = 65;
-												    // -----------------------------------------------------------
-												    
-												 	// HTML을 담을 버퍼 생성 (화면 출력용)
-												    StringBuilder yearHtml = new StringBuilder(); // 상단 연/월 라벨용 (<div class="year-area"> 내부)
-												    StringBuilder btnHtml = new StringBuilder();  // 하단 날짜 버튼용 (<div class="date-list"> 내부)
 												%>
 												
-												<div class="date-list" style = "width: 1120px; padding-left: 65px;">
+												<div class="date-list" style = "width: 1190px;">
 												    <%
 												    // 3. 14일치 날짜 생성 반복문
-												    for (int i = 0; i < 15; i++) {
+												    for (int i = 0; i < 17; i++) {
 												        int year = cal.get(Calendar.YEAR);
 												        int month = cal.get(Calendar.MONTH); // 0~11
-												        int day = cal.get(Calendar.DATE);
+												        int day = cal.get(Calendar.DATE)-1;
 												        int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK); // 1(일) ~ 7(토)
-														
+												
 												        // 날짜 포맷팅 (yyyy.MM.dd)
 												        String dateData = String.format("%04d.%02d.%02d", year, month + 1, day);
-												        String yearMonthData = String.format("%04d.%02d", year, month + 1);
-												        
-												     	// -----------------------------------------------------
-												        // [로직 1] 연/월 라벨 생성 (요청하신 양식 유지)
-												        // -----------------------------------------------------
-												        // 첫 번째 루프이거나(오늘), 날짜가 1일인 경우 라벨 생성
-												        if (i == 0 || day == 1) {
-												            // 위치 계산: (현재 순번 index * 버튼 너비) px
-												            int leftPos = i * btnWidth + initLeft; 
-												            
-												            // 요청하신 HTML 구조 그대로 문자열 생성
-												            // 30px 등 고정값이 아니라 계산된 leftPos 변수를 넣습니다.
-												            yearHtml.append(String.format(
-												                "<div class='year' style='left: %dpx; z-index: 1; opacity: 1;'>" + yearMonthData + "</div>", 
-												                leftPos, year, month
-												            ));
-												        }
 												        
 												        // CSS 클래스 계산 (토요일, 일요일, 그리고 선택된 날짜 'on')
 												        String btnClass = "";
-												        if (dayOfWeek == Calendar.SATURDAY) btnClass = "sat";
-												        else if (dayOfWeek == Calendar.SUNDAY) btnClass = "holi";
+												        if (dayOfWeek == Calendar.SUNDAY) btnClass = "sat";
+												        else if (dayOfWeek == Calendar.MONDAY) btnClass = "holi";
 												        
 												        // 현재 출력중인 날짜가 선택된 날짜와 같으면 'on' 클래스 추가
 												        if (dateData.equals(selectedDate)) {
 												            btnClass += " on";
 												        }
-														
+												
 												        // 표기할 요일 텍스트 결정 (오늘, 내일, 그 외 요일)
-														String dayText = dayNames[dayOfWeek];
-														
-														// 오늘/내일 로직: 반복중인 cal 날짜와 고정된 todayCal 비교
-														long diffSec = (cal.getTimeInMillis() - todayCal.getTimeInMillis()) / 1000;
-														long diffDays = diffSec / (24*60*60); // 일수 차이 계산
+												        String dayText = dayNames[dayOfWeek];
 												        
-														if (diffDays == 0) dayText = "오늘";
-														else if (diffDays == 1) dayText = "내일";
-														
-														// 버튼 HTML 누적
-												        btnHtml.append("<button class='" + btnClass + "' type='button' ");
-												        btnHtml.append("date-data='" + dateData + "' month='" + (month-1) + "' ");
-												        btnHtml.append("onclick=\"changeDate('" + dateData + "')\">");
-												        btnHtml.append("<span class='ir'>" + year + "년 " + month + "월</span>");
-												        btnHtml.append("<em style='pointer-events: none;'>" + day + "<span class='ir'>일</span></em>");
-												        btnHtml.append("<span class='day-kr' style='pointer-events: none; display: inline-block'>" + dayText + "</span>");
-												        btnHtml.append("</button>");
+												        // 오늘/내일 로직: 반복중인 cal 날짜와 고정된 todayCal 비교
+												        long diffSec = (cal.getTimeInMillis() - todayCal.getTimeInMillis()) / 1000;
+												        long diffDays = diffSec / (24*60*60); // 일수 차이 계산
 												        
+												        if (diffDays == 1) dayText = "오늘";
+												        else if (diffDays == 2) dayText = "내일";
+												    %>
+												    
+												    <button class="<%= btnClass %>" type="button" 
+												            date-data="<%= dateData %>" 
+												            month="<%= month %>" 
+												            onclick="changeDate('<%= dateData %>')">
+												            
+												        <span class="ir"><%= year %>년 <%= month + 1 %>월</span>
+												        <em style="pointer-events: none;">
+												            <%= day %>
+												            <span style="pointer-events: none;" class="ir">일</span>
+												        </em>
+												        <span class="day-kr" style="pointer-events: none; display: inline-block"><%= dayText %></span>
+												        <span class="day-en" style="pointer-events: none; display: none"><%= dayNamesEn[dayOfWeek] %></span>
+												    </button>
+												
+												    <%
 												        // 4. 핵심: 하루 증가 (이전 답변의 해결책 적용)
 												        cal.add(Calendar.DATE, 1);
 												    } // end for
 												    %>
-												    <div class="year-area">
-													    <%= yearHtml.toString() %>
-													</div>
-													
-													<div class="date-list" style = "width: 1120px;">
-													    <%= btnHtml.toString() %>
-													</div>
 												</div>
 												<script>
 												    function changeDate(date) {
@@ -438,7 +369,6 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 								                                    int playCount = 1; // 회차 카운트 (DB에 회차 정보가 없다면 임의 증가)
 								                                    for (Map<String, String> schedule : scheduleList) {
 								                                        String screenCode = schedule.get("SCREEN_CODE");  // 시작 시간
-								                                        pageContext.setAttribute("SCREEN_CODE", screenCode);
 								                                        String screenOpen = schedule.get("SCREEN_OPEN");  // 시작 시간
 								                                        String screenOpenTime = screenOpen.substring(screenOpen.indexOf(" "), screenOpen.lastIndexOf(":")).trim();
 								                                        String remainSeat = schedule.get("REMAIN_SEAT");  // 잔여 좌석
@@ -460,7 +390,7 @@ document.addEventListener('DOMContentLoaded', function() { // HTML이 다 로딩
 								                                    rpst-movie-no="<%= movieCode %>">
 								                                    <div class="td-ab">
 								                                        <div class="txt-center">
-								                                            <a onclick = "checkLogin()" href="${commonURL}/user/booking/quickBookingSeat.jsp?screen_code=<%= screenCode %>" title="영화예매하기">
+								                                            <a href="/booking?screen_code=<%= screenCode %>" title="영화예매하기">
 								                                                <div class="ico-box">
 								                                                    <i class="iconset ico-off"></i>
 								                                                </div>

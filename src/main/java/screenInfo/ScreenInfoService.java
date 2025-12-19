@@ -62,5 +62,4 @@ public class ScreenInfoService {
 		return movieScheduleMap;
 	} // getMovieSchedule
 	
-	
 }

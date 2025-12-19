@@ -15,7 +15,6 @@
 
 <%
 String movieCode = request.getParameter("code");
-//String movieImgPath = "resources/images/movieImg";
 
 DetailService ds = DetailService.getInstance();
 DetailDTO dtDTO = ds.searchMovieDetail(movieCode);
@@ -30,12 +29,9 @@ ReviewService rs = ReviewService.getInstance();
 List<ReviewDTO> reviewList = rs.searchReviewList(movieCode);
 
 //int reviewCount = reviewList.size();
-//te
 //영화 평점
 double scoreAverage = rs.getScoreAverage(reviewList);
 
-//double scoreAverage = 0;
-//pageContext.setAttribute("movieImgPath",movieImgPath );
 pageContext.setAttribute("detail", dtDTO);
 pageContext.setAttribute("imgList", imgList);
 pageContext.setAttribute("trailerList", trailerList);

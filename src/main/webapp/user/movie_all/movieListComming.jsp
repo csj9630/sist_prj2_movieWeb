@@ -5,6 +5,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ include file="../../fragments/siteProperty.jsp"%>
 
 <head>
@@ -23,6 +24,10 @@
 	text-align: center;
 	padding: 0 !important;
 }
+
+#movieList.searching li:nth-child(4n) ~ li {
+    margin-top: 0 !important;
+}
 </style>
 <script type="text/javascript">
 $(function() {
@@ -31,11 +36,32 @@ $(function() {
 	// 가나다순 버튼 누르면
 	$("#sortAlphabet").click(sortMoiveList);
 	
+	$("#ibxMovieNmSearch").keyup(searchMovie);
+	
 	// 더보기 버튼 누르면
 	$("#btnAddMovie").click(function(){
 		filterUpComming();
 	})
 });
+
+function searchMovie() {
+	var keyword = $("#ibxMovieNmSearch").val().toLowerCase().trim();
+	
+	if (keyword.length > 0) {
+        $("#movieList").addClass("searching");
+    } else {
+        $("#movieList").removeClass("searching");
+    }
+	
+	$("#movieList li").each(function() {
+		var title = $(this).find(".tit").text().toLowerCase();
+		if (title.includes(keyword)) {
+			$(this).show();
+		} else {
+			$(this).hide();
+		}
+	});
+}
 
 function sortMoiveList(){
 
@@ -78,22 +104,21 @@ function filterUpComming(){
 			        "<li tabindex='0' class='no-img'>" +
 
 			            "<div class='movie-list-info'>" +
-			                "<a href='${commonURL}/user/movie/detail.jsp' " +
-			                    "class='wrap movieBtn' data-no='" + obj.moviecode + "' title='" + obj.moviename + " 상세보기'>" +
+			                "<a href='${commonURL}/user/movie/detail.jsp?code=" + obj.moviecode +
+			                    "' class='wrap movieBtn' data-no='" + obj.moviecode + "' title='" + obj.moviename + " 상세보기'>" +
 
 			                    "<p class='rank'>" +
-			                        (idx + 5) + "<span class='ir'>위</span>" +
+			                        rank + "<span class='ir'>위</span>" +
 			                    "</p>" +
-
-			                    "<img src='" + obj.img + "' " +
-			                         "alt='" + obj.moviename + "' " +
+			                    "<img src='${commonURL}/${movieImgPath}/"+ obj.moviecode +"/"+obj.mainimage +
+			                         "' alt='" + obj.moviename + "' " +
 			                         "class='poster lozad' " +
 			                         "onerror='noImg(this)'>" +
 			                "</a>" +
 			            "</div>" +
 
 			            "<div class='tit-area'>" +
-			                "<p class='movie-grade age-all'></p>" +
+			                "<p class='movie-grade age-" + obj.moviegrade + "'></p>" +
 			                "<p title='" + obj.moviename + "' class='tit'>" + obj.moviename + "</p>" +
 			            "</div>" +
 
@@ -174,15 +199,6 @@ request.setAttribute("size", size);
 
 			<!-- movie-list-util -->
 			<div class="movie-list-util mt40">
-				<!-- 박스오피스 -->
-				<!-- <div class="topSort" style="display: block;">
-
-					<div class="onair-condition">
-						<button type="button" title="개봉작만 보기" class="btn-onair btnOnAir" onclick="location.href='movieList.jsp?filter=opened'">개봉작만</button>
-					</div>
-				</div> -->
-				<!--// 박스오피스 -->
-
 				<!-- 상영예정작 -->
 				<div class="topSort">
 					<div class="movie-sorting sortTab">
@@ -224,23 +240,25 @@ request.setAttribute("size", size);
 
 								<div class="movie-list-info">
 									<!-- 여기가 이제  -->
-									<a href="${commonURL}/user/movie/detail.jsp"
-										class="wrap movieBtn" data-no="25089000" title="주토피아 2 상세보기">
-
+									<a href="${commonURL}/user/movie/detail.jsp?code=${m.moviecode}"
+										class="wrap movieBtn" data-no="${m.moviecode}" title="${m.moviename} 상세보기">
 										<p class="rank">
 											<c:out value="${i.index+1}"/><span class="ir">위</span>
-										</p><img
-										src="./MEET PLAY SHARE, 메가박스_files/YiSbqEf6OvFcDoLoQCipDojOHqMCwKG4_420.jpg"
-										alt="주토피아 2" class="poster lozad" onerror="noImg(this)">
+										</p>
+										<img
+										src="${commonURL}/${movieImgPath}/${m.moviecode}/${m.moviemainimg}"
+										alt="${m.moviename}" class="poster lozad" onerror="noImg(this)">
 									</a>
 								</div> 
 								<div class="tit-area">
-									<p class="movie-grade age-all"></p>
-									<p title="주토피아 2" class="tit">${m.moviename}</p>
+									<p class="movie-grade age-${m.moviegrade}"></p>
+									<p title="${m.moviename}" class="tit">${m.moviename}</p>
 								</div>
 								<div class="rate-date">
-									<span class="rate">예매율 53%</span> 
-									<span class="date">개봉일 ${m.moviereleasedate}</span>
+									<span class="rate">예매율 ${m.bookrate}%</span> 
+									<span class="date">개봉일 
+									<fmt:parseDate value="${m.moviereleasedate}" pattern="yyyy-MM-dd" var="releaseDate"/>
+        							<fmt:formatDate value="${releaseDate}" pattern="yyyy.MM.dd"/></span>
 								</div>
 								<div class="btn-util">
 									<p class="txt movieStat1" style="display: none">상영예정</p>
@@ -251,7 +269,7 @@ request.setAttribute("size", size);
 									<div class="case col-2 movieStat3">
 										<a
 											href="${commonURL}/user/fast_booking/fastBooking.jsp"
-											class="button purple bokdBtn" data-no="25089000"
+											class="button purple bokdBtn" data-no="${m.moviecode}"
 											title="영화 예매하기"> 예매 </a>
 									</div>
 									<div class="case movieStat4" style="display: none">
