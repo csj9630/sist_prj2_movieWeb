@@ -24,6 +24,32 @@ public class MovieDAO {
 		return mDAO;
 	}//getInstance
 	
+	//좌석 페이지 선택 페이지 이미지 가져오기
+	public String selectMovieByCode(String movie_code) throws SQLException {
+		DbConn dbCon=DbConn.getInstance("jdbc/dbcp");
+		String img=null;
+		
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		
+		try {
+			con=dbCon.getConn();
+			String selectImg="select main_image from movie where movie_code=?";
+			pstmt=con.prepareStatement(selectImg);
+			pstmt.setString(1, movie_code);
+			
+			rs=pstmt.executeQuery();
+			if(rs.next()) {
+				img=rs.getString("main_image");
+			}
+		} finally {
+			dbCon.dbClose(rs, pstmt, con);
+		}
+		
+		return img;
+	}//countAllMovie
+	
 	//박스오피스 영화 수를 계산
 	public int countBoxoffice() throws SQLException {
 		int cnt=0;

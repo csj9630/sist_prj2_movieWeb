@@ -284,7 +284,16 @@ $(function() {
     
     // 영화 선택했을 때 넘겨줄 값
     $(document).on("click", ".schedule-row", function () {
-		var row=$(this);
+    	 var userId = "${sessionScope.userId}";
+    	 
+         if (userId === "" || userId === "null") {
+             alert("로그인 후 이용해주시기 바랍니다.");
+             return;
+             //location.href = "${commonURL}/user/member/memberLogin.jsp";
+         }
+         // 예매 페이지로 이동
+    	
+    	var row=$(this);
 		var form=$("#scheduleForm");
 		
 		form.find("input[name=movieCode]").val(row.data("movie-code"));
@@ -293,6 +302,7 @@ $(function() {
 		form.find("input[name=theaterName]").val(row.data("theater-name"));
 		form.find("input[name=screenOpen]").val(row.data("screen-open"));
 		form.find("input[name=screenEnd]").val(row.data("screen-end"));
+		form.find("input[name=screenDate]").val(selectedDate);
 		
 		form.submit();
     });
@@ -384,6 +394,7 @@ function displaySchedule(data) {
 	displayHTML += '	<input type="hidden" name="theaterName">';
 	displayHTML += '	<input type="hidden" name="screenOpen">';
 	displayHTML += '	<input type="hidden" name="screenEnd">';
+	displayHTML += '	<input type="hidden" name="screenDate">';
 	displayHTML += '</form>';
 	displayHTML += '<div class="schedule-table-wrapper">';
 	displayHTML += '<table class="table table-hover schedule-table">';
@@ -790,7 +801,7 @@ function displaySchedule(data) {
 
 				<!-- quick-reserve-area -->
 				<div class="quick-reserve-area "  >
-
+					
 					<!-- movie-choice : 영화 선택  -->
 					<div class="movie-choice" style="width:30%;"  >
 						<p class="tit">영화</p>
