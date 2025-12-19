@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="movie.announce_admin.AnnounceDTO" %>
+<%@ page import="movie.admin.AdminAnnounceService" %>
 <%
     // [세션 검사] 로그인 안 된 상태면 로그인 화면으로 튕겨냄
     String adminId = (String) session.getAttribute("adminId");
@@ -12,20 +14,43 @@
         return; // 밑에 있는 HTML이나 자바 코드가 실행되지 않도록 여기서 멈춤
     }
 %>
+<%
+    // 1. 파라미터 받기 (PK)
+    String numStr = request.getParameter("notice_num");
+    int noticeNum = 0;
+    if(numStr != null && !numStr.isEmpty()){
+        try {
+            noticeNum = Integer.parseInt(numStr);
+        } catch(NumberFormatException e) {
+            noticeNum = 0;
+        }
+    }
+    
+    // 2. 데이터 조회
+    AdminAnnounceService service = AdminAnnounceService.getInstance();
+    AnnounceDTO dto = service.getAnnounceDetail(noticeNum);
+    
+    // 데이터가 없는 경우 방어 코드
+    if(dto == null) {
+%>
+    <script>
+        alert("존재하지 않는 게시물입니다.");
+        location.href = "Admin_NoticeList.jsp";
+    </script>
+<%
+        return;
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>2GV Admin - 공지 등록</title>
+    <title>2GV Admin - 공지 상세</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/lang/summernote-ko-KR.min.js"></script>
-
     <style>
         /* [공통 스타일 유지] */
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
@@ -55,78 +80,68 @@
         .logout-btn { padding: 8px 16px; border: 1px solid #e1e1e1; background-color: #fff; border-radius: 6px; font-size: 12px; font-weight: 600; color: #5e6278; transition: 0.2s; }
         .logout-btn:hover { background-color: #f9f9f9; border-color: #d1d1d1; color: #333; }
         
-        /* [★수정됨★ 컨텐츠 래퍼 - 중앙 정렬 적용] */
+        /* [컨텐츠 래퍼 - 중앙 정렬 적용] */
         .content-wrapper { 
             flex: 1; 
             padding: 40px 30px; 
             overflow-y: auto;
             
-            /* 수직/수평 중앙 정렬을 위한 Flex 설정 */
+            /* 수직/수평 중앙 정렬 */
             display: flex;
             flex-direction: column;
-            justify-content: center; /* 수직 중앙 */
-            align-items: center;     /* 수평 중앙 */
+            justify-content: center; 
+            align-items: center;     
         }
         
-        /* [폼 컨테이너 스타일] */
+        /* [상세 페이지 컨테이너] */
         .form-container { 
             background: #fff; 
             border-radius: 12px; 
             padding: 40px; 
             box-shadow: 0 5px 15px rgba(0,0,0,0.03); 
             max-width: 1000px; 
-            width: 100%; /* 중앙 정렬 시 너비 확보 */
-            /* margin: 0 auto; -> Flex 중앙 정렬 사용 시 제거해도 무방하지만 안전하게 유지 */
+            width: 100%; 
         }
         
-        .form-group { margin-bottom: 20px; }
-        .form-label { display: block; font-size: 14px; font-weight: 700; color: #333; margin-bottom: 8px; }
-        .form-input { width: 100%; height: 45px; padding: 0 15px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        .view-header { border-bottom: 1px solid #eee; padding-bottom: 20px; margin-bottom: 30px; }
+        .view-title { font-size: 24px; font-weight: 700; color: #333; margin-bottom: 15px; }
+        .view-info { display: flex; justify-content: space-between; color: #888; font-size: 13px; }
+        
+        /* 본문 내용 스타일 (Summernote HTML 출력 대응) */
+        .view-content { 
+            min-height: 300px; 
+            font-size: 15px; 
+            color: #444; 
+            line-height: 1.6; 
+        }
+        /* 이미지가 영역을 벗어나지 않도록 처리 */
+        .view-content img { max-width: 100%; height: auto; }
+        .view-content p { margin-bottom: 10px; }
         
         /* 버튼 영역 */
-        .btn-wrap { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-        .btn-save { padding: 12px 30px; background-color: #503396; color: white; border-radius: 6px; font-weight: bold; border: none; cursor: pointer; }
-        .btn-cancel { padding: 12px 30px; background-color: #fff; border: 1px solid #ddd; color: #555; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .btn-wrap { display: flex; justify-content: flex-end; gap: 10px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; }
+        .btn-common { padding: 10px 25px; border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer; transition: 0.2s; border: 1px solid transparent; }
+        
+        .btn-list { background-color: #fff; border-color: #ddd; color: #555; }
+        .btn-list:hover { background-color: #f9f9f9; }
+        
+        .btn-modify { background-color: #503396; color: white; }
+        .btn-modify:hover { background-color: #3e257a; }
+        
+        .btn-delete { background-color: #fdedec; color: #e74c3c; border-color: #fadbd8; }
+        .btn-delete:hover { background-color: #fceae9; }
     </style>
-
+    
     <script>
-        // Summernote 초기화
-        $(document).ready(function() {
-            $('#summernote').summernote({
-                placeholder: '내용을 입력해주세요',
-                tabsize: 2,
-                height: 400,               // 에디터 높이
-                lang: 'ko-KR',             // 한국어 설정
-                toolbar: [
-                    ['style', ['style']],
-                    ['font', ['bold', 'underline', 'clear']],
-                    ['color', ['color']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['table', ['table']],
-                    ['insert', ['link', 'picture', 'video']],
-                    ['view', ['fullscreen', 'codeview', 'help']]
-                ]
-            });
-        });
-
-        function checkForm() {
-            var f = document.frm;
-            if(f.title.value == "") { 
-                alert("제목을 입력해주세요."); 
-                f.title.focus(); 
-                return; 
+        function deleteNotice() {
+            if(confirm("정말 이 공지사항을 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.")) {
+                location.href = "admin_notice_delete_process.jsp?notice_num=<%= noticeNum %>";
             }
-            // Summernote 내용은 textarea에 담깁니다.
-            if($('#summernote').summernote('isEmpty')) {
-                alert("내용을 입력해주세요."); 
-                $('#summernote').summernote('focus');
-                return; 
-            }
-            f.submit();
         }
     </script>
 </head>
 <body>
+
     <nav class="sidebar">
         <div class="logo-area"><a href="../admin_dashboard/Admin_Dashboard.jsp"><img src="../../resources/img/2GV_LOGO_empty.png"></a></div>
         <div class="menu-list">
@@ -171,24 +186,28 @@
 
         <div class="content-wrapper">
             <div class="form-container">
-                <h3 style="margin-bottom: 20px; font-size: 20px; font-weight:800;">📢 공지사항 등록</h3>
                 
-                <form name="frm" action="admin_notice_insert_process.jsp" method="post">
-                    <div class="form-group">
-                        <label class="form-label">제목</label>
-                        <input type="text" name="title" class="form-input" placeholder="예: [공지] 서버 점검 안내">
+                <div class="view-header">
+                    <h2 class="view-title"><%= dto.getAnnounceName() %></h2>
+                    <div class="view-info">
+                        <span><i class="fa-solid fa-user"></i> <%= dto.getAdminId() %></span>
+                        <span>
+                            <span style="margin-right:15px;"><i class="fa-regular fa-clock"></i> <%= dto.getAnnounceDate() %></span>
+                            <span><i class="fa-regular fa-eye"></i> <%= dto.getAnnounceViews() %></span>
+                        </span>
                     </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">내용</label>
-                        <textarea id="summernote" name="content"></textarea>
-                    </div>
-                    
-                    <div class="btn-wrap">
-                        <button type="button" class="btn-cancel" onclick="history.back()">취소</button>
-                        <button type="button" class="btn-save" onclick="checkForm()">등록</button>
-                    </div>
-                </form>
+                </div>
+                
+                <div class="view-content">
+                    <%= dto.getAnnounceContent() %>
+                </div>
+                
+                <div class="btn-wrap">
+                    <button type="button" class="btn-common btn-list" onclick="location.href='Admin_NoticeList.jsp'">목록</button>
+                    <button type="button" class="btn-common btn-modify" onclick="location.href='Admin_NoticeModify.jsp?notice_num=<%= noticeNum %>'">수정</button>
+                    <button type="button" class="btn-common btn-delete" onclick="deleteNotice()">삭제</button>
+                </div>
+                
             </div>
         </div>
     </main>

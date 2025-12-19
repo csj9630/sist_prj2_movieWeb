@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import DBConnection.DbConn;
-import movie.detail.DetailDTO;
 
 public class ImageDAO {
 	// ------싱글톤 패턴------------------------
@@ -80,4 +79,56 @@ public class ImageDAO {
 
 		return list;
 	}// selectImageList
+
+	
+	
+	
+	///////////////관리자 부분 추가함/////////////////
+	
+	
+	// 관리자 : 영화 등록 시 이미지 추가를 해야하므로 메소드 추가. 
+	//이미지 저장 메호드
+	public int insertImage(ImageDTO iDTO) throws SQLException {
+        int cnt = 0;
+        DbConn db = DbConn.getInstance("jdbc/dbcp");
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            con = db.getConn();
+            StringBuilder sql = new StringBuilder();
+            
+            // 보내주신 SQL 파일에 있는 시퀀스 이름(seq_movie_image) 사용
+            sql.append(" INSERT INTO movie_image(img_code, img_path, movie_code) ")
+               .append(" VALUES (seq_movie_image.nextval, ?, ?) "); 
+
+            pstmt = con.prepareStatement(sql.toString());
+            pstmt.setString(1, iDTO.getImg_path());
+            pstmt.setString(2, iDTO.getMovie_code());
+
+            cnt = pstmt.executeUpdate();
+        } finally {
+            db.dbClose(null, pstmt, con);
+        }
+        return cnt;
+    }//insertImage
+	
+	//이미지 삭제 메소드
+	public int deleteImage(String movieCode) throws SQLException {
+        int cnt = 0;
+        DbConn db = DbConn.getInstance("jdbc/dbcp");
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        try {
+            con = db.getConn();
+            String sql = "DELETE FROM movie_image WHERE movie_code=?";
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, movieCode);
+            cnt = pstmt.executeUpdate();
+        } finally {
+            db.dbClose(null, pstmt, con);
+        }
+        return cnt;
+    }//deleteImage
+	
 }// class

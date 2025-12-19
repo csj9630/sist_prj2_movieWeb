@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="movie.announce_admin.AnnounceDTO" %>
+<%@ page import="movie.admin.AdminAnnounceService" %>
 <%
     // [세션 검사] 로그인 안 된 상태면 로그인 화면으로 튕겨냄
     String adminId = (String) session.getAttribute("adminId");
@@ -12,11 +14,39 @@
         return; // 밑에 있는 HTML이나 자바 코드가 실행되지 않도록 여기서 멈춤
     }
 %>
+<%
+    // 1. 파라미터 받기 (수정할 글 번호)
+    String numStr = request.getParameter("notice_num");
+    int noticeNum = 0;
+    if(numStr != null && !numStr.isEmpty()){
+        try {
+            noticeNum = Integer.parseInt(numStr);
+        } catch(NumberFormatException e) {
+            noticeNum = 0;
+        }
+    }
+    
+    // 2. 기존 데이터 조회
+    AdminAnnounceService service = AdminAnnounceService.getInstance();
+    AnnounceDTO dto = service.getAnnounceDetail(noticeNum);
+    
+    // 데이터가 없으면 목록으로 팅겨내기 (방어 코드)
+    if(dto == null) {
+%>
+    <script>
+        alert("존재하지 않는 게시물입니다.");
+        location.href = "Admin_NoticeList.jsp";
+    </script>
+<%
+        return;
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>2GV Admin - 공지 등록</title>
+    <title>2GV Admin - 공지 수정</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -55,17 +85,17 @@
         .logout-btn { padding: 8px 16px; border: 1px solid #e1e1e1; background-color: #fff; border-radius: 6px; font-size: 12px; font-weight: 600; color: #5e6278; transition: 0.2s; }
         .logout-btn:hover { background-color: #f9f9f9; border-color: #d1d1d1; color: #333; }
         
-        /* [★수정됨★ 컨텐츠 래퍼 - 중앙 정렬 적용] */
+        /* [컨텐츠 래퍼 - 중앙 정렬 적용] */
         .content-wrapper { 
             flex: 1; 
             padding: 40px 30px; 
             overflow-y: auto;
             
-            /* 수직/수평 중앙 정렬을 위한 Flex 설정 */
+            /* 수직/수평 중앙 정렬 */
             display: flex;
             flex-direction: column;
-            justify-content: center; /* 수직 중앙 */
-            align-items: center;     /* 수평 중앙 */
+            justify-content: center; 
+            align-items: center;     
         }
         
         /* [폼 컨테이너 스타일] */
@@ -75,8 +105,7 @@
             padding: 40px; 
             box-shadow: 0 5px 15px rgba(0,0,0,0.03); 
             max-width: 1000px; 
-            width: 100%; /* 중앙 정렬 시 너비 확보 */
-            /* margin: 0 auto; -> Flex 중앙 정렬 사용 시 제거해도 무방하지만 안전하게 유지 */
+            width: 100%; 
         }
         
         .form-group { margin-bottom: 20px; }
@@ -171,22 +200,24 @@
 
         <div class="content-wrapper">
             <div class="form-container">
-                <h3 style="margin-bottom: 20px; font-size: 20px; font-weight:800;">📢 공지사항 등록</h3>
+                <h3 style="margin-bottom: 20px; font-size: 20px; font-weight:800;">✏️ 공지사항 수정</h3>
                 
-                <form name="frm" action="admin_notice_insert_process.jsp" method="post">
+                <form name="frm" action="admin_notice_update_process.jsp" method="post">
+                    <input type="hidden" name="notice_num" value="<%= noticeNum %>">
+                    
                     <div class="form-group">
                         <label class="form-label">제목</label>
-                        <input type="text" name="title" class="form-input" placeholder="예: [공지] 서버 점검 안내">
+                        <input type="text" name="title" class="form-input" value="<%= dto.getAnnounceName() %>">
                     </div>
                     
                     <div class="form-group">
                         <label class="form-label">내용</label>
-                        <textarea id="summernote" name="content"></textarea>
+                        <textarea id="summernote" name="content"><%= dto.getAnnounceContent() %></textarea>
                     </div>
                     
                     <div class="btn-wrap">
                         <button type="button" class="btn-cancel" onclick="history.back()">취소</button>
-                        <button type="button" class="btn-save" onclick="checkForm()">등록</button>
+                        <button type="button" class="btn-save" onclick="checkForm()">수정 완료</button>
                     </div>
                 </form>
             </div>

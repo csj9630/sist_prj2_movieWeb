@@ -30,4 +30,28 @@ public class ImageService {
 		
 		return list;
 	}//searchMovieDetail
+	
+	
+	
+	//-----------관리자 파트 추가--------------
+	//이미지 등록
+	public void addImage(ImageDTO iDTO) {
+        ImageDAO iDAO = ImageDAO.getInstance();
+        try {
+            iDAO.insertImage(iDTO);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }//addImage
+	
+	//이미지 삭제
+	public void removeImage(String movieCode) {
+        ImageDAO iDAO = ImageDAO.getInstance();
+        try {
+            iDAO.deleteImage(movieCode);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }//removeImage
+	
 }//class
