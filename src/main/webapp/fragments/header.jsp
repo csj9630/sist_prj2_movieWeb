@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="../../fragments/siteProperty.jsp"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <h1 class="ci">
 	<a href="${commonURL}/user/main/index.jsp" title="2GV 메인으로 가기"
 		style="height:55px; background-image: url('${commonURL}/resources/images/header.png');"></a>
@@ -9,42 +8,18 @@
 <!-- 2019-04-15 마크업 수정 : 고객요청  -->
 <div class="util-area">
 	<div class="right-link">
-		<!-- 로그인 상태 확인하여 상단바 바꿔주기 -->
-		<%
-		// 세션에서 값 가져오기
-		String userId = (String) session.getAttribute("userId");
-		String userName = (String) session.getAttribute("userName");
-		%>
-		<div class="login-status">
-			<%
-			if (userId != null && !"".equals(userId)) {
-			%>
-			<div class="after">
-				<a href="${commonURL}/user/memberLogin.jsp" class="" title=""><%=userName%>님</a>
-				<a href="logout.jsp" title="로그아웃">로그아웃</a>
-			</div>
-			<%
-			} else {
-			%>
-			<div class="before">
-				<a href="${commonURL}/user/member/memberLogin.jsp" title="로그인">로그인</a>
-				<a href="${commonURL}/user/member/memberJoinFrm.jsp" title="회원가입">회원가입</a>
-			</div>
-			<%
-			}
-			%>
+		<!-- 로그인전 -->
+		<div class="before" style="">
+			<a href="${commonURL}/user/member/memberLogin.jsp" title="로그인">로그인</a>
+			<a href="${commonURL}/user/member/memberJoinFrm.jsp" title="회원가입">회원가입</a>
 		</div>
 
-
-		<!-- 로그인전 -->
-
-
 		<!-- 로그인후 -->
-		<!-- <div class="after" style="display: none">
+		<div class="after" style="display: none">
 			<a href="https://www.megabox.co.kr/on/oh/ohg/MbLogin/mbLogout.do"
 				class="" title="로그아웃">로그아웃</a> <a
 				href="https://www.megabox.co.kr/movie" class="notice" title="알림">알림</a>
-		</div> -->
+		</div>
 
 		<a href="https://www.megabox.co.kr/booking">빠른예매</a>
 	</div>

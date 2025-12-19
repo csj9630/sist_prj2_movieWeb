@@ -1,22 +1,8 @@
-<%@page import="SiteProperty.SitePropertyVO"%>
 <%@page import="member.UserInfoService"%>
 <%@page import="member.userDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="../../fragments/siteProperty.jsp"%>
-<%
-    // 세션에 userId가 있다면 이미 로그인된 상태
-    if (session.getAttribute("userId") != null) {
-%>
-    <script type="text/javascript">
-        alert("이미 로그인된 상태입니다.");
-        // 메인 페이지로 이동
-        location.href = "${commonURL}/user/main/index.jsp";
-    </script>
-<%
-        return; // 아래쪽의 로그인 폼(HTML)이 그려지지 않도록 즉시 종료
-    }
-%>
 <%
 /* POST방식에서 한글 깨짐 방지. */
 request.setCharacterEncoding("UTF-8");
@@ -316,9 +302,7 @@ body {
 			<%
 			boolean formSubmitted = (request.getParameter("users_name") != null);
 			String scriptToExecute = ""; // 실행할 JavaScript 코드를 담을 변수
-			System.out.println(request.getParameter("users_name"));
-			System.out.println(request.getParameter("phone_num"));
-			System.out.println(request.getParameter("birth"));
+			
 			if (formSubmitted) {
 				userDTO uDTO = new userDTO();
 				uDTO.setUsers_name(request.getParameter("users_name"));
@@ -328,11 +312,10 @@ body {
 				uDTO.setEmail(request.getParameter("mail") + "@" + request.getParameter("domain"));
 				UserInfoService uis = UserInfoService.getInstance();
 				/* 임시 key */
-				SitePropertyVO sv = new SitePropertyVO();
-				String key = sv.getKey();//키는 반드시 16글자
+				String key = "a123456789012345";
 				boolean flagId = false;
 				flagId = uis.searchUserId(uDTO, key);
-				System.out.println("d결과 : " + flagId);
+
 				if (flagId != false) { // 성공 시
 					// 성공 시 모달 내용 업데이트
 					String modalContent = "회원님의 아이디는 <b>[ " + uDTO.getUsers_id() + " ] 입니다.</b>";
@@ -382,7 +365,7 @@ body {
 						class="form-input" name="mail" id="mail" placeholder="example"
 						style="width: 50%;" value="으악">@ <select name="domain"
 						id="domain" class="form-input" style="width: 45%;">
-						<option value="gmail.com">gmail.com</option>
+						<option value="google.com">google.com</option>
 						<option value="naver.com">naver.com</option>
 						<option value="daum.net">daum.net</option>
 						<option value="hotmail.com">hotmail.com</option>
@@ -406,7 +389,8 @@ body {
 				<span>알림</span>
 				<button class="modal-close-btn" id="closeModal">✕</button>
 			</div>
-			<div class="modal-body"></div>
+			<div class="modal-body">
+			</div>
 			<div class="modal-footer">
 				<button class="modal-confirm-btn" id="checkModal">확인</button>
 			</div>

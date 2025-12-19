@@ -18,7 +18,7 @@ public class MovieService {
 		return ms;
 	}//getInstance
 	
-	// 박스오피스 초기 화면 영화 개수
+	// 박스오피스 영화 개수
 	public int totalBoxOffice() {
 		int cnt=0;
 		MovieDAO mDAO=MovieDAO.getInstance();

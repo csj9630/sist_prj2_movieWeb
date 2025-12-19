@@ -1,21 +1,9 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ include file="../../fragments/siteProperty.jsp"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%
-    // 세션에 userId가 있다면 이미 로그인된 상태
-    if (session.getAttribute("userId") != null) {
-%>
-    <script type="text/javascript">
-        alert("이미 로그인된 상태입니다.");
-        // 메인 페이지로 이동
-        location.href = "${commonURL}/user/main/index.jsp";
-    </script>
-<%
-        return; // 아래쪽의 로그인 폼(HTML)이 그려지지 않도록 즉시 종료
-    }
-%>
 <html lang="en" data-bs-theme="auto">
 <head>
 <meta charset="UTF-8">
@@ -694,6 +682,7 @@ let isCheckCode = false;
 </script>
 </head>
 <body>
+	<input type="button" id="test" value="아">
 	<header id="header"><jsp:include
 			page="../../fragments/header.jsp" /></header>
 
@@ -738,7 +727,7 @@ let isCheckCode = false;
 						<input type="text" class="form-input" name="mail" id="mail"
 							placeholder="example" style="width: 50%;" value="1">@ <select
 							name="domain" id="domain" class="form-input" style="width: 45%;">
-							<option value="gmail.com">gmail.com</option>
+							<option value="google.com">google.com</option>
 							<option value="naver.com">naver.com</option>
 							<option value="daum.net">daum.net</option>
 							<option value="hotmail.com">hotmail.com</option>
@@ -832,6 +821,11 @@ let isCheckCode = false;
 			</div>
 		</div>
 	</div>
+	<%
+	String sessioncode = (String) session.getAttribute("authCode");
+	System.out.println(sessioncode);
+	%>
+	<c:out value="${ sessionScope.authCode }" />
 
 
 	<footer id="footer"><jsp:include
