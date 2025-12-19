@@ -89,6 +89,126 @@
     .modal-footer { padding-bottom: 20px; text-align: center; }
     .modal-confirm-btn { background-color: #55359E; color: white; border: none; padding: 8px 25px; border-radius: 4px; cursor: pointer; font-weight: 600; }
 </style>
+<<<<<<< HEAD
+=======
+<script type="text/javascript">
+$(function() {
+	
+	/* /* modal창 닫기 */
+	$("#modalClose").click(function() {
+		$("#loginModal").removeClass("show");
+	});//click
+
+	/* modal창 닫기 */
+	$("#modalConfirm").click(function() {
+		$("#loginModal").removeClass("show");
+	})//click */
+	
+	
+	$("#btnLogin").click(function(){
+			if($("#users_id").val() == ""){
+				alert("아이디는 필수 입력!");
+				return;
+			}//end if
+			if($("#users_pass").val() == ""){
+				alert("비밀번호는 필수 입력!");
+				return;
+			}//end if
+			resultLogin();
+			/* $("#loginForm").submit(); */
+			/*  $("#loginModal").addClass("show"); // 모달 표시 (현재 페이지 유지) */
+		});
+//비밀번호 입력창에서 엔터 키 이벤트 추가
+$("#users_pass").keydown(function(e) {
+    if (e.keyCode == 13) {
+        $("#btnLogin").click();
+    }
+});
+});//ready
+
+
+ //로그인 버튼 클릭시 ajax로 값 비교 후 결과 알려주기
+/* function resultLogin() {
+    var param = {
+        users_id: $("#users_id").val(),
+        users_pass: $("#users_pass").val()
+    };
+
+    $.ajax({
+        url: 'memberLoginProcess.jsp',
+        type: 'POST',
+        data: param,
+        dataType: "JSON",
+        success: function(response) {
+            $("#loginModal").addClass("show");
+            $("#textModal").text(response.msg);
+
+            // 기존 이벤트를 제거하여 중복 실행 방지
+            $("#modalConfirm, #modalClose").off('click');
+
+            if (response.status === 'success') {
+                $("#modalConfirm, #modalClose").on('click', function() {
+                    $("#loginModal").removeClass("show");
+                    // 에러 원인 수정: 함수형태()가 아닌 대입형태= 사용
+                    window.location.href = "${commonURL}/user/main/index.jsp";
+                });
+            } else {
+                // 실패 시 모달만 닫도록 설정
+                $("#modalConfirm, #modalClose").on('click', function() {
+                    $("#loginModal").removeClass("show");
+                });
+            }
+        }, // success 끝
+        error: function(xhr) {
+            alert("비정상적인 접근이 감지되었습니다.(데이터베이스 등의 문제)");
+            console.log(xhr.status);
+        }
+    }); // ajax 끝
+} */
+
+function resultLogin() {
+    var param = {
+        users_id: $("#users_id").val(),
+        users_pass: $("#users_pass").val()
+    };
+
+    $.ajax({
+        url: 'memberLoginProcess.jsp',
+        type: 'POST',
+        data: param,
+        dataType: "JSON",
+        success: function(response) {
+            $("#loginModal").addClass("show");
+            $("#textModal").text(response.msg);
+
+            $("#modalConfirm, #modalClose").off('click');
+
+            if (response.status === 'success') {
+                $("#modalConfirm, #modalClose").on('click', function() {
+                    $("#loginModal").removeClass("show");
+
+                    var prevPage = document.referrer;
+
+                    // 현재 페이지 파일명이 memberLogin.jsp인지 확인 필요
+                    if (prevPage && prevPage.indexOf("memberLogin.jsp") === -1) {
+                        location.href = prevPage;
+                    } else {
+                        location.href = "${commonURL}/user/main/index.jsp";
+                    }
+                });
+            } else {
+                $("#modalConfirm, #modalClose").on('click', function() {
+                    $("#loginModal").removeClass("show");
+                });
+            }
+        },
+        error: function(xhr) {
+            alert("비정상적인 접근이 감지되었습니다.");
+        }
+    }); // 이 부분이 빠져있었습니다.
+} // 이 부분도 빠져있었습니다
+</script>
+>>>>>>> refs/heads/main
 </head>
 
 <body>
