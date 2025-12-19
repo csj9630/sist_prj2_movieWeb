@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="../../fragments/siteProperty.jsp"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="auto">
 <head>
@@ -42,7 +43,6 @@
 	media="all">
 
 <body style="padding: 0px;">
-
 	<noscript>
 		<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WG5DNB7D"
 			height="0" width="0" style="display: none; visibility: hidden"></iframe>

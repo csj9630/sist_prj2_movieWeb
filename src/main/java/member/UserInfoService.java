@@ -54,7 +54,7 @@ public class UserInfoService {
 	}// searchId
 
 	/**
-	 * 회원 추가 메소드
+	 * 회원가입 메소드
 	 * 
 	 * @param uDTO
 	 * @param key
@@ -215,5 +215,37 @@ public class UserInfoService {
 		}//catch
 		return result;
 	}//changePw
+	
+	//로그인메소드
+	public userDTO searchLogin( LoginDTO lDTO, String key ) {
+		userDTO uDTO = null;
+		
+		//비밀번호는 일방향 해시
+		if(lDTO.getUsers_pass() != null && !lDTO.getUsers_pass().isEmpty()) {
+			try {
+				lDTO.setUsers_pass(DataEncryption.messageDigest("SHA-1", lDTO.getUsers_pass()));
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			}//end catch
+		}//end if
+		
+		UserLoginDAO ulDAO = UserLoginDAO.getInstance("jdbc/dbcp");
+		try {
+			uDTO=ulDAO.selectLogin(lDTO);
+			//pDTO에는 아이디, 이름(암호화 > 복호화), 생년월일이 할당
+			DataDecryption dd= new DataDecryption(key);//대칭키 : 암호화키와 복호화 키가 같아야 한다.
+			try {
+				uDTO.setUsers_name(dd.decrypt(uDTO.getUsers_name()));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return uDTO;
+	}//searchLogin
+	
+	
 	
 }// class
