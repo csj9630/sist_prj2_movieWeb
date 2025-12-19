@@ -358,12 +358,24 @@ public class MovieDAO {
 			con=dbCon.getConn();
 			StringBuilder selectPage=new StringBuilder();
 			selectPage
-			.append("	select movie_code, main_image, movie_grade, movie_name, release_date	")
-			.append("	from movie	")
-			.append("	where release_date > sysdate	")
-			.append("	order by movie_code desc	")
-			.append("	OFFSET ? ROWS FETCH NEXT ? ROWS ONLY	");
-			
+			.append("    SELECT m.movie_code, m.main_image ")
+			.append("         , CASE REGEXP_SUBSTR(m.movie_grade, '^(전체|12|15|청소년)') ")
+			.append("             WHEN '전체'   THEN 'all' ")
+			.append("             WHEN '12'     THEN '12' ")
+			.append("             WHEN '15'     THEN '15' ")
+			.append("             WHEN '청소년' THEN '19' ")
+			.append("             ELSE m.movie_grade ")
+			.append("           END AS movie_grade ")
+			.append("         , m.movie_name ")
+			.append("         , m.release_date ")
+			.append("         , b.book_rate ")
+			.append("    FROM movie m ")
+			.append("    INNER JOIN book_rate b ")
+			.append("        ON b.movie_code = m.movie_code ")
+			.append("    WHERE m.release_date > SYSDATE ")
+			.append("    ORDER BY m.release_date DESC ")
+			.append("    OFFSET ? ROWS FETCH NEXT ? ROWS ONLY ");
+
 			pstmt=con.prepareStatement(selectPage.toString());
 			pstmt.setInt(1, offset);
 			pstmt.setInt(2, size);
@@ -378,6 +390,7 @@ public class MovieDAO {
 				mDTO.setMoviegrade(rs.getString("movie_grade"));
 				mDTO.setMoviename(rs.getString("movie_name"));
 				mDTO.setMoviereleasedate(rs.getString("release_date"));
+				mDTO.setBookrate(rs.getDouble("book_rate"));
 				
 				pageMovieList.add(mDTO);
 			}
