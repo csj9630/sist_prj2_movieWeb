@@ -24,7 +24,7 @@ public class MovieDAO {
 		return mDAO;
 	}//getInstance
 	
-	//좌석 페이지 선택 페이지 이미지 가져오기
+	//좌석 페이지 선택 페이지 이미지 가져오기2
 	public String selectMovieByCode(String movie_code) throws SQLException {
 		DbConn dbCon=DbConn.getInstance("jdbc/dbcp");
 		String img=null;
