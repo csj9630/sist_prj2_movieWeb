@@ -19,7 +19,7 @@
 String movieImgPath = "resources/images/movieImg";
 
 
-application.setAttribute("commonURL","http://localhost/sist_prj2_movieWeb");
+application.setAttribute("commonURL","http://tgv.sist.co.kr");
 application.setAttribute("movieImgPath",movieImgPath );    
 
 

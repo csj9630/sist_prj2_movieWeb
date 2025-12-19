@@ -66,11 +66,6 @@
 		<!-- Google Tag Manager (noscript) -->
 		<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WG5DNB7D" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) -->
 	
-	<!-- 웹접근성 영역 바로가기 -->
-	<div class="skip" title="스킵 네비게이션">
-		<a href="#contents" title="본문 바로가기">본문 바로가기</a> <a href="#footer" title="푸터 바로가기">푸터 바로가기</a>
-	</div>
-
 <!-- 웹접근성 영역 바로가기 -->
 <div class="skip" title="스킵 네비게이션">
 	<a href="#contents" title="본문 바로가기">본문 바로가기</a>

@@ -62,18 +62,5 @@ public class ScreenInfoService {
 		return movieScheduleMap;
 	} // getMovieSchedule
 	
-	// 빠른 예매 창에서 띄워줄 상영 스케쥴
-	public List<ScreenInfoDTO> getMovieSchedule(String date, String movieCode) {
-		List<ScreenInfoDTO> list=null;
-		ScreenInfoDAO siDAO=ScreenInfoDAO.getInstance();
-		
-		try {
-			list=siDAO.selectScheduleList(date, movieCode);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return list;
-	}//getMovieSchedule
 	
 }
