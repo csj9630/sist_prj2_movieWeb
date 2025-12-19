@@ -1533,5 +1533,4 @@ function displaySchedule(data) {
 	<footer id="footer">
 		<jsp:include page="../../fragments/footer.jsp"></jsp:include>
 	</footer>
->>>>>>> refs/heads/main
 </body>
