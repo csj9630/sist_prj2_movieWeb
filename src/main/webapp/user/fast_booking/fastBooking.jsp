@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <%@page import="movie.MovieDTO"%>
 <%@page import="java.util.List"%>
 <%@page import="movie.MovieService"%>
