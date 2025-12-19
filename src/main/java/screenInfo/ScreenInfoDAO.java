@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import movie.MovieDTO;
-
 public class ScreenInfoDAO {
 	
 	private static ScreenInfoDAO siDAO;

@@ -3,29 +3,49 @@
 <%@page import="movie.MovieService"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%
+SeatBookService sbs = SeatBookService.getInstance();
+String screen_code="scc001";
+sbs.searchRestaurant(screen_code);
+%>
 <%@ include file="../../fragments/siteProperty.jsp"%>
 <html lang="en" data-bs-theme="auto">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>빠른예매 (좌석선택)</title>
-<link rel="shortcut icon" href="${commonURL}/resources/images/favicon.ico">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<link rel="stylesheet" href="${commonURL}/resources/css/megabox.min.css" media="all">
+<link rel="shortcut icon"
+	href="${commonURL}/resources/images/favicon.ico">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<link rel="stylesheet" href="${commonURL}/resources/css/megabox.min.css"
+	media="all">
 <script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="${commonURL}/resources/js/jquery-1.12.4.js"></script>
+<script src="${commonURL}/resources/js/jquery-ui.1.12.1.js"></script>
+<script src="${commonURL}/resources/js/gsaps.js"></script>
+<script src="${commonURL}/resources/js/bootstrap-custom.js"></script>
+<script src="${commonURL}/resources/js/bootstrap-select.js"></script>
 
+<script src="${commonURL}/resources/js/commons.js"></script>
+<script src="${commonURL}/resources/js/mega.prototype.js"></script>
+<script src="${commonURL}/resources/js/megaboxCom.js"></script>
+<script src="${commonURL}/resources/js/front.js"></script>
 <style>
-/* 1. 기본 & 레이아웃 */
+/* 기존 스타일 유지 */
 * {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
 }
 
- body {
+body {
 	font-family: "맑은 고딕";
-	background-color: white; /* 기본 배경(회색) */
+	background-color: white;
 	color: #333;
 	-webkit-font-smoothing: antialiased;
 }
@@ -36,7 +56,7 @@
 	min-width: 1100px;
 	margin: 20px auto;
 	border: 1px solid #ddd;
-	background-color: white; /* 메인 컨테이너 배경: 밝은 회색 */
+	background-color: white;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
@@ -55,14 +75,12 @@
 	flex-direction: column;
 }
 
-/* 2. 메인 컨텐츠 (왼쪽) */
 .main-content h1 {
 	font-size: 24px;
 	padding-bottom: 20px;
 	border-bottom: 2px solid #333;
 }
 
-/* 2.1. 인원 선택 바 (우대 추가) */
 .person-selector-bar {
 	display: flex;
 	justify-content: space-between;
@@ -78,7 +96,7 @@
 
 .person-controls {
 	display: flex;
-	gap: 15px; /* 컨트롤 간 간격 */
+	gap: 15px;
 }
 
 .person-control {
@@ -130,7 +148,6 @@
 	font-weight: bold;
 }
 
-/* 2.2. 좌석 맵 */
 .seat-map-container {
 	position: relative;
 	min-height: 500px;
@@ -147,7 +164,7 @@
 	height: 100%;
 	background-color: rgba(90, 90, 90, 0.85);
 	color: #fff;
-	display: flex; /* [중요] CSS로 기본 표시 */
+	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
@@ -179,24 +196,12 @@
 	border-bottom: 12px solid white;
 }
 
-/* 2.3. 실제 좌석 맵 */
 #seat-map {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	gap: 5px;
 	margin-top: 10px;
-}
-
-#seat-map h3 { /* SCREEN 텍스트 */
-	font-size: 16px;
-	color: #888;
-	letter-spacing: 5px;
-	padding: 5px 20px;
-	border: 1px solid #ccc;
-	z-index: 2;
-	position: relative;
-	background: #fdfdfd;
 }
 
 .screen-arc-image {
@@ -237,7 +242,7 @@
 }
 
 .seat-row .aisle {
-	width: 30px; /* 통로 너비 */
+	width: 30px;
 }
 
 .row-label {
@@ -247,56 +252,48 @@
 	color: #777;
 }
 
-/* ========================================
-        좌석 디자인
-        ========================================
-        */
 .seat {
-	/* [추가] 버튼 기본 스타일 초기화 */
 	border: none;
 	padding: 0;
-	font: inherit; /* 부모 폰트 상속 */
-	background: none; /* 배경 제거 */
-	-webkit-appearance: none; /* iOS Safari 스타일 제거 */
-	-moz-appearance: none; /* Firefox 스타일 제거 */
-	appearance: none; /* 표준 스타일 제거 */
+	font: inherit;
+	background: none;
+	-webkit-appearance: none;
+	appearance: none;
 	width: 28px;
 	height: 28px;
 	font-size: 12px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border-radius: 6px; /* [요청] 더 둥근 모서리 */
+	border-radius: 6px;
 	cursor: pointer;
 	transition: all 0.1s ease;
 	font-weight: bold;
 }
 
 .seat.available {
-	background-color: #707070; /* [요청] 살짝 더 진한 회색 */
-	border: 2px solid #00dada; /* [요청] 얇고, 더 연한 틸 테두리 */
+	background-color: #707070;
+	border: 2px solid #00dada;
 	color: #fff;
 }
 
 .seat.available:hover {
-	background-color: #888; /* 호버 시 밝은 회색 */
-	border-color: #00ffff; /* 밝은 틸 */
+	background-color: #888;
+	border-color: #00ffff;
 }
 
 .seat.selected {
-	background-color: #503396; /* 보라색 (선택됨) */
-	border: 2px solid #503396; /* 2px border */
+	background-color: #503396;
+	border: 2px solid #503396;
 	color: #fff;
-	border-radius: 6px; /* 6px radius */
 }
 
 .seat.reserved {
-	background-color: #ddd; /* 예매완료 (밝은 회색) */
-	border: 2px solid #ccc; /* 2px border */
+	background-color: #ddd;
+	border: 2px solid #ccc;
 	color: #aaa;
 	cursor: not-allowed;
 	position: relative;
-	border-radius: 6px; /* 6px radius */
 }
 
 .seat.reserved:before {
@@ -307,7 +304,6 @@
 	color: #aaa;
 }
 
-/* 3. 사이드바 (오른쪽) */
 .sidebar-content {
 	padding: 20px;
 	flex-grow: 1;
@@ -373,23 +369,20 @@
 	height: 14px;
 	margin-right: 8px;
 	border: 1px solid #777;
-    /* [수정] 가상 요소 배치를 위한 설정 */
-    display: inline-block; 
-    position: relative; 
+	display: inline-block;
+	position: relative;
 }
 
-/* [추가] 예매완료 (reserved) 범례에 X 표시 추가 */
 .legend-item.reserved .color-box::after {
-    content: 'X';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 10px; 
-    font-weight: bold;
-    color: #aaa; 
+	content: 'X';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 10px;
+	font-weight: bold;
+	color: #aaa;
 }
-
 
 .selected-seats-info h3 {
 	font-size: 16px;
@@ -414,19 +407,6 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-}
-
-.selected-seat-box.active-placeholder {
-	background-color: #503396;
-	color: #fff;
-	opacity: 0.7;
-}
-
-.selected-seat-box.filled {
-	background-color: #503396;
-	color: #fff;
-	font-weight: bold;
-	opacity: 1;
 }
 
 .price-summary {
@@ -474,17 +454,198 @@
 }
 
 #next-button {
-	/* 초기 활성화 상태로 설정 */
 	background-color: #00b8b2;
 	color: #fff;
-	cursor: pointer;
 }
 
-/* 모달 관련 스타일 */
 .hidden {
 	display: none !important;
 }
+.selected-seat-box.filled {
+	background-color: #503396 !important;
+	color: #fff !important;
+	font-weight: bold;
+	border: 1px solid #7457c1;
+}
 </style>
+<script type="text/javascript">
+	$(function() {
+		// 인원 저장을 위한 변수
+		let adultCnt = 0;
+		let youthCnt = 0;
+		let seniorCnt = 0;
+
+		// 플러스 버튼 클릭
+		$(".btn-plus").click(function() {
+			let type = $(this).data("type");
+			let total = adultCnt + youthCnt + seniorCnt;
+
+			if (total >= 6) {
+				alert("최대 6명까지 선택 가능합니다.");
+				return;
+			}
+
+			if (type === "adult")
+				adultCnt++;
+			else if (type === "youth")
+				youthCnt++;
+			else if (type === "senior")
+				seniorCnt++;
+
+			updateCount();
+		});
+
+		// 마이너스 버튼 클릭
+		$(".btn-minus").click(function() {
+			let type = $(this).data("type");
+
+			if (type === "adult" && adultCnt > 0)
+				adultCnt--;
+			else if (type === "youth" && youthCnt > 0)
+				youthCnt--;
+			else if (type === "senior" && seniorCnt > 0)
+				seniorCnt--;
+
+			updateCount();
+		});
+
+		// 초기화 버튼
+		$("#reset-button").click(function() {
+			adultCnt = 0;
+			youthCnt = 0;
+			seniorCnt = 0;
+			updateCount();
+		});
+
+		// 인원 UI 업데이트 함수
+		function updateCount() {
+		    $("#adult-count").text(adultCnt);
+		    $("#youth-count").text(youthCnt);
+		    $("#senior-count").text(seniorCnt);
+
+		    let total = adultCnt + youthCnt + seniorCnt;
+		    $("#price-summary-text").text("총 " + total + "명");
+
+		    // 인원을 줄였을 때 초과된 좌석 선택 해제하기
+		    let $selectedSeats = $(".seat.selected");
+		    if ($selectedSeats.length > total) {
+		        // 선택된 좌석들 중 인원수를 초과하는 만큼(뒤에서부터) 선택 해제
+		        for (let i = $selectedSeats.length - 1; i >= total; i--) {
+		            $($selectedSeats[i]).removeClass("selected").addClass("available");
+		        }
+		    }
+
+		    // 금액 업데이트
+		    let totalPrice = total * 12000; 
+		    $("#total-price").html(totalPrice.toLocaleString() + "<span>원</span>");
+
+		    // 인원 선택 여부에 따른 오버레이 제어
+		    if (total > 0) {
+		        $("#seat-map-overlay").hide();
+		    } else {
+		        // 인원을 0으로 만들면 모든 좌석 선택 해제
+		        $(".seat.selected").removeClass("selected").addClass("available");
+		        $("#seat-map-overlay").show();
+		    }
+
+		    // 우측 사이드바 정보 갱신
+		    renderSelectedSeats();
+		}
+
+		// 다음 버튼 클릭 -> 모달 오픈
+		$("#next-button").click(function() {
+			$("#alert-modal-booking").removeClass("hidden");
+		});
+
+		// 모달 닫기 (취소 및 X 버튼)
+		$(".close-modal").click(function() {
+			$("#alert-modal-booking").addClass("hidden");
+		});
+
+		// 모달 확인 버튼 (페이지 이동)
+		$("#btn-confirm-move").click(function() {
+			location.href = "${commonURL}/user/payment/paymentFrm.jsp";
+		});
+
+		// 좌석 맵 생성 함수
+		function createSeatMap() {
+			const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";//좌석번호
+			const reservedSeats = [ 'A5', 'A6', 'D10', 'E4', 'E5', 'J8', 'J9',
+					'J10' ];//예약 좌석
+			const rows = 10;//행
+			const cols = 10;//열
+			const aisles = [ 2, 8 ];//통로
+
+			for (let r = 0; r < rows; r++) {
+				let rowLabel = alphabet[r];
+				let $row = $('<div class="seat-row"></div>');
+				$row.append('<div class="row-label">' + rowLabel + '</div>');
+
+				for (let c = 1; c <= cols; c++) {
+					let seatId = rowLabel + c;
+					let isReserved = reservedSeats.includes(seatId);
+					let $seat = $('<button type="button" class="seat '
+							+ (isReserved ? 'reserved' : 'available') + '">'
+							+ c + '</button>');
+					//예약 좌석인지 확인
+					if (isReserved){
+						$seat.prop("disabled", true);
+					}//end if
+					//좌석 추가
+					$row.append($seat);
+					//복도 생성
+					if (aisles.includes(c) && c < cols) {
+						$row.append('<div class="aisle"></div>');
+					}//end if
+				}
+				$("#seat-map").append($row);
+			}
+		}
+		// 초기 실행
+		createSeatMap();
+		
+		// 좌석 클릭 이벤트
+		$(document).on("click", ".seat.available, .seat.selected", function() {
+			let total = adultCnt + youthCnt + seniorCnt;
+			if (total === 0) {
+				alert("관람인원을 먼저 선택해주세요.");
+				return;
+			}
+
+			if ($(this).hasClass("selected")) {
+				$(this).removeClass("selected").addClass("available");
+			} else {
+				if ($(".seat.selected").length >= total) {
+					alert("선택하신 인원수를 초과할 수 없습니다.");
+					return;
+				}
+				$(this).removeClass("available").addClass("selected");
+			}
+			renderSelectedSeats(); // 선택 상태가 바뀔 때마다 우측 정보 갱신
+		});
+
+		// 선택된 좌석 정보를 우측 사이드바에 표시하는 함수
+		function renderSelectedSeats() {
+			// 모든 칸 초기화
+			for (let i = 1; i <= 6; i++) {
+				$("#selectSeat" + i).text("-").removeClass("filled");
+			}
+
+			// 선택된 좌석(.selected)을 찾아서 순서대로 채움
+			$(".seat.selected").each(function(index) {
+				let row = $(this).closest(".seat-row").find(".row-label").text();
+				let col = $(this).text();
+				let seatNum = row + col;
+
+				if (index < 6) {
+					$("#selectSeat" + (index + 1)).text(seatNum).addClass("filled");
+				}
+			});
+		}
+		
+		
+	});//ready
+</script>
 </head>
 <body>
     <header id="header"><jsp:include page="../../fragments/header.jsp" /></header>
@@ -519,40 +680,33 @@
 
 	<div class="booking-container">
 
+	<div class="booking-container">
 		<div class="main-content">
 			<h1>빠른예매</h1>
 
 			<div class="person-selector-bar">
 				<h2>관람인원선택</h2>
-
 				<div class="person-controls">
 					<div class="person-control">
-						<label for="adult-count">성인</label>
-						<button class="btn-minus" data-type="adult">-</button>
+						<label>성인</label>
+						<button type="button" class="btn-minus" data-type="adult">-</button>
 						<span id="adult-count" class="count-display">0</span>
-						<button class="btn-plus" data-type="adult">+</button>
+						<button type="button" class="btn-plus" data-type="adult">+</button>
 					</div>
 					<div class="person-control">
-						<label for="youth-count">청소년</label>
-						<button class="btn-minus" data-type="youth">-</button>
+						<label>청소년</label>
+						<button type="button" class="btn-minus" data-type="youth">-</button>
 						<span id="youth-count" class="count-display">0</span>
-						<button class="btn-plus" data-type="youth">+</button>
+						<button type="button" class="btn-plus" data-type="youth">+</button>
 					</div>
 					<div class="person-control">
-						<label for="senior-count">경로</label>
-						<button class="btn-minus" data-type="senior">-</button>
+						<label>경로</label>
+						<button type="button" class="btn-minus" data-type="senior">-</button>
 						<span id="senior-count" class="count-display">0</span>
-						<button class="btn-plus" data-type="senior">+</button>
-					</div>
-					<div class="person-control">
-						<label for="disabled-count">우대</label>
-						<button class="btn-minus" data-type="disabled">-</button>
-						<span id="disabled-count" class="count-display">0</span>
-						<button class="btn-plus" data-type="disabled">+</button>
+						<button type="button" class="btn-plus" data-type="senior">+</button>
 					</div>
 				</div>
-
-				<button id="reset-button">초기화</button>
+				<button type="button" id="reset-button">초기화</button>
 			</div>
 
 			<div class="seat-map-container">
@@ -560,17 +714,13 @@
 					<div class="overlay-arrow"></div>
 					<span>관람인원을 선택하십시오</span>
 				</div>
-
 				<div class="screen-arc-image">
 					<img src="${commonURL}/resources/images/img-theater-screen.png" />
 				</div>
-
 				<div class="exit-icon-top">Top Exit</div>
 				<div class="exit-icon-bottom">Btm Exit</div>
-
 				<div id="seat-map"></div>
 			</div>
-
 		</div>
 
 		<div class="sidebar">
@@ -586,14 +736,12 @@
 						<span style="color: #FFF"><%= screenOpen %>~<%= screenEnd %></span>
 					</div>
 				</div>
-
 				<div class="legend">
 					<div class="legend-item">
 						<span class="color-box" style="background: #503396;"></span> 선택
 					</div>
-					<div class="legend-item reserved"> 
-						<span class="color-box"
-							style="background: #ddd; border-color: #ccc;"></span> 예매완료
+					<div class="legend-item reserved">
+						<span class="color-box" style="background: #ddd;"></span> 예매완료
 					</div>
 					<div class="legend-item">
 						<span class="color-box"
@@ -601,19 +749,17 @@
 						선택가능
 					</div>
 				</div>
-
 				<div class="selected-seats-info">
 					<h3>선택좌석</h3>
 					<div class="selected-seats-grid" id="selected-seats-grid">
-						<div class="selected-seat-box">-</div>
-						<div class="selected-seat-box">-</div>
-						<div class="selected-seat-box">-</div>
-						<div class="selected-seat-box">-</div>
-						<div class="selected-seat-box">-</div>
-						<div class="selected-seat-box">-</div>
+						<div class="selected-seat-box" id="selectSeat1">-</div>
+						<div class="selected-seat-box" id="selectSeat2">-</div>
+						<div class="selected-seat-box" id="selectSeat3">-</div>
+						<div class="selected-seat-box" id="selectSeat4">-</div>
+						<div class="selected-seat-box" id="selectSeat5">-</div>
+						<div class="selected-seat-box" id="selectSeat6">-</div>
 					</div>
 				</div>
-
 				<div class="price-summary">
 					<p id="price-summary-text">총 0명</p>
 					<div id="total-price">
@@ -621,156 +767,37 @@
 					</div>
 				</div>
 			</div>
-
 			<div class="sidebar-buttons">
-				<button id="prev-button">이전</button>
-				<button id="next-button">다음</button>
+				<button type="button" id="prev-button">이전</button>
+				<button type="button" id="next-button">다음</button>
 			</div>
 		</div>
 	</div>
-	
-	<!-- 임시 사용 중. 다음 버튼 누를 시 팝업 창 생성. -->
+
 	<div id="alert-modal-booking"
-		class="fixed inset-0 modal-overlay hidden flex items-center justify-center z-50"
-		style="background-color: rgba(0, 0, 0, 0.5); font-family: 'Malgun Gothic', sans-serif;">
-		<div
-			class="bg-white w-[400px] shadow-lg border border-purple-800 text-left">
+		class="fixed inset-0 hidden flex items-center justify-center z-50"
+		style="background-color: rgba(0, 0, 0, 0.5);">
+		<div class="bg-white w-[400px] shadow-lg border border-purple-800">
 			<div
 				class="bg-[#503396] text-white px-4 py-2 flex justify-between items-center">
 				<span class="font-bold">알림</span>
-				<button onclick="closeAlertModalBooking()" class="text-white">
-					<i class="fas fa-times"></i>
-				</button>
+				<button type="button" class="close-modal text-white">✕</button>
 			</div>
 			<div class="p-8 text-center">
-				<p class="text-gray-700 mb-6 text-sm">
-					임시 사용 중, 결제 페이지로 이동 하시겠습니까?
-				</p>
+				<p class="text-gray-700 mb-6 text-sm">결제 페이지로 이동 하시겠습니까?</p>
 				<div class="flex justify-center gap-2">
-					<button onclick="closeAlertModalBooking()"
-						class="px-6 py-2 border border-purple-800 text-purple-800 text-sm hover:bg-purple-50">취소</button>
-					<button onclick="confirmMovePage()"
-						class="px-6 py-2 bg-[#503396] text-white text-sm hover:bg-purple-800">확인</button>
+					<button type="button"
+						class="close-modal px-6 py-2 border border-purple-800 text-purple-800 text-sm">취소</button>
+					<button type="button" id="btn-confirm-move"
+						class="px-6 py-2 bg-[#503396] text-white text-sm">확인</button>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<script>
-        $(function() { // jQuery ready 핸들러
-            
-            // --- 1. DOM 요소 캐싱 (jQuery 객체로) ---
-            const dom = {
-                personControls: $('.person-controls'),
-                seatMapContainer: $('#seat-map'),
-                seatMapOverlay: $('#seat-map-overlay'),
-                nextButton: $('#next-button'), // 다음 버튼 추가
-                alertModal: $('#alert-modal-booking') // 모달 캐싱
-            };
-            
-            const NEXT_PAGE_URL = 'http://localhost/second_project_movie_reservation/index/paymentFrm.jsp';
-            
-            /*
-            ========================================
-             이벤트 리스너 (jQuery 방식) - 단순화
-            ========================================
-            */
-            
-            // 인원 선택(+,- 버튼) 영역을 클릭하면 오버레이를 숨깁니다.
-            dom.personControls.on('click', function() {
-                dom.seatMapOverlay.hide(); // jQuery hide() 메소드 사용
-            });
-            
-            // '다음' 버튼 클릭 시 무조건 모달 팝업
-            dom.nextButton.on('click', function(e) {
-                e.preventDefault(); // 버튼의 기본 동작 방지 (페이지 이동 막기)
-                
-                // 조건 검사 없이 바로 모달 팝업
-                dom.alertModal.removeClass('hidden'); 
-            });
 
 
-            /*
-            ========================================
-             [추가] 모달 제어 함수 (전역 함수로 정의)
-            ========================================
-            */
-            // 모달의 '취소'나 'X' 버튼을 눌렀을 때 닫기
-            window.closeAlertModalBooking = function() {
-                dom.alertModal.addClass('hidden');
-            };
-
-            // 모달의 '확인' 버튼을 눌렀을 때 페이지 이동
-            window.confirmMovePage = function() {
-                location.href = NEXT_PAGE_URL;
-            };
-            
-
-            /*
-            ========================================
-             좌석 맵 생성 함수 (기존 로직 유지)
-            ========================================
-            */
-            function createSeatMap(numRows = 10, numCols = 10, aislePositions = [2, 8]) {
-            	 
-                const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                const reservedSeats = ['A5', 'A6', 'D10', 'E4', 'E5', 'J8', 'J9', 'J10'];
-
-                for (let r = 0; r < numRows; r++) {
-                    const rowLabel = alphabet[r];
-                    if (!rowLabel) continue; 
-
-                    const rowEl = document.createElement('div');
-                    rowEl.className = 'seat-row';
-                    
-                    const labelEl = document.createElement('div');
-                    labelEl.className = 'row-label';
-                    labelEl.textContent = rowLabel;
-                    rowEl.appendChild(labelEl);
-                    
-                    for (let c = 1; c <= numCols; c++) {
-                        
-                        const seatEl = document.createElement('button'); 
-						seatEl.setAttribute("type", "button"); 
-						
-						const seatId = rowLabel + c; 
-						
-						seatEl.dataset.seatId = seatId;
-						seatEl.textContent = c;
-						
-                        if (reservedSeats.includes(seatId)) {
-                            seatEl.className = 'seat reserved';
-                            seatEl.disabled = true; 
-                        } else {
-                            seatEl.className = 'seat available';
-                        }
-                        
-                        rowEl.appendChild(seatEl);
-
-                        if (aislePositions.includes(c) && c < numCols) { 
-                             rowEl.appendChild(document.createElement('div')).className = 'aisle';
-                        }
-                    }
-                    dom.seatMapContainer.append(rowEl); 
-                }
-            }
-            
-            // --- 3. 초기화 실행 ---
-            
-            // 좌석 맵 생성
-            const defaultRows = 10;
-            const defaultCols = 10;
-            const defaultAisles = [2, 8];
-            createSeatMap(defaultRows, defaultCols, defaultAisles);
-            
-            // 페이지 로드 시 '다음' 버튼을 활성화된 상태로 설정
-            dom.nextButton.prop('disabled', false); 
-        });
-    </script>
-
-
-
-    <footer id="footer"><jsp:include page="../../fragments/footer.jsp" /></footer>
-
+	<footer id="footer"><jsp:include
+			page="../../fragments/footer.jsp" /></footer>
 </body>
 </html>

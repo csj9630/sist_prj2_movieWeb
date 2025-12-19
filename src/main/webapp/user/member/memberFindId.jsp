@@ -32,6 +32,17 @@ request.setCharacterEncoding("UTF-8");
 <link rel="stylesheet" href="${commonURL}/resources/css/megabox.min.css"
 	media="all">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="${commonURL}/resources/js/jquery-1.12.4.js"></script>
+<script src="${commonURL}/resources/js/jquery-ui.1.12.1.js"></script>
+<script src="${commonURL}/resources/js/gsaps.js"></script>
+<script src="${commonURL}/resources/js/bootstrap-custom.js"></script>
+<script src="${commonURL}/resources/js/bootstrap-select.js"></script>
+
+<script src="${commonURL}/resources/js/commons.js"></script>
+<script src="${commonURL}/resources/js/mega.prototype.js"></script>
+<script src="${commonURL}/resources/js/megaboxCom.js"></script>
+<script src="${commonURL}/resources/js/front.js"></script>
 <title>아이디 찾기</title>
 <style>
 /* === [통일된 레이아웃] === */
