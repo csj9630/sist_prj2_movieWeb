@@ -2,7 +2,7 @@ package movie.booking;
 
 import java.util.Date;
 
-public class ScreenBookDTO {
+public class ScheduleDTO {
 	// screen_info 테이블
     private String screenCode;
     private String screenDate;
@@ -126,7 +126,7 @@ public class ScreenBookDTO {
 
 
 
-	public ScreenBookDTO(String screenCode, String screenDate, Date screenOpen, Date screenEnd, String movieCode,
+	public ScheduleDTO(String screenCode, String screenDate, Date screenOpen, Date screenEnd, String movieCode,
 			String movieGrade, String movieName, int runningTime, String theatherName, int totalSeat, int seatCount) {
 		super();
 		this.screenCode = screenCode;
@@ -142,7 +142,7 @@ public class ScreenBookDTO {
 		this.seatCount = seatCount;
 	}
 
-	public ScreenBookDTO() {
+	public ScheduleDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

@@ -1,6 +1,6 @@
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="movie.booking.ScreenBookDTO"%>
-<%@page import="movie.booking.ScreenBookService"%>
+<%@page import="movie.booking.ScheduleDTO"%>
+<%@page import="movie.booking.ScheduleService"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
 <%@page import="screenInfo.ScreenInfoService"%>
@@ -21,8 +21,8 @@ if (date == null || movieNo == null || date.trim().isEmpty() || movieNo.trim().i
 }//end if
 
 //DB 호출
-ScreenBookService sbs = ScreenBookService.getInstance();
-List<ScreenBookDTO> sbList = sbs.getMovieSchedule(date, movieNo);
+ScheduleService sbs = ScheduleService.getInstance();
+List<ScheduleDTO> sbList = sbs.getMovieSchedule(date, movieNo);
 
 //JSON 세팅
 JSONArray jsonArr = new JSONArray();
@@ -37,7 +37,7 @@ try {
 		return;
 	} //end if
 
-	for (ScreenBookDTO dto : sbList) {
+	for (ScheduleDTO dto : sbList) {
 		jsonObj = new JSONObject();
 
 		// 1. 기본 정보 매핑
@@ -62,8 +62,8 @@ try {
 	} //end for
 	System.out.println(sbList.toString());
 	out.print(jsonArr.toJSONString());
-			
-			
+	
+	
 } catch (Exception e) {
 	e.printStackTrace();
 	System.err.println("getSchedule.jsp에서 에러발생 Error: " + e.getMessage());

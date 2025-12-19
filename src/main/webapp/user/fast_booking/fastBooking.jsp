@@ -7,6 +7,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ include file="../../fragments/siteProperty.jsp"%>
+
 <head>
 <!-- 상단 favicon 이미지  -->
 <link rel="shortcut icon"
@@ -799,12 +800,12 @@ var initMovieHtml;
 
 .date-list {
     display: flex;
-    flex-wrap: nowrap;       /* 🔥 줄바꿈 금지 */
+    flex-wrap: nowrap;       /* 줄바꿈 금지 */
     white-space: nowrap;
 }
 
 .date-list button {
-    flex: 0 0 75px;            /* 🔥 버튼 폭 고정 */
+    flex: 0 0 75px;            /* 버튼 폭 고정 */
     width: 75px;
     text-align: center;
 }
@@ -889,6 +890,31 @@ $(function() {
             theme: "light"
         });
     });
+    
+    // 영화 선택했을 때 넘겨줄 값
+    $(document).on("click", ".schedule-row", function () {
+    	 var userId = "${sessionScope.userId}";
+    	 
+         if (userId === "" || userId === "null") {
+             alert("로그인 후 이용해주시기 바랍니다.");
+             return;
+             //location.href = "${commonURL}/user/member/memberLogin.jsp";
+         }
+         // 예매 페이지로 이동
+    	
+    	var row=$(this);
+		var form=$("#scheduleForm");
+		
+		form.find("input[name=movieCode]").val(row.data("movie-code"));
+		form.find("input[name=movieName]").val(row.data("movie-name"));
+		form.find("input[name=screenCode]").val(row.data("screen-code"));
+		form.find("input[name=theaterName]").val(row.data("theater-name"));
+		form.find("input[name=screenOpen]").val(row.data("screen-open"));
+		form.find("input[name=screenEnd]").val(row.data("screen-end"));
+		form.find("input[name=screenDate]").val(selectedDate);
+		
+		form.submit();
+    });
 
     // 연령별 필터 버튼들 (ALL, 12, 15, 19)
     $("#movieAgeAll, #movieAge12, #movieAge15, #movieAge19").click(function() {
@@ -970,6 +996,15 @@ function displaySchedule(data) {
 	}
 
 	// 테이블 시작
+	displayHTML += '<form id="scheduleForm" action="../booking/quickBookingSeat.jsp" method="post">';
+	displayHTML += '	<input type="hidden" name="movieCode">';
+	displayHTML += '	<input type="hidden" name="movieName">';
+	displayHTML += '	<input type="hidden" name="screenCode">';
+	displayHTML += '	<input type="hidden" name="theaterName">';
+	displayHTML += '	<input type="hidden" name="screenOpen">';
+	displayHTML += '	<input type="hidden" name="screenEnd">';
+	displayHTML += '	<input type="hidden" name="screenDate">';
+	displayHTML += '</form>';
 	displayHTML += '<div class="schedule-table-wrapper">';
 	displayHTML += '<table class="table table-hover schedule-table">';
 	displayHTML += '  <thead class="schedule-thead">';
@@ -1046,11 +1081,10 @@ function displaySchedule(data) {
         
         console.log('선택된 스케줄:', scheduleData);
         
-        
         // 예매 페이지로 이동
         //goReservation(scheduleData);
         //임시로 영화 상세로 이동.
-		location.href='${commonURL}/user/movie/detail.jsp?name='+scheduleData.movieCode;
+		//location.href='${commonURL}/user/booking/quickBookingSeat.jsp?name='+scheduleData.movieCode;
     });
 }//displaySchedule
 		
@@ -1376,7 +1410,7 @@ function displaySchedule(data) {
 
 				<!-- quick-reserve-area -->
 				<div class="quick-reserve-area "  >
-
+					
 					<!-- movie-choice : 영화 선택  -->
 					<div class="movie-choice" style="width:30%;"  >
 						<p class="tit">영화</p>

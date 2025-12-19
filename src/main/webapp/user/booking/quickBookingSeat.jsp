@@ -1,6 +1,7 @@
-<%@page import="seat.booking.SeatBookService"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@page import="movie.MovieDTO"%>
+<%@page import="java.util.List"%>
+<%@page import="movie.MovieService"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
 SeatBookService sbs = SeatBookService.getInstance();
@@ -647,17 +648,37 @@ body {
 </script>
 </head>
 <body>
-	<header id="header"><jsp:include
-			page="../../fragments/header.jsp" /></header>
+    <header id="header"><jsp:include page="../../fragments/header.jsp" /></header>
 
-	<div class="page-util">
-		<div class="inner-wrap">
-			<div class="location">
-				<span>Home</span> <a href="#" title="회원">예매</a> <a href="#">빠른
-					예매</a>
-			</div>
-		</div>
-	</div>
+    <div class="page-util">
+        <div class="inner-wrap">
+            <div class="location">
+                <span>Home</span>
+                <a href="#" title="회원">예매</a>
+                <a href="#">빠른 예매</a>
+            </div>
+        </div>
+    </div>
+
+	<%
+	request.setCharacterEncoding("UTF-8");
+	
+	String movieCode=request.getParameter("movieCode");
+	String movieName=request.getParameter("movieName");
+	String screenCode=request.getParameter("screenCode");
+	String theaterName=request.getParameter("theaterName");
+	String screenOpen=request.getParameter("screenOpen");
+	String screenEnd=request.getParameter("screenEnd");
+	String screenDate=request.getParameter("screenDate");
+	
+	MovieService ms=MovieService.getInstance();
+	String imgPath=ms.showMainImage(movieCode);
+	
+	request.setAttribute("imgPath", imgPath);
+	System.out.println(movieCode);
+	%>
+
+	<div class="booking-container">
 
 	<div class="booking-container">
 		<div class="main-content">
@@ -705,18 +726,14 @@ body {
 		<div class="sidebar">
 			<div class="sidebar-content">
 				<div class="movie-info">
-					<img src="../../resources/images/zoo_book_payment.jpg" alt="포스터">
+					<img src="${commonURL}/${movieImgPath}/<%= movieCode %>/${imgPath}" alt="<%= movieName %> 포스터">
 					<div>
 						<h4>
-							<span class="rating-all">ALL</span> <span style="color: #fff;">주토피아
-								2</span>
+							 <span style="color:#fff;"><%= movieName %></span>
 						</h4>
-						<p>2D(자막)</p>
-						<p>별내 (리클라이너)</p>
-						<p>2025.12.01 (월)</p>
-						<select class="time-select">
-							<option>16:40~18:38</option>
-						</select>
+						<p><%= theaterName %></p>
+						<p><%= screenDate %></p>
+						<span style="color: #FFF"><%= screenOpen %>~<%= screenEnd %></span>
 					</div>
 				</div>
 				<div class="legend">

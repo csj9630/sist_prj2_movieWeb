@@ -11,17 +11,17 @@ import java.util.Map;
 
 import DBConnection.DbConn;
 
-public class ScreenBookDAO {
+public class ScheduleDAO {
 	
-	private static ScreenBookDAO sbDAO;
+	private static ScheduleDAO sbDAO;
 	
-	private ScreenBookDAO() {
+	private ScheduleDAO() {
 		
 	} // ScreenInfoDAO
 	
-	public static ScreenBookDAO getInstance() {
+	public static ScheduleDAO getInstance() {
 		if(sbDAO == null) {
-			sbDAO = new ScreenBookDAO();
+			sbDAO = new ScheduleDAO();
 		} // end if
 		return sbDAO;
 	} // getInstance
@@ -35,8 +35,8 @@ public class ScreenBookDAO {
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<ScreenBookDTO> selectScreenBookList(String date,String movieCode) throws SQLException {
-		List<ScreenBookDTO> list = new ArrayList<>();
+	public List<ScheduleDTO> selectScreenBookList(String date,String movieCode) throws SQLException {
+		List<ScheduleDTO> list = new ArrayList<>();
 	    
 		DbConn dbCon = DbConn.getInstance("jdbc/dbcp");
 		
@@ -65,9 +65,9 @@ public class ScreenBookDAO {
 			pstmt.setString(2, movieCode); // 영화코드
 			rs = pstmt.executeQuery();
 			
-			ScreenBookDTO sbDTO = null;
+			ScheduleDTO sbDTO = null;
 			while (rs.next()) {
-			sbDTO = new ScreenBookDTO();
+			sbDTO = new ScheduleDTO();
 			// 1. screen_info 테이블 데이터
             sbDTO.setScreenCode(rs.getString("screen_code"));
             sbDTO.setScreenOpen(rs.getTimestamp("screen_open")); // 시간까지 포함
